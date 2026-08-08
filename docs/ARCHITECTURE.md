@@ -9,9 +9,16 @@
 | Foldable | `androidx.window` — `WindowInfoTracker`, `FoldingFeature` |
 | Hinge angle | `Sensor.TYPE_HINGE_ANGLE` (Samsung + Pixel Fold), for transition animation only |
 | PDF | `android.graphics.pdf.PdfRenderer` / `PdfDocument` (AOSP — no licence entanglement) |
-| Storage | Room + app-private files |
-| Billing | `purchases-android` ≥ 10.7.0 with `purchases-store-galaxy` |
-| minSdk | 30 |
+| Storage | JSON via `org.json` + app-private files (no Room) |
+| Type | Source Serif 4 + Inter, embedded (SIL OFL) |
+| Billing | `purchases-android` 10.16.1 with `purchases-store-galaxy`, `GalaxyConfiguration` |
+| minSdk / compileSdk | 30 / 37.1 |
+| Build | AGP 9.3.1 on Gradle 9.7 — AGP 9 has built-in Kotlin, so no `kotlin.android` plugin |
+
+**No Room.** The persisted schema is four fields of notes, a session record, and a cached
+entitlement flag. Room would add a compiler plugin, a migration framework and a code-generation step
+to store less data than a single screen displays. `org.json` is in the platform and costs nothing.
+Revisit if the schema ever grows past what fits on one page.
 
 Native Android, not cross-platform. The whole product is a foldable posture API and a PDF renderer;
 a cross-platform layer would only get in the way of both. (Compose Multiplatform would unlock the
@@ -62,10 +69,11 @@ The client renderer takes a type that cannot express agent content:
 
 ```kotlin
 data class ClientPage(
-  val bitmap: Bitmap,
-  val highlights: List<Rect>,
-  val spotlight: Rect?,
+  val bitmap: Bitmap?,
+  val pageNumber: Int,
+  val pageCount: Int,
   val legibility: Float,
+  val spotlight: Rect?,
 )
 // no notes field. no talk track. no way to add one without changing this type.
 ```
@@ -74,23 +82,34 @@ data class ClientPage(
 `ClientPage` plus the private layer. Notes flow agent-ward only, and the compiler enforces it.
 
 A styling bug can leak a colour. It must not be able to leak a note in front of a paying customer.
-This is also tested: a screenshot test asserts no note text appears in the client pane's rendered
-output.
 
-## Module layout
+**Enforced by `LeakGuaranteeTest`**, which reflects over `ClientPage`'s declared fields and fails on
+anything resembling private data, asserts `AgentPage` composes a `ClientPage` rather than
+duplicating it, and pins the exact field set so that adding one forces someone to come back here and
+think. Verified by mutation: adding a `note` field to `ClientPage` fails two of the three tests.
+
+## Package layout
+
+Packages inside a single `:app` module, not separate Gradle modules. At this size the module
+boundaries would buy nothing but configuration time; the package structure already carries the
+architecture. Split when a second app or a shared library needs one of these.
 
 ```
-app/                    – application, navigation, DI wiring
-core/design/            – theme, type scale, tokens  (see DESIGN.md)
-core/fold/              – posture flow, TwofoldScaffold, hinge sensor
-data/document/          – PDF import, page rendering + cache, Room entities
-data/session/           – session log, signature, signed-PDF export
-feature/library/        – document list
-feature/prepare/        – single-pane reading + notes editor
-feature/present/        – the two-sided mode
-feature/sign/           – signature capture
-feature/paywall/        – RevenueCat entitlement + paywall
+com.twofold/
+  MainActivity.kt         – posture → mode routing, the only place panes are composed
+  core/design/            – palette, embedded type, theme            (see DESIGN.md)
+  core/fold/              – FoldLogic (pure, unit-tested), FoldStateTracker, TwofoldScaffold
+  data/document/          – PdfSource, PageStore cache, DocumentRepository
+  data/notes/             – per-page private notes and talk track
+  data/session/           – session log, signature record, signed-PDF export
+  feature/present/        – ClientPane / AgentPane and the shared page state
+  feature/sign/           – signature capture
+  feature/sessions/       – the unsigned follow-up list
+  feature/paywall/        – entitlement and the upgrade screen
 ```
+
+`core/fold/FoldLogic` is deliberately free of Android types so the posture rules — the decisions the
+whole product turns on — can be tested on the JVM rather than only on hardware.
 
 ## Page rendering and cache
 
