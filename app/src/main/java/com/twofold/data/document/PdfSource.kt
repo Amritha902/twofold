@@ -58,16 +58,6 @@ class PdfSource private constructor(
             }
         }
 
-    /** Aspect ratio (height / width) of a page, without paying to render it. */
-    suspend fun aspectRatio(index: Int): Float? = withContext(Dispatchers.IO) {
-        if (index !in 0 until pageCount) return@withContext null
-        mutex.withLock {
-            renderer.openPage(index).use { page ->
-                page.height.toFloat() / page.width.toFloat()
-            }
-        }
-    }
-
     override fun close() {
         renderer.close()
         descriptor.close()
