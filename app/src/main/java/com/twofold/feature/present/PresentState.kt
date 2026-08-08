@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import com.twofold.data.document.DocumentRef
 import com.twofold.data.document.DocumentRepository
@@ -16,7 +17,10 @@ import com.twofold.data.document.PdfSource
 import com.twofold.data.notes.DocumentNotes
 import com.twofold.data.notes.NotesRepository
 import com.twofold.data.notes.PageNotes
+import com.twofold.data.session.SignatureRecord
+import com.twofold.data.session.SignedPdfExporter
 import kotlinx.coroutines.CoroutineScope
+import java.io.File
 
 /** An image and the page number it belongs to, carried together so they cannot disagree. */
 data class RenderedPage(val bitmap: Bitmap?, val index: Int)
@@ -168,6 +172,66 @@ class PresentState(
     fun castSpotlight(region: Rect?) {
         spotlight = region
     }
+
+    // region signing
+
+    /** When true the client's half is a signature surface and nothing else. */
+    var isSigning by mutableStateOf(false)
+        private set
+
+    var signerName by mutableStateOf("")
+        private set
+
+    var lastSignedFile by mutableStateOf<File?>(null)
+        private set
+
+    fun startSigning(name: String) {
+        signerName = name
+        // A spotlight left casting under a signature line would dim the thing being signed.
+        spotlight = null
+        isSigning = true
+    }
+
+    fun cancelSigning() {
+        isSigning = false
+    }
+
+    /**
+     * Flattens the signature into a signed copy.
+     *
+     * Returns null on failure and leaves [isSigning] true, so a failed export keeps the client on
+     * the signature screen rather than silently dropping them back to the document as though
+     * something had been recorded.
+     */
+    suspend fun completeSigning(
+        strokes: List<List<Offset>>,
+        padWidth: Float,
+        padHeight: Float,
+    ): File? {
+        val currentSource = source ?: return null
+        val currentDocument = document ?: return null
+        if (strokes.isEmpty()) return null
+
+        val signed = SignedPdfExporter(context).export(
+            source = currentSource,
+            sourceFile = currentDocument.file,
+            signature = SignatureRecord(
+                strokes = strokes,
+                padWidth = padWidth,
+                padHeight = padHeight,
+                signerName = signerName.ifBlank { "Client" },
+            ),
+            signedPageIndex = rendered.index,
+        )
+
+        if (signed != null) {
+            lastSignedFile = signed
+            isSigning = false
+        }
+        return signed
+    }
+
+    // endregion
 
     private suspend fun renderCurrent() {
         val currentStore = store ?: return

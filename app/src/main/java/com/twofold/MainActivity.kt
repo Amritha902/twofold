@@ -18,10 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,6 +42,7 @@ import com.twofold.feature.present.ClientPage
 import com.twofold.feature.present.ClientPane
 import com.twofold.feature.present.PreparePane
 import com.twofold.feature.present.PresentState
+import com.twofold.feature.sign.SignaturePad
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -111,16 +116,48 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         talkTrack = state.currentNotes.talkTrack,
     )
 
+    var strokes by remember { mutableStateOf<List<List<Offset>>>(emptyList()) }
+    var padSize by remember { mutableStateOf(Size.Zero) }
+
     when (foldState.mode) {
         // Flat on a table between two people: the far half is theirs, the near half is yours.
         DeviceMode.TWOFOLD -> TwofoldScaffold(
             foldState = foldState,
             creaseColor = LocalTwofoldColors.current.rule,
-            farPane = { ClientPane(clientPage) },
+            farPane = {
+                if (state.isSigning) {
+                    SignaturePad(
+                        signerName = state.signerName,
+                        onSignatureChanged = { captured, size ->
+                            strokes = captured
+                            padSize = size
+                        },
+                    )
+                } else {
+                    ClientPane(clientPage)
+                }
+            },
             nearPane = {
                 Column(Modifier.fillMaxWidth()) {
                     AgentPane(agentPage, Modifier.weight(1f))
-                    PageControls(state, onImport = openPicker)
+                    if (state.isSigning) {
+                        SigningControls(
+                            canComplete = strokes.isNotEmpty(),
+                            onCancel = { state.cancelSigning() },
+                            onDone = {
+                                scope.launch {
+                                    state.completeSigning(strokes, padSize.width, padSize.height)
+                                    strokes = emptyList()
+                                }
+                            },
+                        )
+                    } else {
+                        PageControls(
+                            state = state,
+                            onImport = openPicker,
+                            onAskForSignature = { state.startSigning(document.title) },
+                        )
+                    }
                 }
             },
         )
@@ -129,8 +166,24 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         DeviceMode.PRESENT, DeviceMode.PREPARE -> Column(Modifier.fillMaxWidth()) {
             ClientPane(clientPage, Modifier.weight(1f))
             NoteEditor(state)
-            PageControls(state, onImport = openPicker)
+            PageControls(state, onImport = openPicker, onAskForSignature = null)
         }
+    }
+}
+
+@Composable
+private fun SigningControls(canComplete: Boolean, onCancel: () -> Unit, onDone: () -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        TextButton(onClick = onCancel) { Text("Cancel") }
+        // Disabled until there is ink. Exporting an empty signature would produce a signed-looking
+        // document that nobody signed.
+        Button(onClick = onDone, enabled = canComplete) { Text("Done") }
     }
 }
 
@@ -158,7 +211,11 @@ private fun NoteEditor(state: PresentState) {
 }
 
 @Composable
-private fun PageControls(state: PresentState, onImport: () -> Unit) {
+private fun PageControls(
+    state: PresentState,
+    onImport: () -> Unit,
+    onAskForSignature: (() -> Unit)?,
+) {
     val scope = rememberCoroutineScope()
 
     Row(
@@ -169,6 +226,12 @@ private fun PageControls(state: PresentState, onImport: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TextButton(onClick = { scope.launch { state.previousPage() } }) { Text("Back") }
+
+        // Only offered in Twofold mode: asking for a signature when the client cannot see the
+        // screen is meaningless, so the control simply isn't there.
+        onAskForSignature?.let { ask ->
+            TextButton(onClick = ask) { Text("Sign") }
+        }
 
         // Raises the type size on the client's half only. The agent's view is unchanged.
         TextButton(

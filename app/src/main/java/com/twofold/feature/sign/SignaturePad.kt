@@ -12,12 +12,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import com.twofold.core.design.LocalTwofoldColors
 
@@ -37,11 +42,13 @@ typealias Stroke = List<Offset>
 fun SignaturePad(
     signerName: String,
     modifier: Modifier = Modifier,
-    onStrokesChanged: (List<Stroke>) -> Unit = {},
+    /** Strokes plus the pad size they were drawn in — the exporter needs both to scale correctly. */
+    onSignatureChanged: (List<Stroke>, Size) -> Unit = { _, _ -> },
 ) {
     val colors = LocalTwofoldColors.current
     val strokes = remember { mutableStateListOf<Stroke>() }
     val current = remember { mutableStateListOf<Offset>() }
+    var padSize by remember { mutableStateOf(Size.Zero) }
 
     Column(
         modifier
@@ -59,6 +66,7 @@ fun SignaturePad(
             Modifier
                 .fillMaxWidth()
                 .weight(1f)
+                .onSizeChanged { padSize = Size(it.width.toFloat(), it.height.toFloat()) }
                 .pointerInput(Unit) {
                     detectDragGestures(
                         onDragStart = { offset ->
@@ -72,7 +80,7 @@ fun SignaturePad(
                         onDragEnd = {
                             if (current.size > 1) {
                                 strokes.add(current.toList())
-                                onStrokesChanged(strokes.toList())
+                                onSignatureChanged(strokes.toList(), padSize)
                             }
                             current.clear()
                         },
