@@ -11,7 +11,6 @@ import androidx.window.layout.WindowInfoTracker
 import androidx.window.layout.WindowMetricsCalculator
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowPreview
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -37,7 +36,6 @@ class FoldStateTracker(private val activity: Activity) {
     private val sensorManager =
         activity.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
 
-    @OptIn(FlowPreview::class)
     fun foldState(): Flow<FoldState> =
         combine(
             postureFlow().debounce(POSTURE_SETTLE_MS).distinctUntilChanged(),
@@ -112,20 +110,20 @@ class FoldStateTracker(private val activity: Activity) {
      * face-up on a surface rather than being held up to read.
      */
     private fun lyingFlatFlow(): Flow<Boolean> {
-        val gravity = sensorManager?.getDefaultSensor(Sensor.TYPE_GRAVITY)
-            ?: return flowOf(false)
+        val sensors = sensorManager ?: return flowOf(false)
+        val gravity = sensors.getDefaultSensor(Sensor.TYPE_GRAVITY) ?: return flowOf(false)
 
-        return sensorManager.readings(gravity)
+        return sensors.readings(gravity)
             .map { values -> values[Z] > FACE_UP_GRAVITY_THRESHOLD }
             .distinctUntilChanged()
     }
 
     /** Continuous hinge angle where available. Absent on non-foldables, and that is fine. */
     private fun hingeAngleFlow(): Flow<Float?> {
-        val hinge = sensorManager?.getDefaultSensor(Sensor.TYPE_HINGE_ANGLE)
-            ?: return flowOf(null)
+        val sensors = sensorManager ?: return flowOf(null)
+        val hinge = sensors.getDefaultSensor(Sensor.TYPE_HINGE_ANGLE) ?: return flowOf(null)
 
-        return sensorManager.readings(hinge).map { it.firstOrNull() }
+        return sensors.readings(hinge).map { it.firstOrNull() }
     }
 
     private fun SensorManager.readings(sensor: Sensor): Flow<FloatArray> = callbackFlow {

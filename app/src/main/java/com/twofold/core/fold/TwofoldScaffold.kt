@@ -66,7 +66,13 @@ fun TwofoldScaffold(
                     .background(creaseColor)
             )
 
-            Box(Modifier.fillMaxSize()) {
+            // weight(1f), not fillMaxSize() — inside a Column the latter would take the whole
+            // window height and push the near pane off the bottom of the screen.
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
                 if (agentOnNearHalf) nearPane() else farPane()
             }
         }

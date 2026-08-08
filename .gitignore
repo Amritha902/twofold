@@ -17,3 +17,6 @@ local.properties
 /app/google-services.json
 /revenuecat.properties
 secrets.properties
+
+# Local SDK path
+local.properties

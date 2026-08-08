@@ -1,0 +1,3 @@
+com.twofold
+string app_name
+style Theme_Twofold
