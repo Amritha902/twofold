@@ -30,20 +30,20 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.revenuecat.purchases.Package
 import com.twofold.core.design.LocalTwofoldColors
 import com.twofold.core.design.TwofoldTheme
 import com.twofold.core.fold.DeviceMode
 import com.twofold.core.fold.FoldState
 import com.twofold.core.fold.FoldStateTracker
 import com.twofold.core.fold.TwofoldScaffold
-import com.revenuecat.purchases.Package
 import com.twofold.data.document.DocumentRepository
+import com.twofold.feature.paywall.Entitlements
+import com.twofold.feature.paywall.PaywallScreen
 import com.twofold.feature.present.AgentPage
 import com.twofold.feature.present.AgentPane
 import com.twofold.feature.present.ClientPage
 import com.twofold.feature.present.ClientPane
-import com.twofold.feature.paywall.Entitlements
-import com.twofold.feature.paywall.PaywallScreen
 import com.twofold.feature.present.PreparePane
 import com.twofold.feature.present.PresentState
 import com.twofold.feature.sign.SignaturePad
@@ -173,7 +173,11 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
             },
             nearPane = {
                 Column(Modifier.fillMaxWidth()) {
-                    AgentPane(agentPage, Modifier.weight(1f))
+                    AgentPane(
+                        page = agentPage,
+                        modifier = Modifier.weight(1f),
+                        onSpotlight = { state.castSpotlight(it) },
+                    )
                     if (state.isSigning) {
                         SigningControls(
                             canComplete = strokes.isNotEmpty(),

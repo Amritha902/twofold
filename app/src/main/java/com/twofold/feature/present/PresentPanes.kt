@@ -1,7 +1,10 @@
 package com.twofold.feature.present
 
+import android.graphics.Bitmap
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,10 +18,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import android.graphics.Bitmap
-import androidx.compose.foundation.Canvas
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
@@ -26,14 +31,31 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-
 import com.twofold.core.design.LocalTwofoldColors
 
 /** How far the spotlight dims the rest of the page. Enough to guide, not enough to obscure. */
 private const val SPOTLIGHT_DIM = 0.42f
+
+/** The agent's reference copy of the page. Big enough to aim at, small enough to leave room. */
+private val AGENT_PAGE_HEIGHT = 180.dp
+
+/**
+ * Two drag points to a normalised rect, ordered and clamped.
+ *
+ * Ordering matters: dragging up-and-left is as natural as down-and-right, and an unordered rect
+ * would have right < left and silently draw nothing.
+ */
+private fun normalisedRect(start: Offset, end: Offset, size: Size): Rect = Rect(
+    left = (minOf(start.x, end.x) / size.width).coerceIn(0f, 1f),
+    top = (minOf(start.y, end.y) / size.height).coerceIn(0f, 1f),
+    right = (maxOf(start.x, end.x) / size.width).coerceIn(0f, 1f),
+    bottom = (maxOf(start.y, end.y) / size.height).coerceIn(0f, 1f),
+)
 
 /**
  * Everything the client is allowed to see.
@@ -142,9 +164,19 @@ fun ClientPane(page: ClientPage, modifier: Modifier = Modifier) {
     }
 }
 
-/** The near half. Same document, plus everything the client must never see. */
+/**
+ * The near half. Same document, plus everything the client must never see.
+ *
+ * @param onSpotlight receives a normalised region when the agent drags across their copy of the
+ *        page. Dragging on your own half to light something up on theirs is the closest thing the
+ *        product has to pointing at a page across a table, which is what it replaces.
+ */
 @Composable
-fun AgentPane(page: AgentPage, modifier: Modifier = Modifier) {
+fun AgentPane(
+    page: AgentPage,
+    modifier: Modifier = Modifier,
+    onSpotlight: (Rect?) -> Unit = {},
+) {
     val colors = LocalTwofoldColors.current
 
     Column(
@@ -159,6 +191,41 @@ fun AgentPane(page: AgentPage, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.labelLarge,
             color = colors.inkMuted,
         )
+
+        // The agent's own copy of the page, small. Without it there is nothing to point at, and
+        // "cast a spotlight" becomes a control with no target.
+        page.page.bitmap?.let { bitmap ->
+            var paneSize by remember { mutableStateOf(Size.Zero) }
+            var dragOrigin by remember { mutableStateOf<Offset?>(null) }
+
+            Image(
+                bitmap = bitmap.asImageBitmap(),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(AGENT_PAGE_HEIGHT)
+                    .background(colors.paperRaised)
+                    .onSizeChanged { paneSize = Size(it.width.toFloat(), it.height.toFloat()) }
+                    .pointerInput(bitmap) {
+                        detectDragGestures(
+                            onDragStart = { start -> dragOrigin = start },
+                            onDrag = { change, _ ->
+                                change.consume()
+                                if (paneSize.width <= 0f || paneSize.height <= 0f) return@detectDragGestures
+                                val origin = dragOrigin ?: return@detectDragGestures
+                                onSpotlight(
+                                    normalisedRect(origin, change.position, paneSize)
+                                )
+                            },
+                            // Deliberately no onDragEnd clear: the spotlight stays lit until the
+                            // page turns. An agent lets go of the screen to gesture with their
+                            // hand, and the light going out at that moment would be exactly wrong.
+                            onDragEnd = { dragOrigin = null },
+                        )
+                    },
+            )
+        }
 
         Column(
             Modifier
