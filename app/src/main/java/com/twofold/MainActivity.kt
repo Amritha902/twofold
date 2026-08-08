@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -30,6 +31,7 @@ import com.twofold.core.fold.DeviceMode
 import com.twofold.core.fold.FoldState
 import com.twofold.core.fold.FoldStateTracker
 import com.twofold.core.fold.TwofoldScaffold
+import com.twofold.data.document.DocumentRepository
 import com.twofold.feature.present.AgentPage
 import com.twofold.feature.present.AgentPane
 import com.twofold.feature.present.ClientPage
@@ -66,13 +68,13 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
     ) { uri ->
         if (uri != null) scope.launch { state.importAndOpen(uri) }
     }
+    val openPicker = { picker.launch(arrayOf("application/pdf")) }
 
     // Reopen the most recent document on launch so an agent who opens the app at a client's table
     // is one tap from presenting, not four.
     LaunchedEffect(Unit) {
         if (state.document == null) {
-            com.twofold.data.document.DocumentRepository(context).list().firstOrNull()
-                ?.let { state.open(it) }
+            DocumentRepository(context).list().firstOrNull()?.let { state.open(it) }
         }
     }
 
@@ -87,30 +89,30 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         PreparePane(
             hint = state.error ?: "Import the document you'll be walking your client through.",
             action = {
-                Button(onClick = { picker.launch(arrayOf("application/pdf")) }) {
-                    Text("Choose a PDF")
-                }
+                Button(onClick = { openPicker() }) { Text("Choose a PDF") }
             },
         )
         return
     }
 
-    // Both fields come from `rendered`, so the page number can never describe a different image.
+    // Both page fields come from `rendered`, so the number can never describe a different image.
     val clientPage = ClientPage(
         bitmap = state.rendered.bitmap,
         pageNumber = state.rendered.index + 1,
         pageCount = state.pageCount,
+        legibility = state.legibility,
+        spotlight = state.spotlight,
     )
 
     val agentPage = AgentPage(
         page = clientPage,
         documentTitle = document.title,
-        // Notes and talk track arrive next; the private layer exists, it is simply empty for now.
-        notes = "",
-        talkTrack = emptyList(),
+        notes = state.currentNotes.note,
+        talkTrack = state.currentNotes.talkTrack,
     )
 
     when (foldState.mode) {
+        // Flat on a table between two people: the far half is theirs, the near half is yours.
         DeviceMode.TWOFOLD -> TwofoldScaffold(
             foldState = foldState,
             creaseColor = LocalTwofoldColors.current.rule,
@@ -118,16 +120,41 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
             nearPane = {
                 Column(Modifier.fillMaxWidth()) {
                     AgentPane(agentPage, Modifier.weight(1f))
-                    PageControls(state, onImport = { picker.launch(arrayOf("application/pdf")) })
+                    PageControls(state, onImport = openPicker)
                 }
             },
         )
 
+        // Folded or held: private by definition, so this is where notes get written.
         DeviceMode.PRESENT, DeviceMode.PREPARE -> Column(Modifier.fillMaxWidth()) {
             ClientPane(clientPage, Modifier.weight(1f))
-            PageControls(state, onImport = { picker.launch(arrayOf("application/pdf")) })
+            NoteEditor(state)
+            PageControls(state, onImport = openPicker)
         }
     }
+}
+
+/**
+ * Only reachable when the device is folded or held — never in Twofold mode.
+ *
+ * That is a deliberate constraint rather than an omission: there is no way to open the notes
+ * editor while the phone is lying flat in front of a client, because there is no situation in
+ * which you would want to be typing your private notes across the table from them.
+ */
+@Composable
+private fun NoteEditor(state: PresentState) {
+    val scope = rememberCoroutineScope()
+
+    OutlinedTextField(
+        value = state.currentNotes.note,
+        onValueChange = { scope.launch { state.setNote(it) } },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        label = { Text("Private note for this page") },
+        minLines = 2,
+        maxLines = 4,
+    )
 }
 
 @Composable
@@ -142,7 +169,18 @@ private fun PageControls(state: PresentState, onImport: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TextButton(onClick = { scope.launch { state.previousPage() } }) { Text("Back") }
+
+        // Raises the type size on the client's half only. The agent's view is unchanged.
+        TextButton(
+            onClick = { state.adjustLegibility(state.legibility + LEGIBILITY_STEP) }
+        ) { Text("Larger") }
+        TextButton(
+            onClick = { state.adjustLegibility(state.legibility - LEGIBILITY_STEP) }
+        ) { Text("Smaller") }
+
         TextButton(onClick = onImport) { Text("Open…") }
         TextButton(onClick = { scope.launch { state.nextPage() } }) { Text("Next") }
     }
 }
+
+private const val LEGIBILITY_STEP = 0.15f

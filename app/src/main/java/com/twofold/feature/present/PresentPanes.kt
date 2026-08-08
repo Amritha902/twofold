@@ -18,11 +18,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import android.graphics.Bitmap
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+
 import com.twofold.core.design.LocalTwofoldColors
+
+/** How far the spotlight dims the rest of the page. Enough to guide, not enough to obscure. */
+private const val SPOTLIGHT_DIM = 0.42f
 
 /**
  * Everything the client is allowed to see.
@@ -38,7 +49,10 @@ data class ClientPage(
     val bitmap: Bitmap?,
     val pageNumber: Int,
     val pageCount: Int,
+    /** 1.0–2.0. Raised by the agent for a client who is reading without their glasses. */
     val legibility: Float = 1f,
+    /** Normalised (0..1) region of the page to draw the eye to, or null. */
+    val spotlight: Rect? = null,
 )
 
 /** The agent's view: the same page, plus the private layer. Composition, not inheritance. */
@@ -68,6 +82,7 @@ fun ClientPane(page: ClientPage, modifier: Modifier = Modifier) {
             Modifier
                 .fillMaxWidth()
                 .weight(1f)
+                .clipToBounds()
                 .background(colors.paperRaised),
             contentAlignment = Alignment.Center,
         ) {
@@ -75,11 +90,45 @@ fun ClientPane(page: ClientPage, modifier: Modifier = Modifier) {
                 Image(
                     bitmap = page.bitmap.asImageBitmap(),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .scale(page.legibility),
                     // Fit, never Crop. Cropping a legal document silently hides text from the one
                     // person who most needs to read all of it.
                     contentScale = ContentScale.Fit,
                 )
+            }
+
+            // The spotlight dims everything except one region. Drawn as a wash rather than a
+            // border because a border round a clause in a contract looks like the app marking it
+            // as a problem; a soft dim just moves the eye.
+            page.spotlight?.let { region ->
+                Canvas(Modifier.fillMaxSize()) {
+                    val focus = Rect(
+                        left = region.left * size.width,
+                        top = region.top * size.height,
+                        right = region.right * size.width,
+                        bottom = region.bottom * size.height,
+                    )
+                    val dim = Color.Black.copy(alpha = SPOTLIGHT_DIM)
+
+                    drawRect(dim, size = Size(size.width, focus.top))
+                    drawRect(
+                        dim,
+                        topLeft = Offset(0f, focus.bottom),
+                        size = Size(size.width, size.height - focus.bottom),
+                    )
+                    drawRect(
+                        dim,
+                        topLeft = Offset(0f, focus.top),
+                        size = Size(focus.left, focus.height),
+                    )
+                    drawRect(
+                        dim,
+                        topLeft = Offset(focus.right, focus.top),
+                        size = Size(size.width - focus.right, focus.height),
+                    )
+                }
             }
         }
 

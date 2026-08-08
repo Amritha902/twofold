@@ -4,13 +4,18 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Rect
 import com.twofold.data.document.DocumentRef
 import com.twofold.data.document.DocumentRepository
 import com.twofold.data.document.PageStore
 import com.twofold.data.document.PdfSource
+import com.twofold.data.notes.DocumentNotes
+import com.twofold.data.notes.NotesRepository
+import com.twofold.data.notes.PageNotes
 import kotlinx.coroutines.CoroutineScope
 
 /** An image and the page number it belongs to, carried together so they cannot disagree. */
@@ -28,9 +33,35 @@ class PresentState(
     private val scope: CoroutineScope,
 ) {
     private val repository = DocumentRepository(context)
+    private val notesRepository = NotesRepository(context)
 
     private var source: PdfSource? = null
     private var store: PageStore? = null
+
+    private var notes by mutableStateOf(DocumentNotes(""))
+
+    /** The private layer for the page currently on screen. Agent side only. */
+    val currentNotes: PageNotes get() = notes.forPage(rendered.index)
+
+    /**
+     * How large the client's half renders the page, 1.0 to 2.0.
+     *
+     * Lives here rather than in the client's own state because the *agent* controls it. Many
+     * clients are over fifty and reading a policy across a table without their glasses, and asking
+     * them to pinch-zoom a contract in front of the person selling it to them is not something
+     * anyone does. The agent raises it for them.
+     */
+    var legibility by mutableFloatStateOf(1f)
+        private set
+
+    /**
+     * A region of the current page to draw the client's eye to, in normalised page coordinates.
+     *
+     * Transient by design — it is cast during a conversation and gone when the page turns. Nothing
+     * about a spotlight should outlive the sentence that prompted it.
+     */
+    var spotlight by mutableStateOf<Rect?>(null)
+        private set
 
     var document by mutableStateOf<DocumentRef?>(null)
         private set
@@ -89,6 +120,7 @@ class PresentState(
         store = PageStore(context, opened, scope)
         document = ref
         pageIndex = 0
+        notes = notesRepository.load(ref.id)
         isLoading = false
 
         renderCurrent()
@@ -98,12 +130,44 @@ class PresentState(
         val count = pageCount
         if (count == 0) return
         pageIndex = index.coerceIn(0, count - 1)
+        spotlight = null
         renderCurrent()
     }
 
     suspend fun nextPage() = goToPage(pageIndex + 1)
 
     suspend fun previousPage() = goToPage(pageIndex - 1)
+
+    // region the private layer
+
+    /** Writes through on every edit. An agent editing notes in a car will not press save. */
+    suspend fun setNote(text: String) = updateNotes { it.copy(note = text) }
+
+    suspend fun addTalkTrackLine(line: String) {
+        if (line.isBlank()) return
+        updateNotes { it.copy(talkTrack = it.talkTrack + line.trim()) }
+    }
+
+    suspend fun removeTalkTrackLine(index: Int) = updateNotes {
+        it.copy(talkTrack = it.talkTrack.filterIndexed { i, _ -> i != index })
+    }
+
+    private suspend fun updateNotes(transform: (PageNotes) -> PageNotes) {
+        val page = rendered.index
+        notes = notes.withPage(page, transform(notes.forPage(page)))
+        notesRepository.save(notes)
+    }
+
+    // endregion
+
+    /** Named `adjust` rather than `set` — the generated property setter already owns that name. */
+    fun adjustLegibility(scale: Float) {
+        legibility = scale.coerceIn(MIN_LEGIBILITY, MAX_LEGIBILITY)
+    }
+
+    fun castSpotlight(region: Rect?) {
+        spotlight = region
+    }
 
     private suspend fun renderCurrent() {
         val currentStore = store ?: return
@@ -144,5 +208,8 @@ class PresentState(
          * moments — visibly desynchronising the two halves.
          */
         const val RENDER_WIDTH_PX = 1400
+
+        const val MIN_LEGIBILITY = 1f
+        const val MAX_LEGIBILITY = 2f
     }
 }
