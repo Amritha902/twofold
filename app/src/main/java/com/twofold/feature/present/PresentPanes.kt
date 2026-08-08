@@ -41,8 +41,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.twofold.core.design.LocalTwofoldColors
 
-/** How far the spotlight dims the rest of the page. Enough to guide, not enough to obscure. */
-private const val SPOTLIGHT_DIM = 0.42f
+/**
+ * How far the spotlight dims the rest of the page. Enough to guide, not enough to obscure.
+ *
+ * 0.42 was the first guess and it was wrong — on a real page it greyed the document out, and the
+ * client lost the ability to see anything except the lit clause. Someone reading a contract needs
+ * to keep the whole page in view while their eye is drawn to one part of it.
+ */
+private const val SPOTLIGHT_DIM = 0.26f
 
 /**
  * Two drag points to a normalised rect, ordered and clamped.

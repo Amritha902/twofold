@@ -1,7 +1,8 @@
 # Twofold — Submission Copy
 
-Draft. The Galaxy-optimization statement is 20% of the category score, so it is written here
-properly rather than in the last hour before the deadline.
+> **Galaxy Store listing copy and assets have moved to [store/LISTING.md](store/LISTING.md)**, which
+> is the paste-ready version with the finished screenshots beside it. This file keeps the Devpost
+> write-up and the demo-video plan. Two copies of the same copy is how they drift apart.
 
 ---
 
