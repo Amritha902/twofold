@@ -1,5 +1,6 @@
 package com.twofold.feature.present
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,12 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Rect
+import android.graphics.Bitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.twofold.core.design.LocalTwofoldColors
@@ -30,17 +35,16 @@ import com.twofold.core.design.LocalTwofoldColors
  * If you find yourself wanting to add a field here, that is the signal to stop.
  */
 data class ClientPage(
-    val title: String,
-    val body: String,
+    val bitmap: Bitmap?,
     val pageNumber: Int,
     val pageCount: Int,
-    val highlights: List<Rect> = emptyList(),
     val legibility: Float = 1f,
 )
 
 /** The agent's view: the same page, plus the private layer. Composition, not inheritance. */
 data class AgentPage(
     val page: ClientPage,
+    val documentTitle: String,
     val notes: String,
     val talkTrack: List<String>,
 )
@@ -56,27 +60,35 @@ fun ClientPane(page: ClientPage, modifier: Modifier = Modifier) {
     Column(
         modifier
             .fillMaxSize()
-            .background(colors.paperRaised)
-            .padding(horizontal = 32.dp, vertical = 28.dp)
+            .background(colors.paper)
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(
-            text = page.title,
-            style = MaterialTheme.typography.headlineMedium,
-            color = colors.ink,
-        )
-        Spacer(Modifier.height(20.dp))
-        Text(
-            text = page.body,
-            style = MaterialTheme.typography.bodyLarge,
-            color = colors.ink,
-        )
-        Spacer(Modifier.weight(1f))
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .background(colors.paperRaised),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (page.bitmap != null) {
+                Image(
+                    bitmap = page.bitmap.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    // Fit, never Crop. Cropping a legal document silently hides text from the one
+                    // person who most needs to read all of it.
+                    contentScale = ContentScale.Fit,
+                )
+            }
+        }
+
+        Spacer(Modifier.height(10.dp))
+
         Text(
             text = "${page.pageNumber} / ${page.pageCount}",
             style = MaterialTheme.typography.labelLarge,
             color = colors.inkMuted,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
         )
     }
 }
@@ -90,42 +102,56 @@ fun AgentPane(page: AgentPage, modifier: Modifier = Modifier) {
         modifier
             .fillMaxSize()
             .background(colors.paper)
-            .padding(horizontal = 24.dp, vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+            .padding(horizontal = 20.dp, vertical = 14.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(
-            text = page.page.title,
-            style = MaterialTheme.typography.bodyMedium,
+            text = page.documentTitle,
+            style = MaterialTheme.typography.labelLarge,
             color = colors.inkMuted,
         )
 
-        Text(
-            text = page.notes,
-            style = MaterialTheme.typography.bodyMedium,
-            color = colors.note,
-        )
+        Column(
+            Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            if (page.notes.isNotBlank()) {
+                Text(
+                    text = page.notes,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = colors.note,
+                )
+            }
 
-        page.talkTrack.forEach { line ->
-            Text(
-                text = "— $line",
-                style = MaterialTheme.typography.bodyMedium,
-                color = colors.ink,
-            )
+            page.talkTrack.forEach { line ->
+                Text(
+                    text = "— $line",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = colors.ink,
+                )
+            }
         }
     }
 }
 
 /** Shown when the device is folded or held: single pane, private by definition. */
 @Composable
-fun PreparePane(hint: String, modifier: Modifier = Modifier) {
+fun PreparePane(
+    hint: String,
+    modifier: Modifier = Modifier,
+    action: (@Composable () -> Unit)? = null,
+) {
     val colors = LocalTwofoldColors.current
 
-    Box(
+    Column(
         modifier
             .fillMaxSize()
             .background(colors.paper)
             .padding(32.dp),
-        contentAlignment = Alignment.Center,
+        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = hint,
@@ -133,5 +159,6 @@ fun PreparePane(hint: String, modifier: Modifier = Modifier) {
             color = colors.inkMuted,
             textAlign = TextAlign.Center,
         )
+        action?.invoke()
     }
 }
