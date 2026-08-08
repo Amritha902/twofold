@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.twofold.core.fold.FoldLogicTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-08-08T16:49:50.091Z" hostname="amrithas-MacBook-Air.local" time="0.01">
+<testsuite name="com.twofold.core.fold.FoldLogicTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-08-08T16:50:35.063Z" hostname="amrithas-MacBook-Air.local" time="0.011">
   <properties/>
   <testcase name="crease fraction is computed from the reported position" classname="com.twofold.core.fold.FoldLogicTest" time="0.001"/>
   <testcase name="crease fraction is null rather than guessed when it cannot be known" classname="com.twofold.core.fold.FoldLogicTest" time="0.0"/>

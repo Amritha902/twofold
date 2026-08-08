@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -249,17 +250,60 @@ private fun SigningControls(canComplete: Boolean, onCancel: () -> Unit, onDone: 
 @Composable
 private fun NoteEditor(state: PresentState) {
     val scope = rememberCoroutineScope()
+    val colors = LocalTwofoldColors.current
+    var draftLine by remember { mutableStateOf("") }
 
-    OutlinedTextField(
-        value = state.currentNotes.note,
-        onValueChange = { scope.launch { state.setNote(it) } },
-        modifier = Modifier
+    Column(
+        Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        label = { Text("Private note for this page") },
-        minLines = 2,
-        maxLines = 4,
-    )
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        OutlinedTextField(
+            value = state.currentNotes.note,
+            onValueChange = { scope.launch { state.setNote(it) } },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Private note for this page") },
+            minLines = 2,
+            maxLines = 4,
+        )
+
+        // Talk track: the three things to say on this page, and the objection that always comes up.
+        // Kept as separate lines rather than a paragraph because they are read at a glance,
+        // mid-sentence, by someone who is also talking.
+        state.currentNotes.talkTrack.forEachIndexed { index, line ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "— $line",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = colors.ink,
+                    modifier = Modifier.weight(1f),
+                )
+                TextButton(onClick = { scope.launch { state.removeTalkTrackLine(index) } }) {
+                    Text("Remove")
+                }
+            }
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            OutlinedTextField(
+                value = draftLine,
+                onValueChange = { draftLine = it },
+                modifier = Modifier.weight(1f),
+                label = { Text("Add a line to say") },
+                singleLine = true,
+            )
+            TextButton(
+                enabled = draftLine.isNotBlank(),
+                onClick = {
+                    scope.launch {
+                        state.addTalkTrackLine(draftLine)
+                        draftLine = ""
+                    }
+                },
+            ) { Text("Add") }
+        }
+    }
 }
 
 @Composable
