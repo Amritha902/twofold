@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.twofold.core.fold.FoldLogicTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-08-08T16:22:49.541Z" hostname="amrithas-MacBook-Air.local" time="0.009">
+  <properties/>
+  <testcase name="crease fraction is computed from the reported position" classname="com.twofold.core.fold.FoldLogicTest" time="0.001"/>
+  <testcase name="crease fraction is null rather than guessed when it cannot be known" classname="com.twofold.core.fold.FoldLogicTest" time="0.0"/>
+  <testcase name="flat and lying on a table is Twofold" classname="com.twofold.core.fold.FoldLogicTest" time="0.0"/>
+  <testcase name="half opened and horizontal is Present" classname="com.twofold.core.fold.FoldLogicTest" time="0.0"/>
+  <testcase name="no hinge always degrades to Prepare" classname="com.twofold.core.fold.FoldLogicTest" time="0.005"/>
+  <testcase name="flat but held in the hands is not Twofold" classname="com.twofold.core.fold.FoldLogicTest" time="0.0"/>
+  <testcase name="a vertical crease is never Twofold" classname="com.twofold.core.fold.FoldLogicTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

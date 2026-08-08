@@ -38,7 +38,7 @@ class FoldStateTracker(private val activity: Activity) {
 
     fun foldState(): Flow<FoldState> =
         combine(
-            postureFlow().debounce(POSTURE_SETTLE_MS).distinctUntilChanged(),
+            postureFlow().debounce(FoldLogic.POSTURE_SETTLE_MS).distinctUntilChanged(),
             lyingFlatFlow(),
             hingeAngleFlow(),
         ) { posture, lyingFlat, hingeAngle ->
@@ -48,7 +48,7 @@ class FoldStateTracker(private val activity: Activity) {
     // region posture
 
     private data class Posture(
-        val state: FoldingFeature.State?,
+        val hinge: HingeState,
         val isHorizontal: Boolean,
         val creaseFraction: Float?,
         val creaseThickness: Int,
@@ -61,45 +61,41 @@ class FoldStateTracker(private val activity: Activity) {
                 val fold = layoutInfo.displayFeatures
                     .filterIsInstance<FoldingFeature>()
                     .firstOrNull()
-                    ?: return@map Posture(null, false, null, 0)
+                    ?: return@map Posture(HingeState.NONE, false, null, 0)
 
                 val windowHeight = WindowMetricsCalculator.getOrCreate()
                     .computeCurrentWindowMetrics(activity)
                     .bounds
                     .height()
 
-                val horizontal = fold.orientation == FoldingFeature.Orientation.HORIZONTAL
-
                 // Only a horizontal crease splits the window into a near half and a far half.
                 // A vertical crease is a book, not a table, and Twofold mode does not apply.
-                val fraction = if (horizontal && windowHeight > 0) {
-                    fold.bounds.centerY().toFloat() / windowHeight
-                } else {
-                    null
-                }
+                val horizontal = fold.orientation == FoldingFeature.Orientation.HORIZONTAL
 
                 Posture(
-                    state = fold.state,
+                    hinge = fold.state.toHingeState(),
                     isHorizontal = horizontal,
-                    creaseFraction = fraction?.coerceIn(0f, 1f),
+                    creaseFraction = if (horizontal) {
+                        FoldLogic.creaseFraction(fold.bounds.centerY(), windowHeight)
+                    } else {
+                        null
+                    },
                     creaseThickness = if (horizontal) fold.bounds.height() else 0,
                 )
             }
 
-    private fun Posture.toFoldState(lyingFlat: Boolean, hingeAngle: Float?): FoldState {
-        val mode = when {
-            state == null || !isHorizontal -> DeviceMode.PREPARE
-            state == FoldingFeature.State.FLAT && lyingFlat -> DeviceMode.TWOFOLD
-            state == FoldingFeature.State.HALF_OPENED -> DeviceMode.PRESENT
-            else -> DeviceMode.PREPARE
-        }
-        return FoldState(
-            mode = mode,
-            creaseFraction = creaseFraction,
-            creaseThickness = creaseThickness,
-            hingeAngle = hingeAngle,
-        )
+    private fun FoldingFeature.State.toHingeState(): HingeState = when (this) {
+        FoldingFeature.State.FLAT -> HingeState.FLAT
+        FoldingFeature.State.HALF_OPENED -> HingeState.HALF_OPENED
+        else -> HingeState.NONE
     }
+
+    private fun Posture.toFoldState(lyingFlat: Boolean, hingeAngle: Float?) = FoldState(
+        mode = FoldLogic.deriveMode(hinge, isHorizontal, lyingFlat),
+        creaseFraction = creaseFraction,
+        creaseThickness = creaseThickness,
+        hingeAngle = hingeAngle,
+    )
 
     // endregion
 
@@ -114,7 +110,7 @@ class FoldStateTracker(private val activity: Activity) {
         val gravity = sensors.getDefaultSensor(Sensor.TYPE_GRAVITY) ?: return flowOf(false)
 
         return sensors.readings(gravity)
-            .map { values -> values[Z] > FACE_UP_GRAVITY_THRESHOLD }
+            .map { values -> values[Z] > FoldLogic.FACE_UP_GRAVITY_THRESHOLD }
             .distinctUntilChanged()
     }
 
@@ -141,15 +137,7 @@ class FoldStateTracker(private val activity: Activity) {
     // endregion
 
     private companion object {
+        /** Index of the z component in a TYPE_GRAVITY reading. */
         const val Z = 2
-
-        /**
-         * Out of ~9.81 m/s². Generous enough to tolerate a slightly uneven table, tight enough to
-         * exclude a device being held at a reading angle.
-         */
-        const val FACE_UP_GRAVITY_THRESHOLD = 8.5f
-
-        /** Long enough to swallow the intermediate states of a physical unfold. */
-        const val POSTURE_SETTLE_MS = 250L
     }
 }
