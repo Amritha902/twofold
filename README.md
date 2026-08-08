@@ -13,6 +13,11 @@ The crease splits the screen. Your half faces you. Their half faces them, right-
 
 You never hand over your phone. They never see your notes.
 
+![Twofold: held in the hand, then set down on the table](docs/media/twofold-hook.gif)
+
+*Held in the hand it's a private editor. Set it down and it becomes two-sided. No button is
+pressed — the posture is the command.*
+
 ---
 
 ## Why this needs a foldable
