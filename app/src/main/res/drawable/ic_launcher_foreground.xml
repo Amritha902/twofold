@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The product, drawn literally: one sheet split by a crease, with lines of text running one way
+  above it and the other way below. Two people, one page, opposite orientations.
+
+  Everything sits inside the 72dp adaptive-icon safe zone (18dp inset on each side of the 108dp
+  canvas), so nothing important is lost to a circular or squircle mask.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- The sheet -->
+    <path
+        android:fillColor="#FFFDF9"
+        android:strokeColor="#E0D9CE"
+        android:strokeWidth="1"
+        android:pathData="M28,24h52a2,2 0 0 1 2,2v56a2,2 0 0 1 -2,2h-52a2,2 0 0 1 -2,-2v-56a2,2 0 0 1 2,-2z" />
+
+    <!-- Client's half: text ranged left, reading toward the far side of the table -->
+    <path android:fillColor="#1B1917" android:pathData="M34,36h34v3.2h-34z" />
+    <path android:fillColor="#1B1917" android:pathData="M34,44h40v3.2h-40z" />
+    <path android:fillColor="#1B1917" android:pathData="M34,52h26v3.2h-26z" />
+
+    <!-- The crease. The one accent, and the only thing that crosses the full width. -->
+    <path android:fillColor="#7A3428" android:pathData="M26,58.6h56v1.6h-56z" />
+
+    <!-- Agent's half: ranged right, mirrored — the same page read from the other side.
+         Bars end at y=81.2, inside the sheet's bottom edge at y=84. -->
+    <path android:fillColor="#6E675C" android:pathData="M40,64h34v3.2h-34z" />
+    <path android:fillColor="#6E675C" android:pathData="M34,71h40v3.2h-40z" />
+    <path android:fillColor="#6E675C" android:pathData="M48,78h26v3.2h-26z" />
+</vector>

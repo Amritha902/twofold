@@ -1,6 +1,9 @@
 R_DEF: Internal format may change without notice
 local
+drawable ic_launcher_background
+drawable ic_launcher_foreground
 font inter
 font source_serif_4
+mipmap ic_launcher
 string app_name
 style Theme.Twofold
