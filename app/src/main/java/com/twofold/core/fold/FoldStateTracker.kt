@@ -6,7 +6,9 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import androidx.window.layout.FoldingFeature
+import com.twofold.BuildConfig
 import androidx.window.layout.WindowInfoTracker
 import androidx.window.layout.WindowMetricsCalculator
 import kotlinx.coroutines.channels.awaitClose
@@ -42,7 +44,18 @@ class FoldStateTracker(private val activity: Activity) {
             lyingFlatFlow(),
             hingeAngleFlow(),
         ) { posture, lyingFlat, hingeAngle ->
-            posture.toFoldState(lyingFlat, hingeAngle)
+            posture.toFoldState(lyingFlat, hingeAngle).also { state ->
+                if (BuildConfig.DEBUG) {
+                    // Debug-only, and it earns its place: posture bugs are invisible from the UI —
+                    // the app just sits in the wrong mode with no indication why.
+                    Log.d(
+                        TAG,
+                        "hinge=${posture.hinge} horizontal=${posture.isHorizontal} " +
+                            "lyingFlat=$lyingFlat angle=$hingeAngle " +
+                            "crease=${posture.creaseFraction} -> ${state.mode}",
+                    )
+                }
+            }
         }.distinctUntilChanged()
 
     // region posture
@@ -137,6 +150,8 @@ class FoldStateTracker(private val activity: Activity) {
     // endregion
 
     private companion object {
+        const val TAG = "TwofoldPosture"
+
         /** Index of the z component in a TYPE_GRAVITY reading. */
         const val Z = 2
     }

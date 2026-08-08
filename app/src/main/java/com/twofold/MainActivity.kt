@@ -213,7 +213,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
                         PageControls(
                             state = state,
                             onImport = openPicker,
-                            onAskForSignature = { state.startSigning(document.title) },
+                            onAskForSignature = { state.startSigning() },
                         )
                     }
                 }
@@ -265,6 +265,14 @@ private fun NoteEditor(state: PresentState) {
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        OutlinedTextField(
+            value = state.clientLabel,
+            onValueChange = { state.clientLabel = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Who are you meeting?") },
+            singleLine = true,
+        )
+
         OutlinedTextField(
             value = state.currentNotes.note,
             onValueChange = { scope.launch { state.setNote(it) } },
