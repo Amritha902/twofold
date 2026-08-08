@@ -17,6 +17,8 @@ import com.twofold.data.document.PdfSource
 import com.twofold.data.notes.DocumentNotes
 import com.twofold.data.notes.NotesRepository
 import com.twofold.data.notes.PageNotes
+import com.twofold.data.session.Session
+import com.twofold.data.session.SessionLog
 import com.twofold.data.session.SignatureRecord
 import com.twofold.data.session.SignedPdfExporter
 import kotlinx.coroutines.CoroutineScope
@@ -135,6 +137,7 @@ class PresentState(
         if (count == 0) return
         pageIndex = index.coerceIn(0, count - 1)
         spotlight = null
+        pagesSeen.add(pageIndex)
         renderCurrent()
     }
 
@@ -172,6 +175,53 @@ class PresentState(
     fun castSpotlight(region: Rect?) {
         spotlight = region
     }
+
+    // region session recording
+
+    private var activeSession: Session? = null
+    private val sessionLog = SessionLog(context)
+    private val pagesSeen = mutableSetOf<Int>()
+
+    /**
+     * Called when the device enters Twofold mode with a document open — i.e. the moment a meeting
+     * actually starts. Not on app launch: opening the app on a train is not a client meeting, and
+     * a log full of those is a log nobody reads.
+     */
+    fun beginSession() {
+        val ref = document ?: return
+        if (activeSession != null) return
+
+        pagesSeen.clear()
+        pagesSeen.add(rendered.index)
+        activeSession = Session(
+            id = System.currentTimeMillis().toString(RADIX_36),
+            documentId = ref.id,
+            documentTitle = ref.title,
+            clientLabel = "",
+            startedAt = System.currentTimeMillis(),
+            endedAt = null,
+            pagesShown = 1,
+            signed = false,
+        )
+    }
+
+    /** Ends the meeting and writes it to the log. Safe to call when no session is running. */
+    suspend fun endSession(signed: Boolean = false) {
+        val session = activeSession ?: return
+        activeSession = null
+
+        sessionLog.record(
+            session.copy(
+                endedAt = System.currentTimeMillis(),
+                pagesShown = pagesSeen.size,
+                signed = signed,
+            )
+        )
+    }
+
+    suspend fun unsignedSessions(): List<Session> = sessionLog.unsigned()
+
+    // endregion
 
     // region signing
 
@@ -229,6 +279,7 @@ class PresentState(
         if (signed != null) {
             lastSignedFile = signed
             isSigning = false
+            endSession(signed = true)
         }
         return signed
     }
@@ -275,6 +326,7 @@ class PresentState(
          */
         const val RENDER_WIDTH_PX = 1400
 
+        const val RADIX_36 = 36
         const val MIN_LEGIBILITY = 1f
         const val MAX_LEGIBILITY = 2f
     }

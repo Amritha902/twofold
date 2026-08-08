@@ -122,6 +122,12 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         talkTrack = state.currentNotes.talkTrack,
     )
 
+    // A meeting starts when the phone is put down in front of someone and ends when it is picked
+    // up. Tying the log to posture rather than to app launch keeps it to real client meetings.
+    LaunchedEffect(foldState.mode, document.id) {
+        if (foldState.mode == DeviceMode.TWOFOLD) state.beginSession() else state.endSession()
+    }
+
     var strokes by remember { mutableStateOf<List<List<Offset>>>(emptyList()) }
     var padSize by remember { mutableStateOf(Size.Zero) }
 
