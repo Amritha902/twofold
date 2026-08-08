@@ -1,4 +1,6 @@
 R_DEF: Internal format may change without notice
 local
+font inter
+font source_serif_4
 string app_name
 style Theme.Twofold

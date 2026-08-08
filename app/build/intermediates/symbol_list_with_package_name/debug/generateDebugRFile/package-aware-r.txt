@@ -1,3 +1,5 @@
 com.twofold
+font inter
+font source_serif_4
 string app_name
 style Theme_Twofold

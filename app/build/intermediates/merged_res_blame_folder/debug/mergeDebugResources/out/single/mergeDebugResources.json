@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.twofold.app-debug-41:/font_source_serif_4.ttf.flat",
+        "source": "com.twofold.app-main-43:/font/source_serif_4.ttf"
+    },
+    {
+        "merged": "com.twofold.app-debug-41:/font_inter.ttf.flat",
+        "source": "com.twofold.app-main-43:/font/inter.ttf"
+    }
+]

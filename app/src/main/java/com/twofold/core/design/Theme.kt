@@ -9,9 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.twofold.R
 
 /**
  * Twofold's palette. Paper and ink, one accent, no gradients — see docs/DESIGN.md.
@@ -56,15 +61,71 @@ private val DarkColors = TwofoldColors(
 val LocalTwofoldColors = staticCompositionLocalOf { LightColors }
 
 /**
+ * Both faces are embedded in the APK, not fetched from a font provider.
+ *
+ * Downloadable fonts would mean a document opening with fallback type in a client's living room
+ * with no signal — which is precisely the situation this app is for. Both are SIL OFL; the licences
+ * ship in assets/licenses.
+ *
+ * These are variable fonts, so weights come from variation settings on the single file rather than
+ * from separate static cuts.
+ */
+@OptIn(ExperimentalTextApi::class)
+private fun variable(resId: Int, weight: FontWeight) = Font(
+    resId = resId,
+    weight = weight,
+    variationSettings = FontVariation.Settings(FontVariation.weight(weight.weight)),
+)
+
+/** Editorial, credible, reads as printed matter. Used for the document and for headings. */
+private val SourceSerif = FontFamily(
+    variable(R.font.source_serif_4, FontWeight.Normal),
+    variable(R.font.source_serif_4, FontWeight.Medium),
+    variable(R.font.source_serif_4, FontWeight.SemiBold),
+)
+
+/** Neutral, gets out of the way. Used for controls and metadata. */
+private val Inter = FontFamily(
+    variable(R.font.inter, FontWeight.Normal),
+    variable(R.font.inter, FontWeight.Medium),
+)
+
+/**
  * Client-side base size is deliberately larger than a phone UI would normally use. Many clients are
  * over fifty and reading a policy across a table without their glasses.
+ *
+ * Serif for anything that is the document; sans for anything that operates it. The split is the
+ * point — it makes the agent's controls read as machinery and the client's half read as paper.
  */
 private val TwofoldTypography = Typography(
-    displaySmall = TextStyle(fontSize = 34.sp, lineHeight = 42.sp, fontWeight = FontWeight.Normal),
-    headlineMedium = TextStyle(fontSize = 26.sp, lineHeight = 34.sp, fontWeight = FontWeight.Normal),
-    bodyLarge = TextStyle(fontSize = 19.sp, lineHeight = 29.sp),
-    bodyMedium = TextStyle(fontSize = 16.sp, lineHeight = 24.sp),
-    labelLarge = TextStyle(fontSize = 14.sp, lineHeight = 20.sp, fontWeight = FontWeight.Medium),
+    displaySmall = TextStyle(
+        fontFamily = SourceSerif,
+        fontSize = 34.sp,
+        lineHeight = 42.sp,
+        fontWeight = FontWeight.Normal,
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = SourceSerif,
+        fontSize = 26.sp,
+        lineHeight = 34.sp,
+        fontWeight = FontWeight.Normal,
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = SourceSerif,
+        fontSize = 19.sp,
+        lineHeight = 29.sp,
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = Inter,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+    ),
+    labelLarge = TextStyle(
+        fontFamily = Inter,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        fontWeight = FontWeight.Medium,
+    ),
 )
 
 @Composable
