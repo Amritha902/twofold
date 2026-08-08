@@ -47,6 +47,8 @@ import com.twofold.feature.present.ClientPage
 import com.twofold.feature.present.ClientPane
 import com.twofold.feature.present.PreparePane
 import com.twofold.feature.present.PresentState
+import com.twofold.data.session.Session
+import com.twofold.feature.sessions.FollowUpList
 import com.twofold.feature.sign.SignaturePad
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -82,12 +84,15 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
     }
     val openPicker = { picker.launch(arrayOf("application/pdf")) }
 
+    var followUps by remember { mutableStateOf<List<Session>>(emptyList()) }
+
     // Reopen the most recent document on launch so an agent who opens the app at a client's table
     // is one tap from presenting, not four.
     LaunchedEffect(Unit) {
         if (state.document == null) {
             DocumentRepository(context).list().firstOrNull()?.let { state.open(it) }
         }
+        followUps = state.unsignedSessions()
     }
 
     // PdfRenderer holds a file descriptor. Without this it survives the screen and leaks.
@@ -218,6 +223,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         // Folded or held: private by definition, so this is where notes get written.
         DeviceMode.PRESENT, DeviceMode.PREPARE -> Column(Modifier.fillMaxWidth()) {
             ClientPane(clientPage, Modifier.weight(1f))
+            FollowUpList(followUps)
             NoteEditor(state)
             PageControls(state, onImport = openPicker, onAskForSignature = null)
         }
