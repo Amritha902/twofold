@@ -8,6 +8,9 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,9 +43,6 @@ import com.twofold.core.design.LocalTwofoldColors
 
 /** How far the spotlight dims the rest of the page. Enough to guide, not enough to obscure. */
 private const val SPOTLIGHT_DIM = 0.42f
-
-/** The agent's reference copy of the page. Big enough to aim at, small enough to leave room. */
-private val AGENT_PAGE_HEIGHT = 180.dp
 
 /**
  * Two drag points to a normalised rect, ordered and clamped.
@@ -96,65 +96,75 @@ fun ClientPane(page: ClientPage, modifier: Modifier = Modifier) {
     Column(
         modifier
             .fillMaxSize()
+            // The warm ground, not white. The page below sits ON this, so it reads as a sheet of
+            // paper on a desk rather than a small image floating in a large empty box.
             .background(colors.paper)
-            .padding(horizontal = 20.dp, vertical = 16.dp),
+            .padding(horizontal = 20.dp, vertical = 14.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .clipToBounds()
-                .background(colors.paperRaised),
+                .clipToBounds(),
             contentAlignment = Alignment.Center,
         ) {
-            if (page.bitmap != null) {
-                Image(
-                    bitmap = page.bitmap.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .scale(page.legibility),
-                    // Fit, never Crop. Cropping a legal document silently hides text from the one
-                    // person who most needs to read all of it.
-                    contentScale = ContentScale.Fit,
-                )
-            }
+            page.bitmap?.let { bitmap ->
+                // The sheet is exactly the page's shape. Sizing it by aspect ratio rather than
+                // letting ContentScale.Fit letterbox inside a full-width box is what makes the
+                // spotlight land on the page instead of on the empty margins beside it.
+                Box(
+                    Modifier
+                        .fillMaxHeight()
+                        .aspectRatio(bitmap.width.toFloat() / bitmap.height.toFloat())
+                        .scale(page.legibility)
+                        .background(colors.paperRaised),
+                ) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        // Fit, never Crop. Cropping a legal document silently hides text from the
+                        // one person who most needs to read all of it.
+                        contentScale = ContentScale.Fit,
+                    )
 
-            // The spotlight dims everything except one region. Drawn as a wash rather than a
-            // border because a border round a clause in a contract looks like the app marking it
-            // as a problem; a soft dim just moves the eye.
-            page.spotlight?.let { region ->
-                Canvas(Modifier.fillMaxSize()) {
-                    val focus = Rect(
-                        left = region.left * size.width,
-                        top = region.top * size.height,
-                        right = region.right * size.width,
-                        bottom = region.bottom * size.height,
-                    )
-                    val dim = Color.Black.copy(alpha = SPOTLIGHT_DIM)
+                    // The spotlight dims everything except one region. A wash rather than a border,
+                    // because a box drawn round a clause in a contract looks like the app flagging
+                    // a problem; a soft dim just moves the eye.
+                    page.spotlight?.let { region ->
+                        Canvas(Modifier.fillMaxSize()) {
+                            val focus = Rect(
+                                left = region.left * size.width,
+                                top = region.top * size.height,
+                                right = region.right * size.width,
+                                bottom = region.bottom * size.height,
+                            )
+                            val dim = Color.Black.copy(alpha = SPOTLIGHT_DIM)
 
-                    drawRect(dim, size = Size(size.width, focus.top))
-                    drawRect(
-                        dim,
-                        topLeft = Offset(0f, focus.bottom),
-                        size = Size(size.width, size.height - focus.bottom),
-                    )
-                    drawRect(
-                        dim,
-                        topLeft = Offset(0f, focus.top),
-                        size = Size(focus.left, focus.height),
-                    )
-                    drawRect(
-                        dim,
-                        topLeft = Offset(focus.right, focus.top),
-                        size = Size(size.width - focus.right, focus.height),
-                    )
+                            drawRect(dim, size = Size(size.width, focus.top))
+                            drawRect(
+                                dim,
+                                topLeft = Offset(0f, focus.bottom),
+                                size = Size(size.width, size.height - focus.bottom),
+                            )
+                            drawRect(
+                                dim,
+                                topLeft = Offset(0f, focus.top),
+                                size = Size(focus.left, focus.height),
+                            )
+                            drawRect(
+                                dim,
+                                topLeft = Offset(focus.right, focus.top),
+                                size = Size(size.width - focus.right, focus.height),
+                            )
+                        }
+                    }
                 }
             }
         }
 
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(8.dp))
 
         Text(
             text = "${page.pageNumber} / ${page.pageCount}",
@@ -179,21 +189,18 @@ fun AgentPane(
 ) {
     val colors = LocalTwofoldColors.current
 
-    Column(
+    // A Row, not a Column. This half of a flat foldable is a wide landscape strip; stacking the
+    // page above the notes left most of the width empty and squeezed both. Side by side, the page
+    // gets its full height and the notes get the space they need to be read at a glance.
+    Row(
         modifier
             .fillMaxSize()
             .background(colors.paper)
             .padding(horizontal = 20.dp, vertical = 14.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        Text(
-            text = page.documentTitle,
-            style = MaterialTheme.typography.labelLarge,
-            color = colors.inkMuted,
-        )
-
-        // The agent's own copy of the page, small. Without it there is nothing to point at, and
-        // "cast a spotlight" becomes a control with no target.
+        // The agent's own copy of the page. Without it there is nothing to point at, and "cast a
+        // spotlight" becomes a control with no target.
         page.page.bitmap?.let { bitmap ->
             var paneSize by remember { mutableStateOf(Size.Zero) }
             var dragOrigin by remember { mutableStateOf<Offset?>(null) }
@@ -203,8 +210,9 @@ fun AgentPane(
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(AGENT_PAGE_HEIGHT)
+                    .fillMaxHeight()
+                    // Same shape as the client's sheet, so a drag here maps to what they see.
+                    .aspectRatio(bitmap.width.toFloat() / bitmap.height.toFloat())
                     .background(colors.paperRaised)
                     .onSizeChanged { paneSize = Size(it.width.toFloat(), it.height.toFloat()) }
                     .pointerInput(bitmap) {
@@ -230,9 +238,16 @@ fun AgentPane(
         Column(
             Modifier
                 .weight(1f)
+                .fillMaxHeight()
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            Text(
+                text = page.documentTitle,
+                style = MaterialTheme.typography.labelLarge,
+                color = colors.inkMuted,
+            )
+
             if (page.notes.isNotBlank()) {
                 Text(
                     text = page.notes,
