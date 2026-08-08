@@ -13,6 +13,9 @@ import com.twofold.data.document.PageStore
 import com.twofold.data.document.PdfSource
 import kotlinx.coroutines.CoroutineScope
 
+/** An image and the page number it belongs to, carried together so they cannot disagree. */
+data class RenderedPage(val bitmap: Bitmap?, val index: Int)
+
 /**
  * Holds the open document and the page currently being shown.
  *
@@ -32,10 +35,19 @@ class PresentState(
     var document by mutableStateOf<DocumentRef?>(null)
         private set
 
+    /** The page the agent has asked for. May briefly lead [rendered] while a render is in flight. */
     var pageIndex by mutableIntStateOf(0)
         private set
 
-    var bitmap by mutableStateOf<Bitmap?>(null)
+    /**
+     * What is actually on screen — image and page number together, never separately.
+     *
+     * These are one value on purpose. Updating the index the moment it is requested, while the
+     * bitmap lags behind the render, would show the client "3 / 12" underneath page 2 for a frame
+     * or two. Small, but it happens in front of a customer reading a contract, and it reads as a
+     * broken app at precisely the wrong moment.
+     */
+    var rendered by mutableStateOf(RenderedPage(null, 0))
         private set
 
     var isLoading by mutableStateOf(false)
@@ -95,21 +107,32 @@ class PresentState(
 
     private suspend fun renderCurrent() {
         val currentStore = store ?: return
+        val target = pageIndex
 
-        // Show the cached bitmap immediately if we have one, so a page turn never blanks the
-        // client's half — a flash of empty paper in front of a customer reads as a broken app.
-        currentStore.peek(pageIndex, RENDER_WIDTH_PX)?.let { bitmap = it }
+        // Cached? Swap image and number together, instantly.
+        currentStore.peek(target, RENDER_WIDTH_PX)?.let {
+            rendered = RenderedPage(it, target)
+            currentStore.prefetchAround(target, RENDER_WIDTH_PX)
+            return
+        }
 
-        bitmap = currentStore.load(pageIndex, RENDER_WIDTH_PX)
-        currentStore.prefetchAround(pageIndex, RENDER_WIDTH_PX)
+        val loaded = currentStore.load(target, RENDER_WIDTH_PX)
+
+        // A newer turn may have landed while this render was in flight. Dropping the stale result
+        // is what keeps fast repeated taps from showing a page the agent has already moved past.
+        if (target == pageIndex && loaded != null) {
+            rendered = RenderedPage(loaded, target)
+        }
+        currentStore.prefetchAround(target, RENDER_WIDTH_PX)
     }
 
+    /** Releases the PdfRenderer and its file descriptor. Not optional — both leak otherwise. */
     fun closeCurrent() {
         store?.clear()
         source?.close()
         source = null
         store = null
-        bitmap = null
+        rendered = RenderedPage(null, 0)
     }
 
     private companion object {

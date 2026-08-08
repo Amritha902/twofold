@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -75,6 +76,11 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         }
     }
 
+    // PdfRenderer holds a file descriptor. Without this it survives the screen and leaks.
+    DisposableEffect(Unit) {
+        onDispose { state.closeCurrent() }
+    }
+
     val document = state.document
 
     if (document == null) {
@@ -89,9 +95,10 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         return
     }
 
+    // Both fields come from `rendered`, so the page number can never describe a different image.
     val clientPage = ClientPage(
-        bitmap = state.bitmap,
-        pageNumber = state.pageIndex + 1,
+        bitmap = state.rendered.bitmap,
+        pageNumber = state.rendered.index + 1,
         pageCount = state.pageCount,
     )
 
