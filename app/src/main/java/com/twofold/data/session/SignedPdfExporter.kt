@@ -39,11 +39,20 @@ data class SignatureRecord(
  */
 class SignedPdfExporter(private val context: Context) {
 
+    /**
+     * @param isPro when false the export is watermarked.
+     *
+     * The free tier watermarks rather than blocking. An agent who has just closed a deal must still
+     * be able to hand the client something — refusing to produce the document at that moment would
+     * damage their business, not ours, and would be a hostile way to ask for money. The watermark
+     * is the ask; the deal still completes.
+     */
     suspend fun export(
         source: PdfSource,
         sourceFile: File,
         signature: SignatureRecord,
         signedPageIndex: Int,
+        isPro: Boolean,
     ): File? = withContext(Dispatchers.IO) {
         runCatching {
             val document = PdfDocument()
@@ -61,6 +70,9 @@ class SignedPdfExporter(private val context: Context) {
                 if (index == signedPageIndex) {
                     drawSignature(page.canvas, signature, bitmap.width, bitmap.height)
                     drawAuditLine(page.canvas, signature, hash, bitmap.width, bitmap.height)
+                }
+                if (!isPro) {
+                    drawWatermark(page.canvas, bitmap.width, bitmap.height)
                 }
 
                 document.finishPage(page)
@@ -135,6 +147,28 @@ class SignedPdfExporter(private val context: Context) {
         canvas.drawText(text, pageWidth * AUDIT_MARGIN, pageHeight * (1f - AUDIT_MARGIN), paint)
     }
 
+    /**
+     * Diagonal, light, and behind nothing that matters.
+     *
+     * Placed at low alpha across the page rather than stamped over the signature or the audit line.
+     * A free-tier mark that obscured the signed content would make the document useless as a
+     * record, which turns a nudge to upgrade into a reason to distrust the app.
+     */
+    private fun drawWatermark(canvas: Canvas, pageWidth: Int, pageHeight: Int) {
+        val paint = Paint().apply {
+            color = Color.GRAY
+            alpha = WATERMARK_ALPHA
+            textSize = pageWidth * WATERMARK_TEXT_FRACTION
+            isAntiAlias = true
+            textAlign = Paint.Align.CENTER
+        }
+
+        canvas.save()
+        canvas.rotate(WATERMARK_ANGLE, pageWidth / 2f, pageHeight / 2f)
+        canvas.drawText("Signed with Twofold", pageWidth / 2f, pageHeight / 2f, paint)
+        canvas.restore()
+    }
+
     private fun sha256(file: File): String {
         val digest = MessageDigest.getInstance("SHA-256")
         file.inputStream().use { input ->
@@ -157,5 +191,8 @@ class SignedPdfExporter(private val context: Context) {
         const val AUDIT_TEXT_FRACTION = 0.012f
         const val AUDIT_MARGIN = 0.04f
         const val HASH_PREFIX_CHARS = 16
+        const val WATERMARK_ALPHA = 48
+        const val WATERMARK_TEXT_FRACTION = 0.075f
+        const val WATERMARK_ANGLE = -30f
     }
 }

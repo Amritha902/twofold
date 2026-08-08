@@ -40,6 +40,7 @@ import com.twofold.feature.present.AgentPage
 import com.twofold.feature.present.AgentPane
 import com.twofold.feature.present.ClientPage
 import com.twofold.feature.present.ClientPane
+import com.twofold.feature.paywall.Entitlements
 import com.twofold.feature.present.PreparePane
 import com.twofold.feature.present.PresentState
 import com.twofold.feature.sign.SignaturePad
@@ -67,6 +68,8 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val state = remember { PresentState(context, scope) }
+    val entitlements = remember { Entitlements.create(context) }
+    val isPro by entitlements.isPro.collectAsStateWithLifecycle()
 
     val picker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
@@ -146,7 +149,12 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
                             onCancel = { state.cancelSigning() },
                             onDone = {
                                 scope.launch {
-                                    state.completeSigning(strokes, padSize.width, padSize.height)
+                                    state.completeSigning(
+                                        strokes = strokes,
+                                        padWidth = padSize.width,
+                                        padHeight = padSize.height,
+                                        isPro = isPro,
+                                    )
                                     strokes = emptyList()
                                 }
                             },

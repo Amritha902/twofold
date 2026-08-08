@@ -207,6 +207,7 @@ class PresentState(
         strokes: List<List<Offset>>,
         padWidth: Float,
         padHeight: Float,
+        isPro: Boolean,
     ): File? {
         val currentSource = source ?: return null
         val currentDocument = document ?: return null
@@ -222,6 +223,7 @@ class PresentState(
                 signerName = signerName.ifBlank { "Client" },
             ),
             signedPageIndex = rendered.index,
+            isPro = isPro,
         )
 
         if (signed != null) {
