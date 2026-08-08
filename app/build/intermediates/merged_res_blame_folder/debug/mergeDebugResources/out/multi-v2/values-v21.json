@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.twofold.app-mergeDebugResources-39:/values-v21/values-v21.xml",
+            "map": [
+                {
+                    "source": "/Users/amritha/.gradle/caches/9.7.0/transforms/f217fc7ad62d7b134aea7d2c8788763a/transformed/purchases-10.16.1/res/values-v21/values-v21.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "7",
+                        "endColumns": "12",
+                        "endOffsets": "409"
+                    }
+                }
+            ]
+        }
+    ]
+}

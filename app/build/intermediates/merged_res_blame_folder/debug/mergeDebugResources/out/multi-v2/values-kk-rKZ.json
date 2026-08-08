@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.twofold.app-mergeDebugResources-39:/values-kk-rKZ/values-kk-rKZ.xml",
+            "map": [
+                {
+                    "source": "/Users/amritha/.gradle/caches/9.7.0/transforms/60d360abeb80408caa2753744ba72680/transformed/iap-6.5.2/res/values-kk-rKZ/values-kk-rKZ.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,278,485,662,767,858,1036,1131,1196,1265,1363,1460,1711,1885,1968,2180,2393",
+                        "endColumns": "222,206,176,104,90,177,94,64,68,97,96,250,173,82,211,212,92",
+                        "endOffsets": "273,480,657,762,853,1031,1126,1191,1260,1358,1455,1706,1880,1963,2175,2388,2481"
+                    }
+                }
+            ]
+        }
+    ]
+}

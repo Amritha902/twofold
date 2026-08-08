@@ -11,9 +11,35 @@
     <string msgid="59049573811482460" name="call_notification_screening_text">"着信をスクリーニング中"</string>
     <string msgid="406453423630273620" name="close_drawer">"ナビゲーションメニューを閉じる"</string>
     <string msgid="7573152094250666567" name="close_sheet">"シートを閉じる"</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">有効にする</string>
+    <string msgid="227660514972886228" name="common_google_play_services_enable_text">%1$sの実行には、Google Play開発者サービスの有効化が必要です。</string>
+    <string msgid="5122002158466380389" name="common_google_play_services_enable_title">Google Play開発者サービスの有効化</string>
+    <string msgid="7153882981874058840" name="common_google_play_services_install_button">インストール</string>
+    <string name="common_google_play_services_install_text">「%1$s」の実行には Google Play 開発者サービスが必要ですが、お使いのデバイスにはインストールされていません。</string>
+    <string msgid="7215213145546190223" name="common_google_play_services_install_title">Google Play開発者サービスの入手</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play 開発者サービスの利用</string>
+    <string name="common_google_play_services_notification_ticker">Google Play開発者サービスのエラー</string>
+    <string name="common_google_play_services_unknown_issue">「%1$s」で Google Play 開発者サービスに問題が発生しています。もう一度お試しください。</string>
+    <string name="common_google_play_services_unsupported_text">「%1$s」の実行には Google Play 開発者サービスが必要ですが、お使いのデバイスではサポートされていません。</string>
+    <string msgid="6556509956452265614" name="common_google_play_services_update_button">更新</string>
+    <string msgid="9053896323427875356" name="common_google_play_services_update_text">%1$sの実行にはGoogle Play開発者サービスの更新が必要です。</string>
+    <string msgid="6006316683626838685" name="common_google_play_services_update_title">Google Play開発者サービスの更新</string>
+    <string name="common_google_play_services_updating_text">%1$sの実行にはGoogle Play開発者サービスが必要ですが、このサービスは現在更新中です。</string>
+    <string name="common_google_play_services_wear_update_text">Google Play開発者サービスの新しいバージョンが必要です。まもなく自動更新されます。</string>
+    <string name="common_open_on_phone">スマートフォンで開く</string>
+    <string name="common_signin_button_text">ログイン</string>
+    <string name="common_signin_button_text_long">Googleにログイン</string>
     <string msgid="8038256446254964252" name="default_error_message">"入力値が無効です"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"ポップアップウィンドウ"</string>
+    <string name="dream_ph_body_contact_p1sscustomer_servicep2ss_for_more_information_n_nerror_code_c_p3ss">詳細については、%1$sカスタマーサービス%2$sにお問い合わせください。\nエラーコード: %3$s</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_enable_the_galaxy_store_in_settings">購入手続きを完了するには、[設定]でGalaxy Storeを有効にする必要があります。</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_update_the_galaxy_store">購入手続きを完了するには、Galaxy Storeを更新する必要があります。</string>
+    <string name="dream_ph_pheader_couldnt_complete_purchase">購入の完了に失敗</string>
+    <string name="dream_sapps_body_authenticating_ing">認証中\u2026</string>
+    <string name="dream_sapps_body_contact_customer_service_to_complete_your_purchase">購入を完了するには、カスタマーサービスにお問い合わせください。</string>
+    <string name="dream_sapps_body_your_purchase_is_complete">購入が完了しました。</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"プルダウン メニュー"</string>
+    <string name="ids_com_body_error_code_c">エラーコード:</string>
     <string msgid="6827826412747255547" name="in_progress">"処理しています"</string>
     <string msgid="7933458017204019916" name="indeterminate">"一部 ON"</string>
     <string msgid="2988463736136100848" name="m3c_bottom_sheet_collapse_description">"ボトムシートを折りたたみます"</string>
@@ -82,6 +108,15 @@
     <string msgid="5460405025248574620" name="m3c_tooltip_pane_description">"ツールチップ"</string>
     <string msgid="6564222473543418073" name="m3c_wide_navigation_rail_close_rail">"レールを閉じる"</string>
     <string msgid="8350283435461615411" name="m3c_wide_navigation_rail_pane_title">"ナビゲーション レール"</string>
+    <string name="mids_sapps_body_waiting_ing">待機中\u2026</string>
+    <string name="mids_sapps_header_samsung_in_app_purchase_abb">Samsung In-App Purchase</string>
+    <string name="mids_sapps_header_update_galaxy_apps">Galaxy Appsを更新</string>
+    <string name="mids_sapps_pop_a_new_version_is_available_galaxy_apps_will_be_updated_to_the_latest_version_to_complete_this_purchase">新しいバージョンが利用可能です。購入手続きを完了するために、Galaxy Appsを最新バージョンに更新します。</string>
+    <string name="mids_sapps_pop_an_invalid_value_has_been_provided_for_samsung_in_app_purchase">無効な値がSamsung In-App Purchaseに提供されています。</string>
+    <string name="mids_sapps_pop_payment_canceled">支払いがキャンセルされました。</string>
+    <string name="mids_sapps_pop_to_purchase_items_you_need_to_install_samsung_in_app_purchase_install_q">アイテムを購入するには、Samsung In-App Purchaseをインストールする必要があります。インストールしますか？</string>
+    <string name="mids_sapps_pop_unable_to_open_samsung_in_app_purchase_msg">Samsung In-App Purchaseを起動できません。[権限]に移動し、必要な権限を許可してから再度実行してください。</string>
+    <string name="mids_sapps_pop_unknown_error_occurred">不明なエラーが発生しました。</string>
     <string msgid="542007171693138492" name="navigation_menu">"ナビゲーションメニュー"</string>
     <string msgid="6610465462668679431" name="not_selected">"未選択"</string>
     <string msgid="5941395253238309765" name="range_end">"範囲の末尾"</string>

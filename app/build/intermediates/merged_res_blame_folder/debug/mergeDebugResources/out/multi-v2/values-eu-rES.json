@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.twofold.app-mergeDebugResources-39:/values-eu-rES/values-eu-rES.xml",
+            "map": [
+                {
+                    "source": "/Users/amritha/.gradle/caches/9.7.0/transforms/60d360abeb80408caa2753744ba72680/transformed/iap-6.5.2/res/values-eu-rES/values-eu-rES.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,280,464,622,721,807,971,1061,1129,1201,1299,1386,1640,1796,1874,2067,2261",
+                        "endColumns": "224,183,157,98,85,163,89,67,71,97,86,253,155,77,192,193,93",
+                        "endOffsets": "275,459,617,716,802,966,1056,1124,1196,1294,1381,1635,1791,1869,2062,2256,2350"
+                    }
+                }
+            ]
+        }
+    ]
+}

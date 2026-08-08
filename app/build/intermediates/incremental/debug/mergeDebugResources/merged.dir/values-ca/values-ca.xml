@@ -11,9 +11,35 @@
     <string msgid="59049573811482460" name="call_notification_screening_text">"S\'està filtrant una trucada entrant"</string>
     <string msgid="406453423630273620" name="close_drawer">"Tanca el menú de navegació"</string>
     <string msgid="7573152094250666567" name="close_sheet">"Tanca el full"</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Activa</string>
+    <string msgid="227660514972886228" name="common_google_play_services_enable_text">%1$s no funcionarà si no actives Serveis de Google Play.</string>
+    <string msgid="5122002158466380389" name="common_google_play_services_enable_title">Activa Serveis de Google Play</string>
+    <string msgid="7153882981874058840" name="common_google_play_services_install_button">Instal·la</string>
+    <string name="common_google_play_services_install_text">%1$s no s\'executarà si Serveis de Google Play no està instal·lat al dispositiu.</string>
+    <string msgid="7215213145546190223" name="common_google_play_services_install_title">Obtén Serveis de Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">Disponibilitat de serveis de Google Play</string>
+    <string name="common_google_play_services_notification_ticker">Error de Serveis de Google Play</string>
+    <string name="common_google_play_services_unknown_issue">%1$s té problemes amb Serveis de Google Play. Torna-ho a provar.</string>
+    <string name="common_google_play_services_unsupported_text">%1$s no es pot executar sense Serveis de Google Play, que no és compatible amb el teu dispositiu.</string>
+    <string msgid="6556509956452265614" name="common_google_play_services_update_button">Actualitza</string>
+    <string msgid="9053896323427875356" name="common_google_play_services_update_text">%1$s no s\'executarà si no actualitzes Serveis de Google Play.</string>
+    <string msgid="6006316683626838685" name="common_google_play_services_update_title">Actualitza Serveis de Google Play</string>
+    <string name="common_google_play_services_updating_text">%1$s no s\'executarà sense Serveis de Google Play, que s\'està actualitzant en aquest moment.</string>
+    <string name="common_google_play_services_wear_update_text">Cal una nova versió de Serveis de Google Play. S\'actualitzarà automàticament aviat.</string>
+    <string name="common_open_on_phone">Obre al telèfon</string>
+    <string name="common_signin_button_text">Inicia sessió</string>
+    <string name="common_signin_button_text_long">Inicia la sessió amb Google</string>
     <string msgid="8038256446254964252" name="default_error_message">"L\'entrada no és vàlida"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Finestra emergent"</string>
+    <string name="dream_ph_body_contact_p1sscustomer_servicep2ss_for_more_information_n_nerror_code_c_p3ss">Posa\'t en contacte amb el %1$sServei d\'atenció al client%2$s per obtenir més informació.\n\nCodi d\'error: %3$s</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_enable_the_galaxy_store_in_settings">Per completar aquesta compra, activa la Galaxy Store a Ajustaments.</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_update_the_galaxy_store">Per completar aquesta compra, actualitza la Galaxy Store.</string>
+    <string name="dream_ph_pheader_couldnt_complete_purchase">No s\'ha pogut completar la compra</string>
+    <string name="dream_sapps_body_authenticating_ing">S\'està autenticant\u2026</string>
+    <string name="dream_sapps_body_contact_customer_service_to_complete_your_purchase">Posa\'t en contacte amb el Servei d\'atenció al client per completar la compra.</string>
+    <string name="dream_sapps_body_your_purchase_is_complete">La compra s\'ha completat.</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Menú desplegable"</string>
+    <string name="ids_com_body_error_code_c">Codi d\'error:</string>
     <string msgid="6827826412747255547" name="in_progress">"En curs"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Marcat parcialment"</string>
     <string msgid="2988463736136100848" name="m3c_bottom_sheet_collapse_description">"Replega el full inferior"</string>
@@ -82,6 +108,15 @@
     <string msgid="5460405025248574620" name="m3c_tooltip_pane_description">"Descripció emergent"</string>
     <string msgid="6564222473543418073" name="m3c_wide_navigation_rail_close_rail">"Tanca la barra"</string>
     <string msgid="8350283435461615411" name="m3c_wide_navigation_rail_pane_title">"Barra de navegació"</string>
+    <string name="mids_sapps_body_waiting_ing">En espera\u2026</string>
+    <string name="mids_sapps_header_samsung_in_app_purchase_abb">Samsung In-App Purchase</string>
+    <string name="mids_sapps_header_update_galaxy_apps">Actualitzar Galaxy Apps</string>
+    <string name="mids_sapps_pop_a_new_version_is_available_galaxy_apps_will_be_updated_to_the_latest_version_to_complete_this_purchase">Hi ha una versió nova disponible. S\'actualitzarà Galaxy Apps a l\'última versió per completar aquesta compra.</string>
+    <string name="mids_sapps_pop_an_invalid_value_has_been_provided_for_samsung_in_app_purchase">S\'ha proporcionat un valor no vàlid per a In-App Purchase de Samsung</string>
+    <string name="mids_sapps_pop_payment_canceled">Pagament cancel·lat</string>
+    <string name="mids_sapps_pop_to_purchase_items_you_need_to_install_samsung_in_app_purchase_install_q">Per comprar elements, cal que instal·li Samsung In-App Purchase. Instal·lar?</string>
+    <string name="mids_sapps_pop_unable_to_open_samsung_in_app_purchase_msg">No es pot obrir Samsung In-App Purchase. Vagi a Permisos i, a continuació, permeti els permisos necessaris i torni-ho a intentar.</string>
+    <string name="mids_sapps_pop_unknown_error_occurred">S\'ha produït un error desconegut</string>
     <string msgid="542007171693138492" name="navigation_menu">"Menú de navegació"</string>
     <string msgid="6610465462668679431" name="not_selected">"No seleccionat"</string>
     <string msgid="5941395253238309765" name="range_end">"Fi de l\'interval"</string>

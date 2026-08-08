@@ -11,9 +11,35 @@
     <string msgid="59049573811482460" name="call_notification_screening_text">"סינון שיחה נכנסת"</string>
     <string msgid="406453423630273620" name="close_drawer">"סגירת תפריט הניווט"</string>
     <string msgid="7573152094250666567" name="close_sheet">"סגירת הגיליון"</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">הפעל</string>
+    <string msgid="227660514972886228" name="common_google_play_services_enable_text">‏האפליקציה %1$s לא תפעל אם לא תפעיל את שירותי Google Play.</string>
+    <string msgid="5122002158466380389" name="common_google_play_services_enable_title">‏הפעל את שירותי Google Play</string>
+    <string msgid="7153882981874058840" name="common_google_play_services_install_button">התקן</string>
+    <string name="common_google_play_services_install_text">‏האפליקציה %1$s לא תפעל ללא שירותי Google Play, שאינם מותקנים במכשיר.</string>
+    <string msgid="7215213145546190223" name="common_google_play_services_install_title">‏קבל את שירותי Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">‏זמינות של שירותי Google Play</string>
+    <string name="common_google_play_services_notification_ticker">‏שגיאה בשירותי Google Play</string>
+    <string name="common_google_play_services_unknown_issue">‏%1$s נתקלה בבעיה בשירותי Google Play. נסה שוב.</string>
+    <string name="common_google_play_services_unsupported_text">‏%1$s לא תפעל ללא שירותי Google Play, שאינם נתמכים במכשיר שלך.</string>
+    <string msgid="6556509956452265614" name="common_google_play_services_update_button">עדכון</string>
+    <string msgid="9053896323427875356" name="common_google_play_services_update_text">‏%1$s לא יפעל אם לא תעדכן את שירותי Google Play.</string>
+    <string msgid="6006316683626838685" name="common_google_play_services_update_title">‏עדכון שירותי Google Play</string>
+    <string name="common_google_play_services_updating_text">‏האפליקציה %1$s לא תפעל ללא שירותי Google Play, שמתעדכנים כרגע.</string>
+    <string name="common_google_play_services_wear_update_text">‏דרושה גרסה חדשה של שירותי Google Play. הגרסה תתעדכן בעצמה תוך זמן קצר.</string>
+    <string name="common_open_on_phone">פתח בטלפון</string>
+    <string name="common_signin_button_text">כניסה</string>
+    <string name="common_signin_button_text_long">‏היכנס באמצעות Google</string>
     <string msgid="8038256446254964252" name="default_error_message">"הקלט לא תקין"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"חלון קופץ"</string>
+    <string name="dream_ph_body_contact_p1sscustomer_servicep2ss_for_more_information_n_nerror_code_c_p3ss">לקבלת מידע נוסף, פנה אל %1$sשירות הלקוחות%2$s.\n\nקוד שגיאה: %3$s</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_enable_the_galaxy_store_in_settings">להשלמת הרכישה תצטרך להפעיל את ה-Galaxy Store דרך \'הגדרות\'.</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_update_the_galaxy_store">כדי להשלים את הרכישה תצטרך לעדכן את ה-Galaxy Store.</string>
+    <string name="dream_ph_pheader_couldnt_complete_purchase">לא ניתן להשלים רכישה</string>
+    <string name="dream_sapps_body_authenticating_ing">מבצע אימות\u2026</string>
+    <string name="dream_sapps_body_contact_customer_service_to_complete_your_purchase">כדי להשלים את הרכישה, פנה אל שירות הלקוחות.</string>
+    <string name="dream_sapps_body_your_purchase_is_complete">הרכישה שלך הושלמה.</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"תפריט נפתח"</string>
+    <string name="ids_com_body_error_code_c">קוד שגיאה:</string>
     <string msgid="6827826412747255547" name="in_progress">"בתהליך"</string>
     <string msgid="7933458017204019916" name="indeterminate">"מסומנת חלקית"</string>
     <string msgid="2988463736136100848" name="m3c_bottom_sheet_collapse_description">"כיווץ הגיליון התחתון"</string>
@@ -82,6 +108,15 @@
     <string msgid="5460405025248574620" name="m3c_tooltip_pane_description">"הסבר קצר"</string>
     <string msgid="6564222473543418073" name="m3c_wide_navigation_rail_close_rail">"סגירה של פס הניווט"</string>
     <string msgid="8350283435461615411" name="m3c_wide_navigation_rail_pane_title">"פס ניווט"</string>
+    <string name="mids_sapps_body_waiting_ing">ממתין\u2026</string>
+    <string name="mids_sapps_header_samsung_in_app_purchase_abb">Samsung In-App Purchase</string>
+    <string name="mids_sapps_header_update_galaxy_apps">עדכן את Galaxy Apps</string>
+    <string name="mids_sapps_pop_a_new_version_is_available_galaxy_apps_will_be_updated_to_the_latest_version_to_complete_this_purchase">גרסה חדשה זמינה. כדי להשלים רכישה זו, Galaxy Apps יעודכן לגרסה החדשה ביותר.</string>
+    <string name="mids_sapps_pop_an_invalid_value_has_been_provided_for_samsung_in_app_purchase">סופק ערך לא תקין עבור רכישה מתוך היישום של Samsung.</string>
+    <string name="mids_sapps_pop_payment_canceled">התשלום בוטל.</string>
+    <string name="mids_sapps_pop_to_purchase_items_you_need_to_install_samsung_in_app_purchase_install_q">כדי לרכוש פריטים, עליך להתקין את \'רכישה מתוך היישום של Samsung\'. להתקין?</string>
+    <string name="mids_sapps_pop_unable_to_open_samsung_in_app_purchase_msg">לא ניתן לפתוח את Samsung In-App Purchase. עבור אל \'הרשאות\', אשר את ההרשאות הנדרשות ונסה שוב.</string>
+    <string name="mids_sapps_pop_unknown_error_occurred">ארעה שגיאה לא ידועה.</string>
     <string msgid="542007171693138492" name="navigation_menu">"תפריט הניווט"</string>
     <string msgid="6610465462668679431" name="not_selected">"לא נבחר"</string>
     <string msgid="5941395253238309765" name="range_end">"סוף הטווח"</string>

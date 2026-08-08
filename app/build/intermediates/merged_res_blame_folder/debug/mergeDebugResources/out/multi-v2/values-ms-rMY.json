@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.twofold.app-mergeDebugResources-39:/values-ms-rMY/values-ms-rMY.xml",
+            "map": [
+                {
+                    "source": "/Users/amritha/.gradle/caches/9.7.0/transforms/60d360abeb80408caa2753744ba72680/transformed/iap-6.5.2/res/values-ms-rMY/values-ms-rMY.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,265,466,643,750,832,995,1096,1161,1232,1330,1418,1667,1837,1920,2114,2323",
+                        "endColumns": "209,200,176,106,81,162,100,64,70,97,87,248,169,82,193,208,96",
+                        "endOffsets": "260,461,638,745,827,990,1091,1156,1227,1325,1413,1662,1832,1915,2109,2318,2415"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -11,9 +11,35 @@
     <string msgid="59049573811482460" name="call_notification_screening_text">"Filter für eingehenden Anruf"</string>
     <string msgid="406453423630273620" name="close_drawer">"Navigationsmenü schließen"</string>
     <string msgid="7573152094250666567" name="close_sheet">"Tabelle schließen"</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Aktivieren</string>
+    <string msgid="227660514972886228" name="common_google_play_services_enable_text">%1$s funktioniert erst nach der Aktivierung der Google Play-Dienste.</string>
+    <string msgid="5122002158466380389" name="common_google_play_services_enable_title">Google Play-Dienste aktivieren</string>
+    <string msgid="7153882981874058840" name="common_google_play_services_install_button">Installieren</string>
+    <string name="common_google_play_services_install_text">Zur Nutzung von %1$s sind die Google Play-Dienste erforderlich, die auf deinem Gerät nicht installiert sind.</string>
+    <string msgid="7215213145546190223" name="common_google_play_services_install_title">Google Play-Dienste installieren</string>
+    <string name="common_google_play_services_notification_channel_name">Verfügbarkeit von Google Play-Diensten</string>
+    <string name="common_google_play_services_notification_ticker">Fehler bei Zugriff auf Google Play-Dienste</string>
+    <string name="common_google_play_services_unknown_issue">%1$s hat Probleme mit Google Play-Diensten. Bitte versuche es noch einmal.</string>
+    <string name="common_google_play_services_unsupported_text">Zur Nutzung von %1$s sind Google Play-Dienste erforderlich, die auf deinem Gerät nicht unterstützt werden.</string>
+    <string msgid="6556509956452265614" name="common_google_play_services_update_button">Aktualisieren</string>
+    <string msgid="9053896323427875356" name="common_google_play_services_update_text">%1$s wird nur ausgeführt, wenn du die Google Play-Dienste aktualisierst.</string>
+    <string msgid="6006316683626838685" name="common_google_play_services_update_title">Google Play-Dienste aktualisieren</string>
+    <string name="common_google_play_services_updating_text">Zur Nutzung von %1$s sind Google Play-Dienste erforderlich, die gerade aktualisiert werden.</string>
+    <string name="common_google_play_services_wear_update_text">Eine neue Version der Google Play-Dienste wird benötigt. Diese wird in Kürze automatisch aktualisiert.</string>
+    <string name="common_open_on_phone">Auf Smartphone öffnen</string>
+    <string name="common_signin_button_text">Anmelden</string>
+    <string name="common_signin_button_text_long">Über Google anmelden</string>
     <string msgid="8038256446254964252" name="default_error_message">"Ungültige Eingabe"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Pop-up-Fenster"</string>
+    <string name="dream_ph_body_contact_p1sscustomer_servicep2ss_for_more_information_n_nerror_code_c_p3ss">Weitere Informationen erhältst du vom %1$sKundendienst%2$s.\n\nFehlercode: %3$s</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_enable_the_galaxy_store_in_settings">Du musst Galaxy Store in den Einstellungen aktivieren, um diesen Kauf abzuschließen.</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_update_the_galaxy_store">Du musst Galaxy Store aktualisieren, um diesen Kauf abzuschließen.</string>
+    <string name="dream_ph_pheader_couldnt_complete_purchase">Abschließen des Kaufs nicht möglich</string>
+    <string name="dream_sapps_body_authenticating_ing">Authentifizierung wird durchgeführt\u2026</string>
+    <string name="dream_sapps_body_contact_customer_service_to_complete_your_purchase">Wende dich an den Kundendienst, um deinen Einkauf abzuschließen.</string>
+    <string name="dream_sapps_body_your_purchase_is_complete">Dein Kauf ist abgeschlossen.</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Drop-down-Menü"</string>
+    <string name="ids_com_body_error_code_c">Fehlercode:</string>
     <string msgid="6827826412747255547" name="in_progress">"In Bearbeitung"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Teilweise aktiviert"</string>
     <string msgid="2988463736136100848" name="m3c_bottom_sheet_collapse_description">"Ansicht am unteren Rand minimieren"</string>
@@ -82,6 +108,15 @@
     <string msgid="5460405025248574620" name="m3c_tooltip_pane_description">"Kurzinfo"</string>
     <string msgid="6564222473543418073" name="m3c_wide_navigation_rail_close_rail">"Streifen schließen"</string>
     <string msgid="8350283435461615411" name="m3c_wide_navigation_rail_pane_title">"Navigationsstreifen"</string>
+    <string name="mids_sapps_body_waiting_ing">Warten\u2026</string>
+    <string name="mids_sapps_header_samsung_in_app_purchase_abb">Samsung In-App Purchase</string>
+    <string name="mids_sapps_header_update_galaxy_apps">Aktualisieren von Galaxy Apps</string>
+    <string name="mids_sapps_pop_a_new_version_is_available_galaxy_apps_will_be_updated_to_the_latest_version_to_complete_this_purchase">Eine neue Version ist verfügbar. Galaxy Apps wird auf die neueste Version aktualisiert, um diesen Kauf abzuschließen.</string>
+    <string name="mids_sapps_pop_an_invalid_value_has_been_provided_for_samsung_in_app_purchase">Es wurde ein ungültiger Wert für Samsung In-App Purchase angegeben.</string>
+    <string name="mids_sapps_pop_payment_canceled">Zahlung abgebrochen</string>
+    <string name="mids_sapps_pop_to_purchase_items_you_need_to_install_samsung_in_app_purchase_install_q">Wenn du Artikel kaufen möchtest, musst du Samsung In-App-Kauf installieren. Installieren?</string>
+    <string name="mids_sapps_pop_unable_to_open_samsung_in_app_purchase_msg">Samsung In-App Purchase kann nicht geöffnet werden. Wechsle zu „Berechtigungen“, erteile die erforderlichen Berechtigungen und versuche es anschließend erneut.</string>
+    <string name="mids_sapps_pop_unknown_error_occurred">Unbekannter Fehler aufgetreten</string>
     <string msgid="542007171693138492" name="navigation_menu">"Navigationsmenü"</string>
     <string msgid="6610465462668679431" name="not_selected">"Nicht ausgewählt"</string>
     <string msgid="5941395253238309765" name="range_end">"Bereichsende"</string>

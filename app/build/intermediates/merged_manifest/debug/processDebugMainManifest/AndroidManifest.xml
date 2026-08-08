@@ -8,6 +8,22 @@
         android:minSdkVersion="30"
         android:targetSdkVersion="37" />
 
+    <uses-permission android:name="com.samsung.android.iap.permission.BILLING" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <queries>
+        <intent>
+            <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
+        </intent>
+        <intent>
+            <action android:name="com.google.android.apps.play.billingtestcompanion.BillingOverrideService.BIND" />
+        </intent>
+
+        <package android:name="com.sec.android.app.samsungapps" />
+    </queries>
+
     <permission
         android:name="com.twofold.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />
@@ -36,6 +52,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.revenuecat.purchases.amazon.purchasing.ProxyAmazonBillingActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.revenuecat.purchases.SimulatedStoreErrorDialogActivity"
+            android:configChanges="orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Material.Dialog.Alert" />
+
+        <meta-data
+            android:name="com.google.android.play.billingclient.version"
+            android:value="8.3.0" />
+
+        <activity
+            android:name="com.android.billingclient.api.ProxyBillingActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.android.billingclient.api.ProxyBillingActivityV2"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <uses-library
             android:name="androidx.window.extensions"
@@ -82,6 +130,41 @@
                 <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+            android:exported="false" >
+            <meta-data
+                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+                android:value="cct" />
+        </service>
+        <service
+            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" >
+        </service>
+
+        <receiver
+            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+            android:exported="false" /> <!-- IAP 라이브러리 내 Activity 선언 시작 -->
+        <activity
+            android:name="com.samsung.android.sdk.iap.lib.activity.DialogActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.Empty" />
+        <activity
+            android:name="com.samsung.android.sdk.iap.lib.activity.CheckPackageActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.Empty" />
+        <activity
+            android:name="com.samsung.android.sdk.iap.lib.activity.PaymentActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|locale|uiMode|fontScale|density"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.Empty" />
+        <activity
+            android:name="com.samsung.android.sdk.iap.lib.activity.ChangeSubscriptionPlanActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|locale|uiMode|fontScale|density"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.Empty" />
     </application>
 
 </manifest>

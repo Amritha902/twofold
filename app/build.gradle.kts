@@ -1,7 +1,25 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     // No kotlin.android plugin: AGP 9 has built-in Kotlin support and rejects it.
     alias(libs.plugins.kotlin.compose)
+}
+
+/**
+ * RevenueCat's Galaxy Store key, read from local.properties (gitignored) or the environment.
+ *
+ * Empty is a valid state, not a build failure: the app must still compile and run for anyone who
+ * clones the repo without a key. Billing degrades to locked rather than crashing.
+ */
+val revenueCatGalaxyKey: String = run {
+    val local = rootProject.file("local.properties")
+    val fromLocal = if (local.exists()) {
+        Properties().apply { local.inputStream().use(::load) }.getProperty("REVENUECAT_GALAXY_KEY")
+    } else {
+        null
+    }
+    fromLocal ?: System.getenv("REVENUECAT_GALAXY_KEY") ?: ""
 }
 
 android {
@@ -17,6 +35,8 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "REVENUECAT_GALAXY_KEY", "\"$revenueCatGalaxyKey\"")
     }
 
     buildTypes {
@@ -33,6 +53,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -49,6 +70,9 @@ dependencies {
 
     // The foldable posture API. Load-bearing.
     implementation(libs.androidx.window)
+
+    implementation(libs.revenuecat.purchases)
+    implementation(libs.revenuecat.purchases.galaxy)
 
     debugImplementation(libs.androidx.ui.tooling)
 

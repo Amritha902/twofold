@@ -11,9 +11,35 @@
     <string msgid="59049573811482460" name="call_notification_screening_text">"এটা অন্তৰ্গামী কলৰ পৰীক্ষা কৰি থকা হৈছে"</string>
     <string msgid="406453423630273620" name="close_drawer">"নেভিগেশ্বন মেনু বন্ধ কৰক"</string>
     <string msgid="7573152094250666567" name="close_sheet">"শ্বীট বন্ধ কৰক"</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">সক্ষম কৰক</string>
+    <string msgid="227660514972886228" name="common_google_play_services_enable_text">আপুনি Google Play সেৱাবোৰ সক্ষম নকৰালৈকে %1$sএ কাম নকৰিব।</string>
+    <string msgid="5122002158466380389" name="common_google_play_services_enable_title">Google প্লে সেৱাসক্ষম কৰক</string>
+    <string msgid="7153882981874058840" name="common_google_play_services_install_button">ইনষ্টল কৰক</string>
+    <string name="common_google_play_services_install_text">%1$s Google প্লে সেৱাৰ অবিহনে নচলে, যিটো আপোনাৰ ডিভাইচত নাই।</string>
+    <string msgid="7215213145546190223" name="common_google_play_services_install_title">Google প্লে সেৱালাভ কৰক</string>
+    <string name="common_google_play_services_notification_channel_name">Google প্লে সেৱাসমূহৰ উপলব্ধতা</string>
+    <string name="common_google_play_services_notification_ticker">Google Playৰ সেৱা সম্পৰ্কীয় আসোঁৱাহ</string>
+    <string name="common_google_play_services_unknown_issue">Google প্লে সেৱাত %1$s ত সমস্যা হৈ আছে। আকৌ চেষ্টা কৰক।</string>
+    <string name="common_google_play_services_unsupported_text">%1$s Google প্লে সেৱাৰ অবিহনে নচলে, যিবোৰ আপোনাৰ ডিভাইচত চলিব নোৱাৰে।</string>
+    <string msgid="6556509956452265614" name="common_google_play_services_update_button">আপডে’ট কৰক</string>
+    <string msgid="9053896323427875356" name="common_google_play_services_update_text">আপুনি Google Play সেৱাবোৰ আপডে’ট নকৰালৈকে %1$s নচলিব।</string>
+    <string msgid="6006316683626838685" name="common_google_play_services_update_title">Google Play সেৱা আপডে’ট কৰক</string>
+    <string name="common_google_play_services_updating_text">বৰ্তমান আপডে’ট হৈ থকা Google Play সেৱাসমূহৰ অবিহনে %1$s নচলিব৷</string>
+    <string name="common_google_play_services_wear_update_text">Google Play সেৱাসমূহৰ নতুন সংস্কৰণৰ প্ৰয়োজন৷ এইটো শীঘ্ৰেই নিজে-নিজে আপডে’ট হ’ব৷</string>
+    <string name="common_open_on_phone">ফ\'নত খোলক</string>
+    <string name="common_signin_button_text">ছাইন ইন কৰক</string>
+    <string name="common_signin_button_text_long">Googleৰ জৰিয়তে ছাইন ইন কৰক</string>
     <string msgid="8038256446254964252" name="default_error_message">"অমান্য ইনপুট"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"পপ-আপ ৱিণ্ড’"</string>
+    <string name="dream_ph_body_contact_p1sscustomer_servicep2ss_for_more_information_n_nerror_code_c_p3ss">অধিক তথ্যৰ বাবে %1$sগ্ৰাহক সেৱা%2$s সৈতে সম্পৰ্ক কৰক।\n\nত্ৰুটি ক\'ড: %3$s</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_enable_the_galaxy_store_in_settings">এই ক্ৰয় সম্পূৰ্ণ কৰিবলৈ, আপুনি ছেটিংছত Galaxy Store সক্ষম কৰাৰ প্ৰয়োজন।</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_update_the_galaxy_store">এই ক্ৰয় সম্পূৰ্ণ কৰিবলৈ, আপুনি Galaxy Store আপডেট কৰাৰ প্ৰয়োজন।</string>
+    <string name="dream_ph_pheader_couldnt_complete_purchase">ক্ৰয় সম্পূৰ্ণ কৰিব পৰা নগ\'ল</string>
+    <string name="dream_sapps_body_authenticating_ing">প্ৰমাণিকৃত কৰি আছে\u2026</string>
+    <string name="dream_sapps_body_contact_customer_service_to_complete_your_purchase">আপোনাৰ ক্ৰয় সম্পূৰ্ণ কৰিবলৈ গ্ৰাহক সেৱাৰ সৈতে সম্পৰ্ক কৰক।</string>
+    <string name="dream_sapps_body_your_purchase_is_complete">আপোনাৰ ক্ৰয় সম্পূৰ্ণ হ\'ল।</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"ড্ৰপডাউনৰ মেনু"</string>
+    <string name="ids_com_body_error_code_c">ত্ৰুটি ক\'ড:</string>
     <string msgid="6827826412747255547" name="in_progress">"প্ৰক্ৰিয়াকৰণ কৰি থকা হৈছে"</string>
     <string msgid="7933458017204019916" name="indeterminate">"আংশিকভাৱে পৰীক্ষা কৰা হৈছে"</string>
     <string msgid="2988463736136100848" name="m3c_bottom_sheet_collapse_description">"তলৰ শ্বীটখন সংকোচন কৰক"</string>
@@ -82,6 +108,15 @@
     <string msgid="5460405025248574620" name="m3c_tooltip_pane_description">"টুলটিপ"</string>
     <string msgid="6564222473543418073" name="m3c_wide_navigation_rail_close_rail">"ৰে’ল কৰক"</string>
     <string msgid="8350283435461615411" name="m3c_wide_navigation_rail_pane_title">"নেভিগেশ্বন ৰে’ল"</string>
+    <string name="mids_sapps_body_waiting_ing">অপেক্ষাৰত\u2026</string>
+    <string name="mids_sapps_header_samsung_in_app_purchase_abb">চেমচাং ইন-এপ্প্‌ ক্ৰয়</string>
+    <string name="mids_sapps_header_update_galaxy_apps">Galaxy Apps আপডেট কৰক</string>
+    <string name="mids_sapps_pop_a_new_version_is_available_galaxy_apps_will_be_updated_to_the_latest_version_to_complete_this_purchase">এটা নতুন সংস্কৰণ উপলব্ধ। এই ক্ৰয় সম্পূৰ্ণ কৰিবলৈ Galaxy Apps-ক শেহতীয়া সংস্কৰণলৈ আপডেট কৰা হ\'ব।</string>
+    <string name="mids_sapps_pop_an_invalid_value_has_been_provided_for_samsung_in_app_purchase">চেমচাং ইন-এপ্প্‌ ক্ৰয়ৰ বাবে এটা অমান্য মান প্ৰদান কৰা হৈছে৷</string>
+    <string name="mids_sapps_pop_payment_canceled">পৰিশোধ বাতিল কৰা হৈছে৷</string>
+    <string name="mids_sapps_pop_to_purchase_items_you_need_to_install_samsung_in_app_purchase_install_q">আইটেমসমূহ ক্ৰয় কৰিবলৈ, আপুনি চেমচাং ইন-এপ্প্‌ পাৰচেজ ইনষ্টল কৰাটো প্ৰয়োজন। ইনষ্টল কৰিবনে?</string>
+    <string name="mids_sapps_pop_unable_to_open_samsung_in_app_purchase_msg">চেমচাং ইন-এপ্প্‌ ক্ৰয় খোলাত অক্ষম। অনুমতিলৈ যাওক, তাৰপিছত আৱশ্যকীয় অনুমতি অনুমোদন কৰক আৰু পুনঃচেষ্টা কৰক।</string>
+    <string name="mids_sapps_pop_unknown_error_occurred">অজ্ঞাত ত্ৰুটি ঘটিছে৷</string>
     <string msgid="542007171693138492" name="navigation_menu">"নেভিগেশ্বন মেনু"</string>
     <string msgid="6610465462668679431" name="not_selected">"বাছনি কৰা হোৱা নাই"</string>
     <string msgid="5941395253238309765" name="range_end">"পৰিসৰৰ সমাপ্তি"</string>

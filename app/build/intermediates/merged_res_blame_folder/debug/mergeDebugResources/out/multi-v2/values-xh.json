@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.twofold.app-mergeDebugResources-39:/values-xh/values-xh.xml",
+            "map": [
+                {
+                    "source": "/Users/amritha/.gradle/caches/9.7.0/transforms/60d360abeb80408caa2753744ba72680/transformed/iap-6.5.2/res/values-xh/values-xh.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,140,288,386,457,555,639,890,1060,1139,1327,1523",
+                        "endColumns": "84,147,97,70,97,83,250,169,78,187,195,95",
+                        "endOffsets": "135,283,381,452,550,634,885,1055,1134,1322,1518,1614"
+                    }
+                }
+            ]
+        }
+    ]
+}

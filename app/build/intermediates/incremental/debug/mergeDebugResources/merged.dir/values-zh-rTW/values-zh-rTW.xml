@@ -11,9 +11,35 @@
     <string msgid="59049573811482460" name="call_notification_screening_text">"正在過濾來電"</string>
     <string msgid="406453423630273620" name="close_drawer">"關閉導覽選單"</string>
     <string msgid="7573152094250666567" name="close_sheet">"關閉功能表"</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">啟用</string>
+    <string msgid="227660514972886228" name="common_google_play_services_enable_text">您必須啟用 Google Play 服務，才能執行「%1$s」。</string>
+    <string msgid="5122002158466380389" name="common_google_play_services_enable_title">啟用 Google Play 服務</string>
+    <string msgid="7153882981874058840" name="common_google_play_services_install_button">安裝</string>
+    <string name="common_google_play_services_install_text">您的裝置並未安裝 Google Play 服務，因此無法執行「%1$s」。</string>
+    <string msgid="7215213145546190223" name="common_google_play_services_install_title">取得 Google Play 服務</string>
+    <string name="common_google_play_services_notification_channel_name">Google Play 服務可用性</string>
+    <string name="common_google_play_services_notification_ticker">Google Play 服務發生錯誤</string>
+    <string name="common_google_play_services_unknown_issue">「%1$s」無法存取 Google Play 服務，請再試一次。</string>
+    <string name="common_google_play_services_unsupported_text">您的裝置不支援 Google Play 服務，因此無法執行「%1$s」。</string>
+    <string msgid="6556509956452265614" name="common_google_play_services_update_button">更新</string>
+    <string msgid="9053896323427875356" name="common_google_play_services_update_text">您必須更新 Google Play 服務，才能執行「%1$s」。</string>
+    <string msgid="6006316683626838685" name="common_google_play_services_update_title">更新 Google Play 服務</string>
+    <string name="common_google_play_services_updating_text">執行「%1$s」所需的 Google Play 服務正在更新。</string>
+    <string name="common_google_play_services_wear_update_text">必須使用新版 Google Play 服務。該服務稍後就會自動更新。</string>
+    <string name="common_open_on_phone">在手機上開啟</string>
+    <string name="common_signin_button_text">登入</string>
+    <string name="common_signin_button_text_long">使用 Google 帳戶登入</string>
     <string msgid="8038256446254964252" name="default_error_message">"輸入內容無效"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"彈出式視窗"</string>
+    <string name="dream_ph_body_contact_p1sscustomer_servicep2ss_for_more_information_n_nerror_code_c_p3ss">請聯絡%1$s客服中心%2$s瞭解更多資訊。\n\n錯誤碼：%3$s</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_enable_the_galaxy_store_in_settings">若要完成此次購買，需於設定中啟用三星應用商店。</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_update_the_galaxy_store">若要完成此次購買，需更新三星應用商店。</string>
+    <string name="dream_ph_pheader_couldnt_complete_purchase">無法完成購買</string>
+    <string name="dream_sapps_body_authenticating_ing">正在驗證\u2026</string>
+    <string name="dream_sapps_body_contact_customer_service_to_complete_your_purchase">請聯絡客服中心來完成您的購買。</string>
+    <string name="dream_sapps_body_your_purchase_is_complete">已完成您的購買。</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"下拉式選單"</string>
+    <string name="ids_com_body_error_code_c">錯誤碼：</string>
     <string msgid="6827826412747255547" name="in_progress">"處理中"</string>
     <string msgid="7933458017204019916" name="indeterminate">"部分檢查"</string>
     <string msgid="2988463736136100848" name="m3c_bottom_sheet_collapse_description">"收合底部功能表"</string>
@@ -82,6 +108,15 @@
     <string msgid="5460405025248574620" name="m3c_tooltip_pane_description">"工具提示"</string>
     <string msgid="6564222473543418073" name="m3c_wide_navigation_rail_close_rail">"關閉邊欄"</string>
     <string msgid="8350283435461615411" name="m3c_wide_navigation_rail_pane_title">"導覽邊欄"</string>
+    <string name="mids_sapps_body_waiting_ing">等待中\u2026</string>
+    <string name="mids_sapps_header_samsung_in_app_purchase_abb">Samsung In-App Purchase</string>
+    <string name="mids_sapps_header_update_galaxy_apps">更新 Galaxy Apps</string>
+    <string name="mids_sapps_pop_a_new_version_is_available_galaxy_apps_will_be_updated_to_the_latest_version_to_complete_this_purchase">有可用的新版本。Galaxy Apps 將更新至最新版本以完成此筆購買。</string>
+    <string name="mids_sapps_pop_an_invalid_value_has_been_provided_for_samsung_in_app_purchase">提供給 Samsung In-App Purchase 的值無效。</string>
+    <string name="mids_sapps_pop_payment_canceled">付款已取消。</string>
+    <string name="mids_sapps_pop_to_purchase_items_you_need_to_install_samsung_in_app_purchase_install_q">若要購買項目，需安裝 Samsung In-App Purchase。安裝嗎？</string>
+    <string name="mids_sapps_pop_unable_to_open_samsung_in_app_purchase_msg">無法開啟 [三星應用程式內購買]。請前往 [權限]，然後允許所需權限並重試。</string>
+    <string name="mids_sapps_pop_unknown_error_occurred">已發生未知錯誤。</string>
     <string msgid="542007171693138492" name="navigation_menu">"導覽選單"</string>
     <string msgid="6610465462668679431" name="not_selected">"未選取"</string>
     <string msgid="5941395253238309765" name="range_end">"範圍終點"</string>

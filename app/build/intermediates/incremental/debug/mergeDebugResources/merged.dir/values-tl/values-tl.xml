@@ -11,9 +11,35 @@
     <string msgid="59049573811482460" name="call_notification_screening_text">"Nagsi-screen ng papasok na tawag"</string>
     <string msgid="406453423630273620" name="close_drawer">"Isara ang menu ng navigation"</string>
     <string msgid="7573152094250666567" name="close_sheet">"Isara ang sheet"</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">I-enable</string>
+    <string msgid="227660514972886228" name="common_google_play_services_enable_text">Hindi gagana ang %1$s maliban kung ie-enable mo ang mga serbisyo ng Google Play.</string>
+    <string msgid="5122002158466380389" name="common_google_play_services_enable_title">I-enable ang mga serbisyo ng Google Play</string>
+    <string msgid="7153882981874058840" name="common_google_play_services_install_button">I-install</string>
+    <string name="common_google_play_services_install_text">Hindi gagana ang %1$s nang wala ang mga serbisyo ng Google Play na wala sa iyong device.</string>
+    <string msgid="7215213145546190223" name="common_google_play_services_install_title">Kunin ang mga serbisyo ng Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">Availability ng serbisyo ng Google Play</string>
+    <string name="common_google_play_services_notification_ticker">Error sa Mga Serbisyo ng Google Play</string>
+    <string name="common_google_play_services_unknown_issue">Nagkakaproblema ang %1$s sa mga serbisyo ng Google Play. Pakisubukan ulit.</string>
+    <string name="common_google_play_services_unsupported_text">Hindi gagana ang %1$s nang wala ang mga serbisyo ng Google Play, na hindi nasusuportahan ng iyong device.</string>
+    <string msgid="6556509956452265614" name="common_google_play_services_update_button">I-update</string>
+    <string msgid="9053896323427875356" name="common_google_play_services_update_text">Hindi gagana ang %1$s maliban kung i-a-update mo ang mga serbisyo ng Google Play.</string>
+    <string msgid="6006316683626838685" name="common_google_play_services_update_title">I-update ang mga serbisyo ng Google Play</string>
+    <string name="common_google_play_services_updating_text">Hindi gagana ang %1$s nang wala ang mga serbisyo ng Google Play na kasalukuyang ina-update.</string>
+    <string name="common_google_play_services_wear_update_text">Kailangan ang bagong bersyon ng mga serbisyo ng Google Play. Mag-a-update itong mag-isa sa ilang sandali.</string>
+    <string name="common_open_on_phone">Buksan sa telepono</string>
+    <string name="common_signin_button_text">Mag-sign in</string>
+    <string name="common_signin_button_text_long">Mag-sign in sa Google</string>
     <string msgid="8038256446254964252" name="default_error_message">"Invalid na input"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Window ng Pop-Up"</string>
+    <string name="dream_ph_body_contact_p1sscustomer_servicep2ss_for_more_information_n_nerror_code_c_p3ss">Makipag-ugnayan sa %1$sCustomer Service%2$s para sa mas maraming impormasyon.\n\nError code: %3$s</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_enable_the_galaxy_store_in_settings">Para tapusin ang pagbili na ito, kailangan mong paganahin ang Galaxy Store sa Settings.</string>
+    <string name="dream_ph_body_to_complete_this_purchase_you_need_to_update_the_galaxy_store">Para tapusin ang pagbili na ito, kailangan mong i-update ang Galaxy Store.</string>
+    <string name="dream_ph_pheader_couldnt_complete_purchase">Hindi matapos ang pagbili</string>
+    <string name="dream_sapps_body_authenticating_ing">Ina-authenticate\u2026</string>
+    <string name="dream_sapps_body_contact_customer_service_to_complete_your_purchase">Makipag-ugnayan sa Customer Service para tapusin ang pagbili mo.</string>
+    <string name="dream_sapps_body_your_purchase_is_complete">Tapos na ang pagbili mo.</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Drop-down na menu"</string>
+    <string name="ids_com_body_error_code_c">Code ng error:</string>
     <string msgid="6827826412747255547" name="in_progress">"Isinasagawa"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Bahagyang may check"</string>
     <string msgid="2988463736136100848" name="m3c_bottom_sheet_collapse_description">"I-collapse ang bottom sheet"</string>
@@ -82,6 +108,15 @@
     <string msgid="5460405025248574620" name="m3c_tooltip_pane_description">"Tooltip"</string>
     <string msgid="6564222473543418073" name="m3c_wide_navigation_rail_close_rail">"Isara ang rail"</string>
     <string msgid="8350283435461615411" name="m3c_wide_navigation_rail_pane_title">"Navigation rail"</string>
+    <string name="mids_sapps_body_waiting_ing">Naghihintay\u2026</string>
+    <string name="mids_sapps_header_samsung_in_app_purchase_abb">Samsung In-App Purchase</string>
+    <string name="mids_sapps_header_update_galaxy_apps">I-update ang Galaxy Apps</string>
+    <string name="mids_sapps_pop_a_new_version_is_available_galaxy_apps_will_be_updated_to_the_latest_version_to_complete_this_purchase">May bagong bersiyon na magagamit. Ia-update ang Galaxy Apps sa pinakabagong bersiyon para tapusin ang pagbili na ito.</string>
+    <string name="mids_sapps_pop_an_invalid_value_has_been_provided_for_samsung_in_app_purchase">May ibinigay na hindi tamang halaga para sa Samsung In-App Purchase.</string>
+    <string name="mids_sapps_pop_payment_canceled">Kinansela ang pagbabayad.</string>
+    <string name="mids_sapps_pop_to_purchase_items_you_need_to_install_samsung_in_app_purchase_install_q">Upang bumili ng mga item, kailangan mong i-install ang Samsung In-App Purchase. I-install?</string>
+    <string name="mids_sapps_pop_unable_to_open_samsung_in_app_purchase_msg">Hindi mabuksan ang Samsung In-App Purchase. Pumunta sa Permissions, tapos payagan ang mga kailangang pahintulot at subukang muli.</string>
+    <string name="mids_sapps_pop_unknown_error_occurred">May naganap na hindi alam na error.</string>
     <string msgid="542007171693138492" name="navigation_menu">"Menu ng navigation"</string>
     <string msgid="6610465462668679431" name="not_selected">"Hindi napili"</string>
     <string msgid="5941395253238309765" name="range_end">"Katapusan ng range"</string>

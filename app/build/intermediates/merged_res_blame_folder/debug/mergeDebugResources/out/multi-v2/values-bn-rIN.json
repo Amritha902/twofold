@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.twofold.app-mergeDebugResources-39:/values-bn-rIN/values-bn-rIN.xml",
+            "map": [
+                {
+                    "source": "/Users/amritha/.gradle/caches/9.7.0/transforms/60d360abeb80408caa2753744ba72680/transformed/iap-6.5.2/res/values-bn-rIN/values-bn-rIN.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,246,432,598,697,788,948,1044,1110,1190,1289,1377,1619,1785,1865,2059,2262",
+                        "endColumns": "190,185,165,98,90,159,95,65,79,98,87,241,165,79,193,202,85",
+                        "endOffsets": "241,427,593,692,783,943,1039,1105,1185,1284,1372,1614,1780,1860,2054,2257,2343"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.twofold.app-mergeDebugResources-34:/values-v30/values-v30.xml",
+            "outputFile": "com.twofold.app-mergeDebugResources-39:/values-v30/values-v30.xml",
             "map": [
                 {
-                    "source": "/Users/amritha/.gradle/caches/9.7.0/transforms/ebf2beff6a6d6034062873cd7ff26d35/transformed/material3/res/values-v30/values-v30.xml",
+                    "source": "/Users/amritha/.gradle/caches/9.7.0/transforms/68593994430914b67cb0c0a94c8a01dc/transformed/material3/res/values-v30/values-v30.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

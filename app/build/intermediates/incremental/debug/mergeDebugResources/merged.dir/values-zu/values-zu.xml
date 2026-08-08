@@ -11,8 +11,29 @@
     <string msgid="59049573811482460" name="call_notification_screening_text">"Ukuveza ikholi engenayo"</string>
     <string msgid="406453423630273620" name="close_drawer">"Vala imenyu yokuzulazula"</string>
     <string msgid="7573152094250666567" name="close_sheet">"Vala ishidi"</string>
+    <string msgid="2523291102206661146" name="common_google_play_services_enable_button">Nika amandla</string>
+    <string msgid="227660514972886228" name="common_google_play_services_enable_text">I-%1$s ngeke isebenze ngaphandle kokuthi unike amandla amasevisi we-Google Play.</string>
+    <string msgid="5122002158466380389" name="common_google_play_services_enable_title">Nika amandla amasevisi we-Google Play</string>
+    <string msgid="7153882981874058840" name="common_google_play_services_install_button">Faka</string>
+    <string name="common_google_play_services_install_text">I-%1$s ngeke ize iqalise ngaphandle kwamasevisi we-Google Play, angekho kusukela kudivayisi yakho.</string>
+    <string msgid="7215213145546190223" name="common_google_play_services_install_title">Thola amasevisi we-Google Play</string>
+    <string name="common_google_play_services_notification_channel_name">Ukungatholakali kwamasevisi e-Google Play</string>
+    <string name="common_google_play_services_notification_ticker">Iphutha lamasevisi we-Google Play</string>
+    <string name="common_google_play_services_unknown_issue">%1$s inenkinga ngamasevisi e-Google Play. Sicela uzame futhi.</string>
+    <string name="common_google_play_services_unsupported_text">%1$s ngeke isebenze ngaphandle kwamasevisi e-Google Play, angasekelwa idivayisi yakho.</string>
+    <string msgid="6556509956452265614" name="common_google_play_services_update_button">Isibuyekezo</string>
+    <string msgid="9053896323427875356" name="common_google_play_services_update_text">I-%1$s ngeke ize iqalise ngaphandle kokuthi ubuyekeze i-Google Play.</string>
+    <string msgid="6006316683626838685" name="common_google_play_services_update_title">Buyekeza amasevisi we-Google Play</string>
+    <string name="common_google_play_services_updating_text">I-%1$s ngeke ize iqalise ngaphandle kwamasevisi we-Google Play, okwamanje abuyekezwayo.</string>
+    <string name="common_google_play_services_wear_update_text">Kudingeka inguqulo entsha yamasevisi we-Google Play. Izozibuyekeza ngokwayo maduze.</string>
+    <string name="common_open_on_phone">Vula kufoni</string>
+    <string name="common_signin_button_text">Ngena ngemvume</string>
+    <string name="common_signin_button_text_long">Ngena ngemvume nge-Google</string>
     <string msgid="8038256446254964252" name="default_error_message">"Okufakwayo okungalungile"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Iwindi Lesikhashana"</string>
+    <string name="dream_sapps_body_authenticating_ing">Authenticating\u2026</string>
+    <string name="dream_sapps_body_contact_customer_service_to_complete_your_purchase">Contact Customer Service to complete your purchase.</string>
+    <string name="dream_sapps_body_your_purchase_is_complete">Your purchase is complete.</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Imenyu eya phansi"</string>
     <string msgid="6827826412747255547" name="in_progress">"Kuyaqhubeka"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Kuhlolwe kancane"</string>
@@ -82,6 +103,15 @@
     <string msgid="5460405025248574620" name="m3c_tooltip_pane_description">"Ithulithiphu"</string>
     <string msgid="6564222473543418073" name="m3c_wide_navigation_rail_close_rail">"Vala ikhalamu lezikhangiso"</string>
     <string msgid="8350283435461615411" name="m3c_wide_navigation_rail_pane_title">"Ikhalamu lezikhangiso lokufuna"</string>
+    <string name="mids_sapps_body_waiting_ing">Ilindile\u2026</string>
+    <string name="mids_sapps_header_samsung_in_app_purchase_abb">Samsung In-App Purchase</string>
+    <string name="mids_sapps_header_update_galaxy_apps">Update Galaxy Apps</string>
+    <string name="mids_sapps_pop_a_new_version_is_available_galaxy_apps_will_be_updated_to_the_latest_version_to_complete_this_purchase">A new version is available. Galaxy Apps will be updated to the latest version to complete this purchase.</string>
+    <string name="mids_sapps_pop_an_invalid_value_has_been_provided_for_samsung_in_app_purchase">An invalid value has been provided for Samsung In-App Purchase.</string>
+    <string name="mids_sapps_pop_payment_canceled">Payment cancelled.</string>
+    <string name="mids_sapps_pop_to_purchase_items_you_need_to_install_samsung_in_app_purchase_install_q">To purchase items, you need to install Samsung In-App Purchase. Install?</string>
+    <string name="mids_sapps_pop_unable_to_open_samsung_in_app_purchase_msg">Unable to open Samsung In-App Purchase. Go to Permissions, then allow the required permissions and try again.</string>
+    <string name="mids_sapps_pop_unknown_error_occurred">Kuvule iphutha elingaziwa.</string>
     <string msgid="542007171693138492" name="navigation_menu">"Imenyu yokuzulazula"</string>
     <string msgid="6610465462668679431" name="not_selected">"Ayikhethiwe"</string>
     <string msgid="5941395253238309765" name="range_end">"Umkhawulo wobubanzi"</string>

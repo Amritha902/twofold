@@ -6,6 +6,7 @@ lifecycle = "2.11.0"
 activityCompose = "1.13.0"
 composeBom = "2026.06.01"
 window = "1.5.1"
+revenuecat = "10.16.1"
 junit = "4.13.2"
 androidxJunit = "1.2.1"
 espresso = "3.6.1"
@@ -22,6 +23,11 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-window = { group = "androidx.window", name = "window", version.ref = "window" }
+
+# Galaxy Store in-app purchases. The -store-galaxy module is what makes this possible at all;
+# without it RevenueCat only speaks Play and App Store.
+revenuecat-purchases = { group = "com.revenuecat.purchases", name = "purchases", version.ref = "revenuecat" }
+revenuecat-purchases-galaxy = { group = "com.revenuecat.purchases", name = "purchases-store-galaxy", version.ref = "revenuecat" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
