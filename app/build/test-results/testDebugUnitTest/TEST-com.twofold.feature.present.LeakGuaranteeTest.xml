@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.twofold.feature.present.LeakGuaranteeTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-08-08T16:31:48.780Z" hostname="amrithas-MacBook-Air.local" time="0.006">
+<testsuite name="com.twofold.feature.present.LeakGuaranteeTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-08-08T16:46:26.287Z" hostname="amrithas-MacBook-Air.local" time="0.007">
   <properties/>
   <testcase name="ClientPage carries no agent-private fields" classname="com.twofold.feature.present.LeakGuaranteeTest" time="0.003"/>
-  <testcase name="ClientPage exposes only the fields the client is meant to see" classname="com.twofold.feature.present.LeakGuaranteeTest" time="0.003"/>
+  <testcase name="ClientPage exposes only the fields the client is meant to see" classname="com.twofold.feature.present.LeakGuaranteeTest" time="0.004"/>
   <testcase name="AgentPage composes ClientPage rather than duplicating it" classname="com.twofold.feature.present.LeakGuaranteeTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

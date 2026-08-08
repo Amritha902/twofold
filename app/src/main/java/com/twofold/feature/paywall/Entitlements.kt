@@ -1,8 +1,18 @@
 package com.twofold.feature.paywall
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import com.revenuecat.purchases.LogLevel
+import com.revenuecat.purchases.Offering
+import com.revenuecat.purchases.Offerings
+import com.revenuecat.purchases.Package
+import com.revenuecat.purchases.PurchaseParams
+import com.revenuecat.purchases.interfaces.PurchaseCallback
+import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
+import com.revenuecat.purchases.models.StoreTransaction
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
@@ -47,6 +57,50 @@ class Entitlements private constructor(private val prefs: SharedPreferences) {
             // that the agent stopped paying — the cached value stands.
             override fun onError(error: PurchasesError) = Unit
         })
+    }
+
+    /** The current offering, or null when unconfigured or unreachable. */
+    suspend fun currentOffering(): Offering? {
+        if (!isConfigured) return null
+
+        return suspendCancellableCoroutine { continuation ->
+            Purchases.sharedInstance.getOfferings(object : ReceiveOfferingsCallback {
+                override fun onReceived(offerings: Offerings) {
+                    continuation.resume(offerings.current)
+                }
+
+                override fun onError(error: PurchasesError) {
+                    // Offline is the common case in the field, not an exception worth surfacing.
+                    continuation.resume(null)
+                }
+            })
+        }
+    }
+
+    /**
+     * Runs the Galaxy Store purchase flow.
+     *
+     * @return true when the purchase completed and Pro is now active.
+     */
+    suspend fun purchase(activity: Activity, packageToBuy: Package): Boolean {
+        if (!isConfigured) return false
+
+        return suspendCancellableCoroutine { continuation ->
+            Purchases.sharedInstance.purchase(
+                PurchaseParams.Builder(activity, packageToBuy).build(),
+                object : PurchaseCallback {
+                    override fun onCompleted(storeTransaction: StoreTransaction, customerInfo: CustomerInfo) {
+                        val active = customerInfo.entitlements[PRO_ENTITLEMENT]?.isActive == true
+                        update(active)
+                        continuation.resume(active)
+                    }
+
+                    override fun onError(error: PurchasesError, userCancelled: Boolean) {
+                        continuation.resume(false)
+                    }
+                },
+            )
+        }
     }
 
     private fun update(isPro: Boolean) {

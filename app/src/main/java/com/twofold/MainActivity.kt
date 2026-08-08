@@ -1,5 +1,6 @@
 package com.twofold
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -35,12 +36,14 @@ import com.twofold.core.fold.DeviceMode
 import com.twofold.core.fold.FoldState
 import com.twofold.core.fold.FoldStateTracker
 import com.twofold.core.fold.TwofoldScaffold
+import com.revenuecat.purchases.Package
 import com.twofold.data.document.DocumentRepository
 import com.twofold.feature.present.AgentPage
 import com.twofold.feature.present.AgentPane
 import com.twofold.feature.present.ClientPage
 import com.twofold.feature.present.ClientPane
 import com.twofold.feature.paywall.Entitlements
+import com.twofold.feature.paywall.PaywallScreen
 import com.twofold.feature.present.PreparePane
 import com.twofold.feature.present.PresentState
 import com.twofold.feature.sign.SignaturePad
@@ -122,6 +125,28 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
     var strokes by remember { mutableStateOf<List<List<Offset>>>(emptyList()) }
     var padSize by remember { mutableStateOf(Size.Zero) }
 
+    var showPaywall by remember { mutableStateOf(false) }
+    var offeringPackages by remember { mutableStateOf<List<Package>>(emptyList()) }
+    var isPurchasing by remember { mutableStateOf(false) }
+
+    if (showPaywall) {
+        PaywallScreen(
+            packages = offeringPackages,
+            isPurchasing = isPurchasing,
+            onPurchase = { option ->
+                val activity = context as? Activity ?: return@PaywallScreen
+                scope.launch {
+                    isPurchasing = true
+                    entitlements.purchase(activity, option)
+                    isPurchasing = false
+                    showPaywall = false
+                }
+            },
+            onDismiss = { showPaywall = false },
+        )
+        return
+    }
+
     when (foldState.mode) {
         // Flat on a table between two people: the far half is theirs, the near half is yours.
         DeviceMode.TWOFOLD -> TwofoldScaffold(
@@ -156,6 +181,15 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
                                         isPro = isPro,
                                     )
                                     strokes = emptyList()
+
+                                    // Ask here and nowhere else. The agent has just closed, the
+                                    // client is signed, and the watermark they are about to send
+                                    // is the only argument the paywall needs to make.
+                                    if (!isPro) {
+                                        offeringPackages =
+                                            entitlements.currentOffering()?.availablePackages.orEmpty()
+                                        showPaywall = true
+                                    }
                                 }
                             },
                         )
