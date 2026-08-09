@@ -109,8 +109,8 @@ privacy policy, which a reviewer will read alongside it. The accurate answer is:
 | `05-they-can-ask.png` | 1600×2000 | Screenshot 5 — the client's own button |
 | `promo-16x9.png` | 1920×1080 | Promotional graphic |
 | `icon-512.png` | 512×512 | Store icon |
-| `../media/twofold-demo.mp4` | 32s | Listing video |
-| `../media/twofold-hook.mp4` | 13s | Devpost / social |
+| `../media/twofold-demo.mp4` | 34s | Listing video |
+| `../media/twofold-hook.mp4` | 14s | Devpost / social |
 
 All captures are from the app running on a folding device, at native resolution, with a clean
 status bar. Nothing is mocked up.
