@@ -52,6 +52,9 @@ Pre-release. Building for the [RevenueCat Shipaton 2026](https://revenuecat-ship
 | [Architecture](docs/ARCHITECTURE.md) | Technical design, foldable APIs, module layout |
 | [Design](docs/DESIGN.md) | Visual identity and the rules it follows |
 | [Shipaton plan](docs/SHIPATON.md) | Dates, critical path, category strategy |
+| [Devpost submission](docs/DEVPOST.md) | The write-up, paste-ready |
+| [Store listing](docs/store/LISTING.md) | Galaxy Store copy and assets |
+| [Privacy policy](docs/privacy.html) | Live at amritha902.github.io/twofold/privacy.html |
 
 ## License
 
