@@ -22,6 +22,17 @@ val revenueCatGalaxyKey: String = run {
     fromLocal ?: System.getenv("REVENUECAT_GALAXY_KEY") ?: ""
 }
 
+/** OneSignal app id, read the same way. Blank means the follow-up nudge is simply off. */
+val oneSignalAppId: String = run {
+    val local = rootProject.file("local.properties")
+    val fromLocal = if (local.exists()) {
+        Properties().apply { local.inputStream().use(::load) }.getProperty("ONESIGNAL_APP_ID")
+    } else {
+        null
+    }
+    fromLocal ?: System.getenv("ONESIGNAL_APP_ID") ?: ""
+}
+
 android {
     namespace = "com.twofold"
     compileSdk = 37
@@ -37,6 +48,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "REVENUECAT_GALAXY_KEY", "\"$revenueCatGalaxyKey\"")
+        buildConfigField("String", "ONESIGNAL_APP_ID", "\"$oneSignalAppId\"")
 
         ndk {
             // arm64 only. Every Galaxy foldable is arm64, and the OCR pipeline ships a ~10MB
@@ -94,6 +106,7 @@ dependencies {
 
     implementation(libs.revenuecat.purchases)
     implementation(libs.revenuecat.purchases.galaxy)
+    implementation(libs.onesignal)
 
     debugImplementation(libs.androidx.ui.tooling)
 

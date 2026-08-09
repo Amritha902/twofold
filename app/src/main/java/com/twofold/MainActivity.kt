@@ -91,6 +91,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
     val scope = rememberCoroutineScope()
     val state = remember { PresentState(context, scope) }
     val entitlements = remember { Entitlements.create(context) }
+    val nudge = remember { (context.applicationContext as TwofoldApplication).nudge }
     val isPro by entitlements.isPro.collectAsStateWithLifecycle()
 
     val picker = rememberLauncherForActivityResult(
@@ -163,7 +164,18 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
     // A meeting starts when the phone is put down in front of someone and ends when it is picked
     // up. Tying the log to posture rather than to app launch keeps it to real client meetings.
     LaunchedEffect(foldState.mode, document.id) {
-        if (foldState.mode == DeviceMode.TWOFOLD) state.beginSession() else state.endSession()
+        if (foldState.mode == DeviceMode.TWOFOLD) {
+            state.beginSession()
+        } else {
+            state.endSession()
+
+            // The meeting just ended, so this is the moment the follow-up list changes and the only
+            // moment asking to be reminded about it explains itself. Never while presenting — see
+            // NudgePolicy.
+            followUps = state.unsignedSessions()
+            nudge.publish(followUps.size)
+            nudge.askIfItIsTheRightMoment(unsignedCount = followUps.size, isPresenting = false)
+        }
     }
 
     var strokes by remember { mutableStateOf<List<List<Offset>>>(emptyList()) }

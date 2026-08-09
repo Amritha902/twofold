@@ -7,6 +7,7 @@ activityCompose = "1.13.0"
 composeBom = "2026.06.01"
 window = "1.5.1"
 revenuecat = "10.16.1"
+onesignal = "5.1.31"
 pdfbox = "2.0.27.0"
 mlkitTextRecognition = "16.0.1"
 mlkitTranslate = "17.0.3"
@@ -45,6 +46,7 @@ mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref 
 # without it RevenueCat only speaks Play and App Store.
 revenuecat-purchases = { group = "com.revenuecat.purchases", name = "purchases", version.ref = "revenuecat" }
 revenuecat-purchases-galaxy = { group = "com.revenuecat.purchases", name = "purchases-store-galaxy", version.ref = "revenuecat" }
+onesignal = { group = "com.onesignal", name = "OneSignal", version.ref = "onesignal" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
