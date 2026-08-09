@@ -157,6 +157,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         pageCount = state.pageCount,
         textIsApproximate = state.textIsApproximate,
         sourceClause = state.sourceClause,
+        clauseLabels = state.clauses.map { it.label },
         wasQuestioned = state.currentClauseWasQuestioned,
         questionCount = state.questionedClauses.size,
     )
@@ -234,7 +235,11 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
             },
             nearPane = {
                 Column(Modifier.fillMaxWidth()) {
-                    AgentPane(page = agentPage, modifier = Modifier.weight(1f))
+                    AgentPane(
+                        page = agentPage,
+                        modifier = Modifier.weight(1f),
+                        onSelectClause = { scope.launch { state.goToClause(it) } },
+                    )
                     if (state.isSigning) {
                         SigningControls(
                             canComplete = strokes.isNotEmpty(),
@@ -284,6 +289,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
             state = state,
             followUps = followUps,
             onImport = openPicker,
+            onSelectClause = { scope.launch { state.goToClause(it) } },
         )
 
         // Folded, or held open in the hand: one pane, private by definition.
@@ -345,11 +351,12 @@ private fun TwofoldScaffoldFlex(
     state: PresentState,
     followUps: List<Session>,
     onImport: () -> Unit,
+    onSelectClause: (Int) -> Unit,
 ) {
     FlexScaffold(
         foldState = foldState,
         creaseColor = LocalTwofoldColors.current.rule,
-        upper = { AgentPane(page = agentPage) },
+        upper = { AgentPane(page = agentPage, onSelectClause = onSelectClause) },
         lower = {
             Column(Modifier.fillMaxSize()) {
                 // Notes scroll; the controls do not. This half is the console, and a console whose

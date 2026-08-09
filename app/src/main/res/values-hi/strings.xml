@@ -57,6 +57,7 @@
     <!-- The two panes -->
     <string name="clause_counter">%1$d / %2$d</string>
     <string name="clause_description">खंड %1$d, कुल %2$d</string>
+    <string name="jump_to_clause">%2$d में से %1$d वें भाग पर जाएँ</string>
     <string name="showing_clause">खंड %1$s दिखाया जा रहा है  %2$s</string>
     <string name="agent_page_description">पेज %1$d की आपकी प्रति, कुल %2$d, जैसी छपी है।</string>
 

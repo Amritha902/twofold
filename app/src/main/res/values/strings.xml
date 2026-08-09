@@ -42,6 +42,7 @@
     <string name="clause_counter">%1$d / %2$d</string>
     <string name="clause_description">Clause %1$d of %2$d</string>
     <string name="showing_clause">Showing clause %1$s  %2$s</string>
+    <string name="jump_to_clause">Go to section %1$d of %2$d</string>
     <string name="agent_page_description">Your copy of page %1$d of %2$d, as it is printed.</string>
 
     <string name="preparing_document">Reading the document…</string>

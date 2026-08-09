@@ -4,10 +4,12 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -116,6 +118,13 @@ data class AgentPage(
     val wasQuestioned: Boolean = false,
     /** How many they have asked about so far — all of which reach the signed copy. */
     val questionCount: Int = 0,
+    /**
+     * Every clause label, for the jump strip — agent's half only.
+     *
+     * Labels rather than whole clauses: this is a way to *get* somewhere, not a second reader, and
+     * the agent's half is the same 130 × 63 mm as the client's.
+     */
+    val clauseLabels: List<String> = emptyList(),
     /**
      * The clause in its original wording.
      *
@@ -257,6 +266,7 @@ fun ClientPane(
 fun AgentPane(
     page: AgentPage,
     modifier: Modifier = Modifier,
+    onSelectClause: (Int) -> Unit = {},
 ) {
     val colors = LocalTwofoldColors.current
 
@@ -335,6 +345,17 @@ fun AgentPane(
                 )
             }
 
+            // The reason this exists: an agent's own note routinely says "lead with clause 3, not
+            // the benefits table" — and until now the only way there was tapping Next nine times
+            // while a client watched. A meeting does not run in document order.
+            if (page.clauseLabels.size > 1) {
+                ClauseStrip(
+                    labels = page.clauseLabels,
+                    currentIndex = page.page.clauseNumber - 1,
+                    onSelect = onSelectClause,
+                )
+            }
+
             if (page.notes.isNotBlank()) {
                 Text(
                     text = page.notes,
@@ -378,5 +399,53 @@ fun PreparePane(
             textAlign = TextAlign.Center,
         )
         action?.invoke()
+    }
+}
+
+/**
+ * Jump straight to a clause.
+ *
+ * Numbers only, and horizontally scrollable. This half is no bigger than the client's, so a list
+ * with headings would either take the space the page needs or be unreadable — and the agent already
+ * knows what clause 3 is, which is precisely why they want to go there.
+ *
+ * Never rendered on the client's half. Not because it would leak anything, but because a client
+ * watching someone skip past clauses is being shown the shape of the sales pitch rather than the
+ * document.
+ */
+@Composable
+private fun ClauseStrip(
+    labels: List<String>,
+    currentIndex: Int,
+    onSelect: (Int) -> Unit,
+) {
+    val colors = LocalTwofoldColors.current
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        labels.forEachIndexed { index, label ->
+            val isCurrent = index == currentIndex
+            // Spoken by position, not by label. A document can leave several stretches unnumbered,
+            // and "go to clause —" three times over is no use to anyone listening. The position is
+            // the one thing guaranteed unique.
+            val spoken = stringResource(R.string.jump_to_clause, index + 1, labels.size)
+
+            TextButton(
+                onClick = { onSelect(index) },
+                modifier = Modifier.semantics { contentDescription = spoken },
+                contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+            ) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = if (isCurrent) colors.seal else colors.inkMuted,
+                )
+            }
+        }
     }
 }

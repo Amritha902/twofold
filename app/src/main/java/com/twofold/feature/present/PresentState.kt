@@ -196,9 +196,18 @@ class PresentState(
         questionedClauses = questionedClauses + clauseIndex
     }
 
-    /** Clause labels, in document order, for the signed record. */
+    /**
+     * How the questioned clauses are named on the signed copy.
+     *
+     * The document's own number where it has one, and the position where it does not — because
+     * "Explained on request: —, —" is not a record of anything. This is the line someone reads back
+     * years later when a sale is disputed, so every entry has to point at exactly one clause.
+     */
     private fun questionedLabels(): List<String> =
-        questionedClauses.sorted().mapNotNull { clauses.getOrNull(it)?.label }
+        questionedClauses.sorted().mapNotNull { index ->
+            val clause = clauses.getOrNull(index) ?: return@mapNotNull null
+            if (clause.label == Clause.UNNUMBERED) "#${index + 1}" else clause.label
+        }
 
     // endregion
 

@@ -8,7 +8,14 @@ package com.twofold.data.document
  * shows text rather than a picture of a page, and this is the unit it shows.
  */
 data class Clause(
-    /** "3" for a numbered clause, otherwise the position in the document. */
+    /**
+     * "3" for a numbered clause. [UNNUMBERED] for text the document never numbered.
+     *
+     * Not a position fallback when the document numbers its clauses, because that produces two
+     * different clauses both labelled "1" — the preamble and the real clause 1 — and the label is
+     * what the agent taps to jump and what gets written onto the signed copy. A number that means
+     * two things is worse there than an honest dash.
+     */
     val label: String,
     /** "Premium payment and grace period", where the document gives one. */
     val heading: String?,
@@ -16,6 +23,11 @@ data class Clause(
     val pageIndex: Int,
 ) {
     val isEmpty: Boolean get() = heading.isNullOrBlank() && body.isBlank()
+
+    companion object {
+        /** Shown for a clause the document itself gave no number. */
+        const val UNNUMBERED = "—"
+    }
 }
 
 /**
@@ -44,7 +56,11 @@ object ClauseSegmenter {
      */
     const val COMFORTABLE_LENGTH = 340
 
-    fun segment(pageText: String, pageIndex: Int): List<Clause> {
+    /**
+     * Splits one page. `internal` because the labels it returns are not final — see [segmentAll],
+     * which is the only thing that can resolve them, and the only entry point production uses.
+     */
+    internal fun segment(pageText: String, pageIndex: Int): List<Clause> {
         val lines = pageText.lines().map { it.trim() }
         val clauses = mutableListOf<Clause>()
 
@@ -56,7 +72,10 @@ object ClauseSegmenter {
             val text = body.toString().trim()
             if (label != null || heading != null || text.isNotEmpty()) {
                 val clause = Clause(
-                    label = label ?: (clauses.size + 1).toString(),
+                    // Position, resolved later. A document that numbers nothing still needs
+                    // something to tap, but one that numbers its clauses must not have the preamble
+                    // stealing the number "1".
+                    label = label ?: PENDING,
                     heading = heading,
                     body = text,
                     pageIndex = pageIndex,
@@ -88,7 +107,27 @@ object ClauseSegmenter {
         return clauses
     }
 
-    /** Every clause in a document, in reading order. */
-    fun segmentAll(pageTexts: List<String>): List<Clause> =
-        pageTexts.flatMapIndexed { index, text -> segment(text, index) }
+    /**
+     * Every clause in a document, in reading order, with labels resolved.
+     *
+     * Resolution has to happen across the whole document rather than per page: whether unnumbered
+     * text should borrow a position number depends on whether the document numbers anything at all,
+     * and page one alone cannot answer that.
+     */
+    fun segmentAll(pageTexts: List<String>): List<Clause> {
+        val clauses = pageTexts.flatMapIndexed { index, text -> segment(text, index) }
+        val documentNumbersItsClauses = clauses.any { it.label != PENDING }
+
+        return clauses.mapIndexed { index, clause ->
+            when {
+                clause.label != PENDING -> clause
+                // Nothing is numbered, so position is the only handle there is.
+                !documentNumbersItsClauses -> clause.copy(label = (index + 1).toString())
+                else -> clause.copy(label = Clause.UNNUMBERED)
+            }
+        }
+    }
+
+    /** Placeholder while segmenting; never leaves [segmentAll]. */
+    private const val PENDING = "?"
 }
