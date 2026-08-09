@@ -2,6 +2,8 @@
 
 **One device. Two sides of the table.**
 
+**[twofold site →](https://amritha902.github.io/twofold/)** · **[watch the demo →](https://amritha902.github.io/twofold/media/twofold-demo.mp4)** · [privacy](https://amritha902.github.io/twofold/privacy.html)
+
 Twofold turns a Galaxy foldable, laid flat between two people, into a two-sided document terminal.
 The crease splits the screen. Your half faces you. Their half faces them, right-side-up.
 
@@ -17,6 +19,15 @@ You never hand over your phone. They never see your notes.
 
 *Held in the hand it's a private editor. Set it down and it becomes two-sided. No button is
 pressed — the posture is the command.*
+
+### Watch it
+
+| | |
+|---|---|
+| **[The demo — 30s](https://amritha902.github.io/twofold/media/twofold-demo.mp4)** | The full flow: prepare, set it down, point at a clause, ask for a signature, the client signs, the signed copy is exported. |
+| [Just the hook — 11s](https://amritha902.github.io/twofold/media/twofold-hook.mp4) | The transition on its own. No narration; it doesn't need any. |
+
+Both were recorded on a folding device. Nothing is mocked up.
 
 ---
 
@@ -54,7 +65,7 @@ Pre-release. Building for the [RevenueCat Shipaton 2026](https://revenuecat-ship
 | [Shipaton plan](docs/SHIPATON.md) | Dates, critical path, category strategy |
 | [Devpost submission](docs/DEVPOST.md) | The write-up, paste-ready |
 | [Store listing](docs/store/LISTING.md) | Galaxy Store copy and assets |
-| [Privacy policy](docs/privacy.html) | Live at amritha902.github.io/twofold/privacy.html |
+| [Privacy policy](https://amritha902.github.io/twofold/privacy.html) | What leaves the device, and what doesn't |
 
 ## License
 
