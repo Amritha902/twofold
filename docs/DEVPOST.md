@@ -71,6 +71,17 @@ cross-platform layer would only have got in the way of both.
 - **Storage** — JSON in app-private files. No Room: the entire persisted schema is smaller than one
   screen displays, and a migration framework for that is more machinery than the data deserves.
 
+### It isn't an insurance app
+
+The words were, for a while. The code never was. Every line does one thing: show a person a document
+they have to sign, in a form they can understand, while the person explaining it keeps their own
+view. That is a loan officer and a borrower, a doctor taking consent, a landlord and a tenant, an
+employer and someone signing an offer half-read.
+
+So the profession became a setting that changes the wording and nothing else — and the fact that
+nothing else needed to change is the argument that it generalises, rather than a claim that it
+might.
+
 ### The thing I would show a judge first
 
 **One document, two languages, at the same instant.** The client reads clause 3 in Hindi; the agent
@@ -84,6 +95,30 @@ cannot translate a bitmap.
 
 It runs on-device. A stranger's insurance policy is not something to upload to a translation
 server.
+
+And then the follow-on question, which is the one that actually matters: **translation only helps
+someone who can read.** About a quarter of Indian adults cannot, and functional literacy for a legal
+document is lower still — the exact people most likely to be sold something they don't understand.
+So the clause is read out loud too, in their language, on the device. Someone who cannot read Tamil
+still speaks Tamil.
+
+Neither of those is possible with a picture of a page. You cannot translate a bitmap and you
+certainly cannot speak one. The chain is the product: extract → segment → translate → speak, each
+step only reachable because of the one before it.
+
+### The one control that isn't the agent's
+
+Everything on that screen belongs to the person selling. That is correct — it's their meeting. But a
+document explained entirely by the seller, with no way for the other party to say *wait, what does
+this mean*, is precisely the dynamic that produces a signature on something nobody understood.
+
+So the client's half has one quiet button. Tapping it tells the agent immediately, and the clauses
+asked about are written onto the signed copy.
+
+That last part is the commercial argument. It turns "they signed" into "they were shown each clause,
+these are the ones they asked about, and they signed after" — which is what an insurer or a bank
+actually wants when a sale is disputed years later, and is not obtainable from a paper signature at
+all.
 
 ### Challenges I ran into
 
@@ -117,7 +152,11 @@ text can be translated where a bitmap cannot, the client's own language. The con
 design.
 
 **Nothing is real until it runs.** The app compiled and passed tests for a full day before it ever
-met a folding device. First run, the signed PDF came out attributed to *the document's own
+met a folding device. Three later bugs were all invisible in a screenshot and all found by driving
+the thing: the client's only button sat underneath the status bar, where edge-to-edge quietly ate
+every tap on it; a slow speech-service bind was being reported to the agent as a missing feature;
+and every launch re-ran OCR, putting fifteen seconds of *Reading the document…* in front of a client
+for a file that hadn't changed. First run, the signed PDF came out attributed to *the document's own
 filename* — "Signed by Term_Life_Policy" — because a placeholder had never been replaced. No amount
 of reading would have caught it.
 

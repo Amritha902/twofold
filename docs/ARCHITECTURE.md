@@ -168,11 +168,29 @@ The language is chosen on the prepare screen, not mid-meeting: a pack is tens of
 client should never watch a progress bar. It persists across restarts, and the translator re-arms
 before the first clause renders so the client never briefly sees the wrong language.
 
+## Speech
+
+Translation only helps a client who can read. Around a quarter of Indian adults cannot, and
+functional literacy for a legal document is lower still — so the clause is also read aloud, in the
+client's language, through the platform engine.
+
+Readiness is deliberately tri-state (`SpeechReadiness`). A cold bind to the system speech service is
+slow, and collapsing "hasn't answered yet" into "unavailable" put *This phone has no voice for that
+language* in front of an agent whose phone had one. `UNKNOWN` keeps the control offered and settles
+the question when it is pressed.
+
 ## Size
 
-On-device OCR ships a ~10MB native library **per ABI**, which took the release APK from 6.7MB to
-55.5MB. Restricting to `arm64-v8a` — every Galaxy foldable is arm64 — and dropping BouncyCastle's
-post-quantum test vectors brings it to ~23MB.
+The release APK is ~39MB, and about 27MB of that is two ML Kit native libraries — translation
+(16MB) and OCR (11MB). Restricting to `arm64-v8a` (every Galaxy foldable is arm64) and dropping
+BouncyCastle's post-quantum test vectors already removed the worst of it.
+
+The remaining 27MB is **kept on purpose.** ML Kit's text recognition also comes in an unbundled
+variant that would save ~11MB by loading models through Google Play services on first use. That
+trades size for a download before the first scanned document can be read — and "works in a living
+room with no signal" is the promise the whole product rests on. An agent whose OCR needs a
+connection has an app that fails in exactly the villages it was built for. Size is the cheaper
+thing to spend.
 
 ## Offline
 

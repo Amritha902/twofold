@@ -3,6 +3,7 @@
 
     <!-- Empty state -->
     <string name="import_prompt">Import the document you\'ll be walking your client through.</string>
+    <string name="see_how_it_works">See how it works</string>
     <string name="choose_pdf">Choose a PDF</string>
 
     <!-- Errors, shown to the agent only -->

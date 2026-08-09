@@ -310,6 +310,18 @@ class PresentState(
         open(ref)
     }
 
+    /** Opens the bundled sample, so the app has something to show before anything is imported. */
+    suspend fun openSample() {
+        isLoading = true
+        val ref = repository.importSample()
+        if (ref == null) {
+            error = context.getString(R.string.error_open_failed)
+            isLoading = false
+            return
+        }
+        open(ref)
+    }
+
     suspend fun open(ref: DocumentRef) {
         isLoading = true
         error = null

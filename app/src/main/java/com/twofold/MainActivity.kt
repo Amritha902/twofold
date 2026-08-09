@@ -120,7 +120,14 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
             modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing),
             hint = state.error ?: stringResource(R.string.import_prompt),
             action = {
-                Button(onClick = { openPicker() }) { Text(stringResource(R.string.choose_pdf)) }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(onClick = { openPicker() }) { Text(stringResource(R.string.choose_pdf)) }
+                    // Offered, not forced. Silently importing a sample into someone's document
+                    // library is the app deciding it knows better than they do what is in there.
+                    TextButton(onClick = { scope.launch { state.openSample() } }) {
+                        Text(stringResource(R.string.see_how_it_works))
+                    }
+                }
             },
         )
         return

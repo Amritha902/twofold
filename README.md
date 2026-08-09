@@ -26,7 +26,11 @@ and text can be translated where a page image cannot.
 ![Twofold: held in the hand, then set down on the table](docs/media/twofold-hook.gif)
 
 *Held in the hand it's a private editor. Set it down and it becomes two-sided — the clause appears
-in front of the client, in their language. No button is pressed; the posture is the command.*
+in front of the client, in their language, and can be read to them out loud. No button is pressed;
+the posture is the command.*
+
+**No PDF to hand?** Open it and tap *See how it works*. The app ships with a document that explains
+itself — through the same extraction, translation and speech as anything else you'd open.
 
 ### Watch it
 

@@ -22,6 +22,7 @@
 
     <!-- Empty state -->
     <string name="import_prompt">वह दस्तावेज़ चुनें जो आप अपने क्लाइंट को दिखाने वाले हैं।</string>
+    <string name="see_how_it_works">यह कैसे काम करता है</string>
     <string name="choose_pdf">PDF चुनें</string>
 
     <!-- Errors, shown to the agent only -->

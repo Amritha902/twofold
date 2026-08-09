@@ -50,6 +50,33 @@ class DocumentRepository(private val context: Context) {
     }
 
     /**
+     * Copies the bundled sample in, exactly as though it had been picked from storage.
+     *
+     * Deliberately a real import of a real PDF rather than a special case. It goes through the same
+     * extraction, segmentation, translation and speech as a policy an agent opens — a sample that
+     * bypassed any of that would be demonstrating something the product does not actually do.
+     *
+     * The reason it exists is the first thirty seconds. Someone installing this and finding an empty
+     * screen and a file picker has to go and find a PDF before the app can show them anything, and
+     * most people do not have a contract on their phone. That is a bad way to meet a product whose
+     * whole argument is visible in one glance.
+     */
+    suspend fun importSample(): DocumentRef? = withContext(Dispatchers.IO) {
+        runCatching {
+            val target = uniqueFile(SAMPLE_TITLE)
+            context.assets.open(SAMPLE_ASSET).use { input ->
+                target.outputStream().use { output -> input.copyTo(output) }
+            }
+            DocumentRef(
+                id = target.nameWithoutExtension,
+                title = target.nameWithoutExtension,
+                file = target,
+                importedAt = System.currentTimeMillis(),
+            )
+        }.getOrNull()
+    }
+
+    /**
      * A writable filename that preserves the document's name and doesn't collide.
      *
      * Importing the same document twice is normal — a policy gets reissued — so the second one
@@ -111,6 +138,11 @@ class DocumentRepository(private val context: Context) {
             .ifBlank { DEFAULT_TITLE }
 
         private const val DOCUMENTS_DIR = "documents"
+
+        private const val SAMPLE_ASSET = "how-twofold-works.pdf"
+
+        /** Also a filename, so it is fixed for the same reason [DEFAULT_TITLE] is. */
+        private const val SAMPLE_TITLE = "How Twofold works"
         /**
          * Not a string resource: this becomes a *filename*, and a title that changes with the
          * phone's locale would orphan the document the next time the app opened in another one.
