@@ -48,7 +48,11 @@ You lay the phone flat on the table. That's the whole interface.
 - **Your half** shows the same document plus your private notes, your talk track, and the controls.
 - **Move to a clause** and it appears in front of them, because it's one index, not two synced
   viewers.
+- **Read it aloud** in their language, for the clients who read no language at all — which is a
+  larger group than the ones translation alone reaches.
 - **Raise the type size on their half only**, for the client who left their glasses at home.
+- **They can ask.** One quiet button on their half — the only control that isn't yours — and the
+  clauses they asked about are written onto the signed copy.
 - **They sign on their half.** The signed copy carries the time and a SHA-256 of the document as
   presented, so the pages signed are provably the pages shown.
 
@@ -151,6 +155,13 @@ The fix forced a better product. Text instead of a page image; one clause at a t
 text can be translated where a bitmap cannot, the client's own language. The constraint was the
 design.
 
+**A Fold creases like a book, and that decides the whole layout.** `androidx.window` reports the
+fold as `Orientation.VERTICAL` in the device's natural orientation — because unfolded, a Fold is a
+book, and the crease runs top to bottom. The near-half/far-half geometry this product is built on
+only exists once the device is turned landscape. So the app refuses to split on a vertical crease
+rather than guessing, and the real usage posture is *unfolded, turned sideways, laid flat*. I found
+this by being unable to reproduce two-sided mode on an emulator I had already recorded it on.
+
 **Nothing is real until it runs.** The app compiled and passed tests for a full day before it ever
 met a folding device. Three later bugs were all invisible in a screenshot and all found by driving
 the thing: the client's only button sat underneath the status bar, where edge-to-edge quietly ate
@@ -165,8 +176,8 @@ of reading would have caught it.
 **The privacy guarantee is structural, not a promise.** The client's renderer takes a `ClientPage`
 type that has no field for notes and no escape hatch. It cannot render private content even if
 someone wires it up carelessly later. `LeakGuaranteeTest` enforces it by reflection, and I verified
-the test has teeth by mutation — adding a `note` field to `ClientPage` fails two of its three
-assertions. A styling bug can leak a colour; it must not be able to leak a note in front of a
+the test has teeth by mutation — adding a `note` field to `ClientPage` fails two of its four
+cases. A styling bug can leak a colour; it must not be able to leak a note in front of a
 paying customer.
 
 **The posture rules are unit-testable without hardware.** They're a pure function over a `HingeState`
@@ -208,8 +219,8 @@ unvalidated, and I'd rather find out in week one than after launch.
 ## Built with
 
 ```
-kotlin, jetpack-compose, androidx-window, foldables, android, revenuecat, galaxy-store,
-pdfrenderer, material3
+kotlin, jetpack-compose, androidx-window, foldables, android, ml-kit, on-device-translation,
+text-to-speech, ocr, revenuecat, galaxy-store, pdfbox, pdfrenderer, material3
 ```
 
 ## Try it out
@@ -219,11 +230,26 @@ pdfrenderer, material3
 - Privacy policy: https://amritha902.github.io/twofold/privacy.html
 - Galaxy Store listing: *(pending — see below)*
 
+No PDF to hand? Open it and tap **See how it works** — it ships with a document whose clauses are
+the instructions, read through the same extraction, translation and speech as anything else.
+
 ## Video
 
-`docs/media/twofold-demo.mp4` — 30 seconds, no narration. Held in the hand it's a private editor;
-set down on the table it becomes two-sided. Then: point at a clause, ask for a signature, the
-client signs, the signed copy is exported.
+**[twofold-demo.mp4](https://amritha902.github.io/twofold/media/twofold-demo.mp4) — 34 seconds, no
+narration.** Recorded on a foldable from an empty install, so nothing is set up off camera.
+
+Open the document the app ships with. Say the meeting is a **tenancy** and that the client reads
+**Hindi**. Set the phone down — it splits at the crease, and the clause is now in front of them, in
+their language, while the original stays on the near half. Move through clauses. Press **Read** and
+it is spoken aloud. The client taps the one button that is theirs, and the agent's half says *They
+asked about this one — recorded on the signed copy.* Then they sign.
+
+The last frame is the one to watch: the signature line reads **Tenant**, not "Client". The meeting
+kind reaches the signed document, which is the whole "this isn't an insurance app" claim shown
+rather than asserted.
+
+A [14-second cut](https://amritha902.github.io/twofold/media/twofold-hook.mp4) of just the
+transition is there too, for anywhere that won't play 34 seconds.
 
 ---
 
@@ -241,7 +267,7 @@ on a real device.
 | Category | Status |
 |---|---|
 | **Best App for Galaxy** | Primary. Blocked on the Galaxy Store listing going live. |
-| **Next Gen** (students) | Submittable now — needs only a demo video and a public repo, both of which exist. |
+| **Next Gen** (students) | No store listing required, so it clears the long-lead blocker — but the RevenueCat purchase requirement still applies, so it is not free. |
 | Grand Prize | Automatic |
 | HAMM Award | Free entry; the revenue model is articulated above |
 | Design Award | Free entry |
@@ -254,5 +280,7 @@ seller account whose verification can take up to 10 business days. The app, list
 screenshots, promotional graphic, icon, privacy policy and demo video are all finished and waiting
 on it.
 
-**Next Gen has no store requirement** and is submittable independently — which is why it's worth
-entering as a hedge rather than an afterthought.
+**Next Gen has no store requirement** and is worth entering as a hedge rather than an afterthought.
+It is not a free pass, though: the RevenueCat rule that the SDK must power at least one real
+purchase applies to every category, so a Test Store purchase alone may not satisfy it. That is a
+question for shipaton@revenuecat.com rather than an assumption to submit on.
