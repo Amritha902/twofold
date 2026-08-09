@@ -108,4 +108,78 @@ fun TwofoldScaffold(
     }
 }
 
+/**
+ * Splits the window at the crease with both halves facing the same person.
+ *
+ * This is Flex Mode: the device propped open on a desk like a small laptop, screen half raised,
+ * base flat. Samsung's own apps use the pattern — content on the raised half, controls on the flat
+ * half — and it is the posture an agent is actually in while preparing, which is a desk rather than
+ * a table with someone opposite.
+ *
+ * **The difference from [TwofoldScaffold] is the rotation, and it is the whole difference.** There
+ * nobody shares the screen, so the far half is turned to face the other party. Here both halves are
+ * the agent's, so neither is turned, and there is no client pane and no leak surface at all.
+ *
+ * Falls back to [lower] filling the window when the crease is unknown, for the same reason the
+ * two-sided scaffold does: a guessed split is worse than none.
+ */
+@Composable
+fun FlexScaffold(
+    foldState: FoldState,
+    modifier: Modifier = Modifier,
+    creaseColor: androidx.compose.ui.graphics.Color,
+    upper: @Composable () -> Unit,
+    lower: @Composable () -> Unit,
+) {
+    val creaseFraction = foldState.creaseFraction
+
+    if (creaseFraction == null) {
+        Box(modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) { lower() }
+        return
+    }
+
+    BoxWithConstraints(modifier.fillMaxSize()) {
+        val upperHeight = maxHeight * creaseFraction
+
+        Column(Modifier.fillMaxSize()) {
+            // Raised half: what you are looking at. Insets inside the fixed height so the split
+            // still lands on the physical crease — same reasoning as the two-sided scaffold.
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(upperHeight)
+            ) {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(
+                                WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+                            )
+                        )
+                ) { upper() }
+            }
+
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(CREASE_HAIRLINE)
+                    .background(creaseColor)
+            )
+
+            // Flat half: where your hands are, so this is where anything you type or press lives.
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal
+                        )
+                    )
+            ) { lower() }
+        }
+    }
+}
+
 private val CREASE_HAIRLINE = 1.dp

@@ -144,6 +144,19 @@ requires a physical Galaxy device signed into a Samsung account. The purchase pa
 against RevenueCat's Test Store first, and validated for real only during the borrowed-device window.
 See [SHIPATON.md](SHIPATON.md).
 
+## The three postures
+
+| Posture | Mode | Layout |
+|---|---|---|
+| Folded, or held open in the hand | `PREPARE` | One pane. Private by definition. |
+| Half-opened, propped on a desk | `PRESENT` | `FlexScaffold` — page above the crease, console below, neither rotated. |
+| Flat on a table, face up | `TWOFOLD` | `TwofoldScaffold` — far half rotated 180° to face the client. |
+
+`PRESENT` used to fall through to `PREPARE`, so Flex Mode was a name in an enum with no behaviour
+behind it while the write-up claimed a presenter view. The distinction that makes it worth having is
+the rotation: in Flex both halves belong to the same person, so neither is turned and there is no
+client pane and no leak surface at all.
+
 ## Reading a document
 
 Three routes, in order of preference:

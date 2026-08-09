@@ -7,11 +7,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -46,6 +48,7 @@ import com.twofold.core.design.TwofoldTheme
 import com.twofold.core.fold.DeviceMode
 import com.twofold.core.fold.FoldState
 import com.twofold.core.fold.FoldStateTracker
+import com.twofold.core.fold.FlexScaffold
 import com.twofold.core.fold.TwofoldScaffold
 import com.twofold.data.document.ClientLanguage
 import com.twofold.data.document.ModelState
@@ -256,8 +259,23 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
             },
         )
 
-        // Folded or held: private by definition, so this is where notes get written.
-        DeviceMode.PRESENT, DeviceMode.PREPARE -> Column(
+        // Half-opened and propped on a desk. Both halves are yours — nobody is opposite — so
+        // neither is rotated: the document sits on the raised half where you are looking, and
+        // everything you type or press sits on the flat half where your hands already are.
+        //
+        // This branch used to fall through to the one below, which meant Flex Mode was a mode name
+        // with no behaviour behind it while the write-up claimed a presenter view. Either make the
+        // claim true or stop making it.
+        DeviceMode.PRESENT -> TwofoldScaffoldFlex(
+            foldState = foldState,
+            agentPage = agentPage,
+            state = state,
+            followUps = followUps,
+            onImport = openPicker,
+        )
+
+        // Folded, or held open in the hand: one pane, private by definition.
+        DeviceMode.PREPARE -> Column(
             Modifier
                 .fillMaxWidth()
                 .windowInsetsPadding(WindowInsets.safeDrawing)
@@ -298,6 +316,47 @@ private fun MeetingKindPicker(state: PresentState) {
             }
         }
     }
+}
+
+/**
+ * Flex Mode: the document above the crease, the console below it.
+ *
+ * Deliberately not the client's clause on top. Nobody is sitting opposite in this posture — the
+ * agent is at a desk with the phone propped up, checking the page as printed against what they are
+ * about to say. So the raised half shows their own view, and the flat half carries the language and
+ * meeting settings, the notes, and the controls.
+ */
+@Composable
+private fun TwofoldScaffoldFlex(
+    foldState: FoldState,
+    agentPage: AgentPage,
+    state: PresentState,
+    followUps: List<Session>,
+    onImport: () -> Unit,
+) {
+    FlexScaffold(
+        foldState = foldState,
+        creaseColor = LocalTwofoldColors.current.rule,
+        upper = { AgentPane(page = agentPage) },
+        lower = {
+            Column(Modifier.fillMaxSize()) {
+                // Notes scroll; the controls do not. This half is the console, and a console whose
+                // buttons move when you scroll something else is a console you have to look at.
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    FollowUpList(followUps)
+                    NoteEditor(state)
+                }
+                // No signature control: asking someone to sign while the phone is propped facing
+                // away from them is not a thing anyone does.
+                PageControls(state, onImport = onImport, onAskForSignature = null)
+            }
+        },
+    )
 }
 
 @Composable

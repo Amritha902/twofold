@@ -64,8 +64,10 @@ Native Kotlin and Jetpack Compose. The whole product is a posture API and a PDF 
 cross-platform layer would only have got in the way of both.
 
 - **Posture** — `WindowInfoTracker` / `FoldingFeature`, switching whole modes rather than reflowing
-  a grid. Folded or held: a private editor. Half-opened: presenter view. Flat on a table:
-  two-sided.
+  a grid. Folded or held: a private editor. **Half-opened and propped on a desk: Flex Mode** — the
+  page on the raised half where you are looking, your notes and controls on the flat half where your
+  hands are, neither rotated because both halves are yours. **Flat on a table: two-sided**, and the
+  far half turns to face the person opposite.
 - **The split** comes from `FoldingFeature.bounds.centerY()` measured against live window metrics,
   never a hardcoded 50%. Where it can't be determined, the app returns null and falls back to a
   single pane rather than guessing.
