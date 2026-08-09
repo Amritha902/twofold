@@ -31,9 +31,13 @@ Lay your Galaxy foldable flat on the table between you and your client. The crea
 screen, and each half shows the form of the document that suits whoever is looking at it.
 
 Their half shows one clause, as text, large enough to read across a table — and in Hindi, Tamil,
-Bengali or Marathi if that is what they read. Your half shows the whole page as printed, plus your
-private notes and your talk track. Move to a clause and it appears in front of them. When you are
-done, they sign on their half.
+Bengali or Marathi if that is what they read. If they read nothing at all, it can be spoken to them
+in the same language. Your half shows the whole page as printed, plus your private notes and your
+talk track. Move to a clause and it appears in front of them.
+
+They also get one button of their own: a quiet way to say they'd like a clause explained. You see it
+straight away, and the clauses they asked about are written onto the signed copy — so the record
+shows what was actually discussed, not only that a signature happened.
 
 Everything happens on your phone. The policy is never uploaded anywhere.
 
@@ -43,6 +47,9 @@ BUILT FOR THE WAY FIELD AGENTS ACTUALLY WORK
 
 • Nothing is handed over. You keep the device and the conversation.
 • Their language, not just yours. On-device translation into Hindi, Tamil, Bengali and Marathi.
+• Read out loud. For the clients who cannot read the document in any language.
+• They can ask. One button on their half, and a signed copy that records what they asked about.
+• Not only insurance. Loans, medical consent, tenancy, employment — the wording follows the work.
 • Made to be read. One clause at a time, set large, and you can raise it further for the clients
   who left their glasses at home.
 • Scanned documents work too. If a PDF has no text in it, Twofold reads the pages instead.
@@ -99,6 +106,7 @@ privacy policy, which a reviewer will read alongside it. The accurate answer is:
 | `02-two-sided.png` | 1600×2000 | Screenshot 2 — the two halves |
 | `03-prepare.png` | 1600×2000 | Screenshot 3 — setting up before the meeting |
 | `04-signature.png` | 1600×2000 | Screenshot 4 — signing |
+| `05-they-can-ask.png` | 1600×2000 | Screenshot 5 — the client's own button |
 | `promo-16x9.png` | 1920×1080 | Promotional graphic |
 | `icon-512.png` | 512×512 | Store icon |
 | `../media/twofold-demo.mp4` | 32s | Listing video |
