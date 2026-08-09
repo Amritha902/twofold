@@ -106,8 +106,16 @@ class SignedPdfExporter(private val context: Context) {
         val boxHeight = pageHeight * SIGNATURE_BOX_FRACTION / 2f
         val scale = minOf(boxWidth / signature.padWidth, boxHeight / signature.padHeight)
 
+        // Laid out upward from the rule, not downward from the page bottom.
+        //
+        // The first version anchored the strokes a fixed margin off the bottom and hung the rule
+        // and name beneath them — which put both straight through the audit lines. Opening the file
+        // showed "Employee" overprinting "Explained on request". Widening the gap alone would have
+        // left the same collision waiting for any taller signature pad, so the rule now has a fixed
+        // home and everything else is positioned relative to it.
+        val ruleY = pageHeight * SIGNATURE_RULE_Y
         val originX = (pageWidth - signature.padWidth * scale) / 2f
-        val originY = pageHeight - signature.padHeight * scale - pageHeight * SIGNATURE_MARGIN
+        val originY = ruleY - pageHeight * RULE_GAP - signature.padHeight * scale
 
         val paint = Paint().apply {
             color = Color.BLACK
@@ -128,6 +136,33 @@ class SignedPdfExporter(private val context: Context) {
                 )
             }
         }
+
+        // A rule and a printed name under the strokes.
+        //
+        // Without them the export was a few ink marks floating in white space — indistinguishable
+        // from a stray scribble, with nothing on the page saying it was a signature or whose it
+        // was. That is not a defect you notice in code; it took opening a signed copy and looking
+        // at it. The line is what makes the mark read as a signature to a person, and the name is
+        // what makes it checkable months later.
+        val ruleLeft = (pageWidth - boxWidth) / 2f
+        val ruleRight = ruleLeft + boxWidth
+
+        canvas.drawLine(ruleLeft, ruleY, ruleRight, ruleY, Paint().apply {
+            color = Color.DKGRAY
+            strokeWidth = RULE_STROKE_PX
+            isAntiAlias = true
+        })
+
+        canvas.drawText(
+            signature.signerName,
+            ruleLeft,
+            ruleY + pageWidth * NAME_TEXT_FRACTION * NAME_BASELINE,
+            Paint().apply {
+                color = Color.DKGRAY
+                textSize = pageWidth * NAME_TEXT_FRACTION
+                isAntiAlias = true
+            },
+        )
     }
 
     /**
@@ -153,6 +188,8 @@ class SignedPdfExporter(private val context: Context) {
 
         val paint = Paint().apply {
             color = Color.DKGRAY
+            // Bumped after reading one at print size: the original was hairline-thin on paper, and
+            // this is the line someone checks a disputed signature against.
             textSize = pageWidth * AUDIT_TEXT_FRACTION
             isAntiAlias = true
         }
@@ -165,12 +202,36 @@ class SignedPdfExporter(private val context: Context) {
         // as evidence that nothing needed asking, which it is not.
         if (questionedClauses.isNotEmpty()) {
             canvas.drawText(
-                "Explained on request: ${questionedClauses.joinToString(", ").take(QUESTION_LINE_CHARS)}",
+                "Explained on request: ${describe(questionedClauses).take(QUESTION_LINE_CHARS)}",
                 pageWidth * AUDIT_MARGIN,
                 baseline - paint.textSize * AUDIT_LINE_SPACING,
                 paint,
             )
         }
+    }
+
+    /**
+     * Names the questioned clauses in one consistent scheme.
+     *
+     * The first attempt printed the raw labels and produced "Explained on request: #1, 2" — two
+     * numbering systems in one line, on the document a dispute would be argued from. A reader has no
+     * way to know that "#1" is a position and "2" is the document's own clause number.
+     *
+     * So the document's numbers are used where they exist, because that is what a dispute cites,
+     * and everything unnumbered collapses into a single honest phrase rather than inventing
+     * references the document does not have.
+     */
+    private fun describe(labels: List<String>): String {
+        val (positional, numbered) = labels.partition { it.startsWith(POSITION_MARKER) }
+        val parts = mutableListOf<String>()
+
+        if (numbered.isNotEmpty()) {
+            parts += if (numbered.size == 1) "clause ${numbered.first()}" else "clauses ${numbered.joinToString(", ")}"
+        }
+        if (positional.isNotEmpty()) {
+            parts += if (positional.size == 1) "unnumbered text" else "${positional.size} unnumbered sections"
+        }
+        return parts.joinToString(" and ")
     }
 
     /**
@@ -212,13 +273,27 @@ class SignedPdfExporter(private val context: Context) {
         const val SIGNED_DIR = "signed"
         const val EXPORT_WIDTH_PX = 1700
         const val SIGNATURE_BOX_FRACTION = 0.5f
-        const val SIGNATURE_MARGIN = 0.08f
         const val SIGNATURE_STROKE_PX = 3f
-        const val AUDIT_TEXT_FRACTION = 0.012f
+        const val AUDIT_TEXT_FRACTION = 0.015f
         const val AUDIT_MARGIN = 0.04f
         const val HASH_PREFIX_CHARS = 16
         const val QUESTION_LINE_CHARS = 120
         const val AUDIT_LINE_SPACING = 1.5f
+
+        /** Marks a clause the document never numbered — see PresentState.questionedLabels. */
+        const val POSITION_MARKER = "#"
+
+        /**
+         * Where the signature rule sits, as a fraction of page height.
+         *
+         * Chosen against the audit block rather than by eye: those lines sit at 96% with a second
+         * line above them, so anything below about 90% overprints.
+         */
+        const val SIGNATURE_RULE_Y = 0.86f
+        const val RULE_GAP = 0.012f
+        const val RULE_STROKE_PX = 2f
+        const val NAME_TEXT_FRACTION = 0.014f
+        const val NAME_BASELINE = 1.6f
         const val WATERMARK_ALPHA = 48
         const val WATERMARK_TEXT_FRACTION = 0.075f
         const val WATERMARK_ANGLE = -30f
