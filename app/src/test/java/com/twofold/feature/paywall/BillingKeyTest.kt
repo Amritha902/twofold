@@ -38,12 +38,23 @@ class BillingKeyTest {
     }
 
     @Test
-    fun `a Play key is refused even though it is a real key`() {
-        // It compiles, then routes every purchase to Play Billing, which fails silently on a Galaxy
-        // build — worse than not configuring, because nobody sees an error.
-        assertFalse(BillingKey.isUsable("goog_abc123", isDebugBuild = true))
-        assertFalse(BillingKey.isUsable("goog_abc123", isDebugBuild = false))
-        assertEquals(KeyKind.OTHER, BillingKey.kind("goog_abc123"))
+    fun `a Play key is accepted, because Galaxy exclusivity is a bonus and not a requirement`() {
+        assertEquals(KeyKind.PLAY, BillingKey.kind("goog_abc123"))
+        assertTrue(BillingKey.isUsable("goog_abc123", isDebugBuild = false))
+    }
+
+    @Test
+    fun `a Play key never goes through Galaxy configuration`() {
+        // The protection that matters: routed through GalaxyConfiguration it would send purchases
+        // to Play Billing and fail silently on a Galaxy Store install.
+        assertFalse(BillingKey.usesGalaxyStore("goog_abc123"))
+        assertNotNull("shipping a Play key deserves a word of warning", BillingKey.warning("goog_abc", false))
+    }
+
+    @Test
+    fun `an Amazon key is still refused, because Amazon is not a target`() {
+        assertEquals(KeyKind.OTHER, BillingKey.kind("amzn_abc123"))
+        assertFalse(BillingKey.isUsable("amzn_abc123", isDebugBuild = true))
     }
 
     @Test

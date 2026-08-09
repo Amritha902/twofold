@@ -1,7 +1,7 @@
 package com.twofold.feature.paywall
 
 /** Which store a RevenueCat public key belongs to, read from its prefix. */
-enum class KeyKind { MISSING, TEST, GALAXY, OTHER }
+enum class KeyKind { MISSING, TEST, GALAXY, PLAY, OTHER }
 
 /**
  * Decides whether a RevenueCat key may be used, and for which store.
@@ -31,19 +31,29 @@ object BillingKey {
         key.isBlank() -> KeyKind.MISSING
         key.startsWith(TEST_PREFIX) -> KeyKind.TEST
         key.startsWith(GALAXY_PREFIX) -> KeyKind.GALAXY
+        key.startsWith(PLAY_PREFIX) -> KeyKind.PLAY
         else -> KeyKind.OTHER
     }
 
     /**
      * Whether to configure billing at all.
      *
-     * [KeyKind.OTHER] covers a Play or Amazon key pasted in by mistake, and legacy keys. Those are
-     * refused in release too: a `goog_` key through Galaxy configuration routes purchases to Play
-     * Billing, which on a Galaxy Store build fails silently on every purchase — the exact bug the
-     * `GalaxyConfiguration` comment in [Entitlements] was written to prevent.
+     * Play is accepted as well as Galaxy, and that is the hedge rather than a loosening. The rules
+     * say Galaxy Store *exclusivity* earns bonus consideration but is not required, so if Samsung's
+     * seller verification threatens the deadline, publishing to Play as well keeps every
+     * non-Galaxy category alive for the price of that bonus. Swapping one key would be a poor
+     * moment to discover the app refuses it.
+     *
+     * The protection that actually mattered is unchanged and lives in [usesGalaxyStore]: a key is
+     * never put through the *wrong* store's configuration. A `goog_` key through
+     * `GalaxyConfiguration` routes purchases to Play Billing and fails silently on a Galaxy Store
+     * install — that bug is still impossible.
+     *
+     * [KeyKind.OTHER] covers Amazon and legacy keys, and stays refused. Neither store is a target,
+     * so a key from one is a mistake rather than a choice.
      */
     fun isUsable(key: String, isDebugBuild: Boolean): Boolean = when (kind(key)) {
-        KeyKind.GALAXY -> true
+        KeyKind.GALAXY, KeyKind.PLAY -> true
         KeyKind.TEST -> isDebugBuild
         KeyKind.MISSING, KeyKind.OTHER -> false
     }
@@ -63,11 +73,16 @@ object BillingKey {
                 "key would crash on launch, so billing will be disabled there instead."
         kind(key) == KeyKind.TEST ->
             "Refusing a Test Store key in a release build — the SDK would crash. Billing is off."
+        kind(key) == KeyKind.PLAY ->
+            "Play Store key: purchases go through Play Billing, which is correct only for a build " +
+                "published to Google Play. A Galaxy Store install will fail every purchase."
         kind(key) == KeyKind.OTHER ->
-            "Unrecognised RevenueCat key. Galaxy keys start with '$GALAXY_PREFIX'. Billing is off."
+            "Unrecognised RevenueCat key. Galaxy keys start with '$GALAXY_PREFIX', Play with " +
+                "'$PLAY_PREFIX'. Billing is off."
         else -> null
     }
 
     private const val TEST_PREFIX = "test_"
     private const val GALAXY_PREFIX = "galx_"
+    private const val PLAY_PREFIX = "goog_"
 }
