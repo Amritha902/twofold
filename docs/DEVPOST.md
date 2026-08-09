@@ -109,8 +109,9 @@ paying customer.
 enum of my own rather than Android types, so the decisions the whole product turns on are covered
 by seven JVM tests instead of only being checkable on a device I don't own.
 
-**It degrades all the way down.** The same APK runs on a flat-screen Galaxy. Every foldable
-behaviour is an enhancement behind a null check.
+**It degrades all the way down, and I checked rather than claimed it.** The minified release APK
+was installed on a flat-screen emulator with no hinge sensor at all and runs single-pane with no
+crash. Every foldable behaviour is an enhancement behind a null check.
 
 ### What I learned
 

@@ -141,7 +141,8 @@ module using `GalaxyConfiguration` — not the generic configuration, which comp
 then silently routes to Play Billing. Entitlement is cached and honoured offline, because agents
 work where there is no signal.
 
-**Degrades cleanly.** The same APK runs on flat-screen Galaxy phones. Every foldable behaviour is an
+**Degrades cleanly, verified.** The minified release APK was installed and run on a flat-screen
+emulator reporting no hinge sensor: single pane, no crash. Every foldable behaviour is an
 enhancement guarded by a null check.
 
 **Galaxy Store exclusive.** Not published on Play or the App Store.
