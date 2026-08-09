@@ -19,26 +19,33 @@ Twofold
 ## Short description
 
 ```
-One device, two sides of the table. Show your client the document while you keep your notes.
+Your client reads the clause in their own language. You keep the original, and your notes.
 ```
 
 ## Full description
 
 ```
-Lay your Galaxy foldable flat on the table between you and your client. The crease splits the
-screen. Their half faces them, right-side-up. Your half faces you.
+Millions of people sign financial documents they cannot read.
 
-They see the document — clean, large, nothing else. You see the same document plus your private
-notes, your talk track, and the controls. Point at a clause and it lights up on their side. Turn a
-page and theirs turns with it. When you're done, they sign on their half.
+Lay your Galaxy foldable flat on the table between you and your client. The crease splits the
+screen, and each half shows the form of the document that suits whoever is looking at it.
+
+Their half shows one clause, as text, large enough to read across a table — and in Hindi, Tamil,
+Bengali or Marathi if that is what they read. Your half shows the whole page as printed, plus your
+private notes and your talk track. Move to a clause and it appears in front of them. When you are
+done, they sign on their half.
+
+Everything happens on your phone. The policy is never uploaded anywhere.
 
 You never hand over your phone. They never see your notes.
 
 BUILT FOR THE WAY FIELD AGENTS ACTUALLY WORK
 
 • Nothing is handed over. You keep the device and the conversation.
-• Made to be read. Raise the type size on your client's half without touching your own — for the
-  clients who left their glasses at home.
+• Their language, not just yours. On-device translation into Hindi, Tamil, Bengali and Marathi.
+• Made to be read. One clause at a time, set large, and you can raise it further for the clients
+  who left their glasses at home.
+• Scanned documents work too. If a PDF has no text in it, Twofold reads the pages instead.
 • Works with no signal. Documents live on your phone. Nothing waits on a server in someone's
   living room.
 • Signatures that hold up. Every signed copy carries the time and a fingerprint of the document as
@@ -88,14 +95,14 @@ privacy policy, which a reviewer will read alongside it. The accurate answer is:
 
 | File | Size | Use |
 |---|---|---|
-| `01-two-sided.png` | 1600×2000 | Screenshot 1 — the whole idea |
-| `02-prepare.png` | 1600×2000 | Screenshot 2 — the private layer |
-| `03-spotlight.png` | 1600×2000 | Screenshot 3 — pointing at a clause |
+| `01-own-language.png` | 1600×2000 | Screenshot 1 — the clause in the client's language |
+| `02-two-sided.png` | 1600×2000 | Screenshot 2 — the two halves |
+| `03-prepare.png` | 1600×2000 | Screenshot 3 — setting up before the meeting |
 | `04-signature.png` | 1600×2000 | Screenshot 4 — signing |
 | `promo-16x9.png` | 1920×1080 | Promotional graphic |
 | `icon-512.png` | 512×512 | Store icon |
-| `../media/twofold-demo.mp4` | 30s | Listing video |
-| `../media/twofold-hook.mp4` | 11s | Devpost / social |
+| `../media/twofold-demo.mp4` | 32s | Listing video |
+| `../media/twofold-hook.mp4` | 13s | Devpost / social |
 
 All captures are from the app running on a folding device, at native resolution, with a clean
 status bar. Nothing is mocked up.

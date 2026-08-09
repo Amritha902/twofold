@@ -25,15 +25,15 @@ and text can be translated where a page image cannot.
 
 ![Twofold: held in the hand, then set down on the table](docs/media/twofold-hook.gif)
 
-*Held in the hand it's a private editor. Set it down and it becomes two-sided. No button is
-pressed — the posture is the command.*
+*Held in the hand it's a private editor. Set it down and it becomes two-sided — the clause appears
+in front of the client, in their language. No button is pressed; the posture is the command.*
 
 ### Watch it
 
 | | |
 |---|---|
-| **[The demo — 30s](https://amritha902.github.io/twofold/media/twofold-demo.mp4)** | The full flow: prepare, set it down, point at a clause, ask for a signature, the client signs, the signed copy is exported. |
-| [Just the hook — 11s](https://amritha902.github.io/twofold/media/twofold-hook.mp4) | The transition on its own. No narration; it doesn't need any. |
+| **[The demo — 32s](https://amritha902.github.io/twofold/media/twofold-demo.mp4)** | The full flow: prepare, set it down, move through clauses, ask for a signature, the client signs, the signed copy is exported. |
+| [Just the hook — 13s](https://amritha902.github.io/twofold/media/twofold-hook.mp4) | Held, then set down, and the clause appears in Hindi. No narration; it doesn't need any. |
 
 Both were recorded on a folding device. Nothing is mocked up.
 
