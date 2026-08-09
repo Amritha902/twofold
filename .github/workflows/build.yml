@@ -1,0 +1,35 @@
+# Runs the checks that catch the mistakes this project actually made.
+#
+# Not a generic Android template: the reachability step exists because six finished-looking layers
+# in this repo were never called from any screen, and every one was found by hand, late.
+name: build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Nothing unreachable
+        run: python3 tools/check_reachable.py
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # No signing keys and no RevenueCat key here, which is the point: the app must build and its
+      # logic must pass without credentials. BillingKey treats a missing key as "not subscribed"
+      # rather than an error precisely so this works.
+      - name: Unit tests
+        run: gradle :app:testDebugUnitTest --console=plain
+
+      - name: Debug build
+        run: gradle :app:assembleDebug --console=plain

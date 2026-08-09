@@ -114,3 +114,19 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+
+/**
+ * Fails the build when production code declares something no screen can reach.
+ *
+ * Six separate layers in this project were written, named sensibly, sometimes tested, and called
+ * from nowhere — each found by hand, late. Auditing for that once catches one; doing it on every
+ * `check` catches all of them. See tools/check_reachable.py for why it is deliberately blunt.
+ */
+val checkReachable by tasks.registering(Exec::class) {
+    group = "verification"
+    description = "Fails if any function in main is never called from main."
+    workingDir = rootProject.projectDir
+    commandLine("python3", "tools/check_reachable.py")
+}
+
+tasks.named("check") { dependsOn(checkReachable) }
