@@ -19,10 +19,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.twofold.R
 import androidx.compose.ui.unit.dp
 import com.revenuecat.purchases.Package
+import com.revenuecat.purchases.models.Period
+import com.revenuecat.purchases.models.StoreProduct
 import com.twofold.core.design.LocalTwofoldColors
 
 /**
@@ -100,6 +103,8 @@ fun PaywallScreen(
             )
         } else {
             packages.forEach { option ->
+                val trial = freeTrialLabel(option.product)
+
                 Button(
                     onClick = { onPurchase(option) },
                     enabled = !isPurchasing,
@@ -110,11 +115,20 @@ fun PaywallScreen(
                     ),
                 ) {
                     Text(
-                        text = stringResource(
-                            R.string.pro_package_label,
-                            option.product.title,
-                            option.product.price.formatted,
-                        ),
+                        text = if (trial == null) {
+                            stringResource(
+                                R.string.pro_package_label,
+                                option.product.title,
+                                option.product.price.formatted,
+                            )
+                        } else {
+                            stringResource(
+                                R.string.pro_package_label_trial,
+                                option.product.title,
+                                trial,
+                                option.product.price.formatted,
+                            )
+                        },
                         style = MaterialTheme.typography.labelLarge,
                     )
                 }
@@ -135,4 +149,32 @@ fun PaywallScreen(
             color = colors.inkMuted,
         )
     }
+}
+
+/**
+ * "7 days" when the product carries a free trial, null when it doesn't.
+ *
+ * A trial nobody is told about converts nobody, so this is worth having on its own. It is also a
+ * submission requirement: Shipaton asks that judges be able to unlock the in-app purchase and test
+ * premium features, via either a free trial or a promo code — and a trial that the paywall renders
+ * as a bare price is, from a judge's side of the screen, not a trial at all.
+ *
+ * Every step is nullable on purpose. `defaultOption` is a Google Play Billing concept and the
+ * Galaxy Store may well not populate it; when it doesn't, the button falls back to the plain price
+ * rather than the paywall breaking.
+ */
+@Composable
+private fun freeTrialLabel(product: StoreProduct): String? {
+    val period = product.defaultOption?.freePhase?.billingPeriod ?: return null
+    if (period.value <= 0) return null
+
+    val plural = when (period.unit) {
+        Period.Unit.DAY -> R.plurals.trial_days
+        Period.Unit.WEEK -> R.plurals.trial_weeks
+        Period.Unit.MONTH -> R.plurals.trial_months
+        Period.Unit.YEAR -> R.plurals.trial_years
+        // A period we cannot name is not one to guess at in a purchase flow.
+        Period.Unit.UNKNOWN -> return null
+    }
+    return pluralStringResource(plural, period.value, period.value)
 }
