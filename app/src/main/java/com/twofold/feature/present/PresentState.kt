@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import com.twofold.R
 import com.twofold.data.document.DocumentRef
 import com.twofold.data.document.DocumentRepository
 import com.twofold.data.document.PageStore
@@ -102,7 +103,7 @@ class PresentState(
 
         val ref = repository.import(uri)
         if (ref == null) {
-            error = "That file could not be imported."
+            error = context.getString(R.string.error_import_failed)
             isLoading = false
             return
         }
@@ -117,7 +118,7 @@ class PresentState(
 
         val opened = PdfSource.open(ref.file)
         if (opened == null) {
-            error = "That PDF could not be opened. It may be damaged or password-protected."
+            error = context.getString(R.string.error_open_failed)
             isLoading = false
             return
         }
@@ -248,7 +249,7 @@ class PresentState(
         // Falls back to a neutral word rather than the document's filename, which is what it used
         // to do — a signed PDF that says "signed by Term_Life_Policy" is worse than one that says
         // "signed by Client".
-        signerName = clientLabel.ifBlank { DEFAULT_SIGNER }
+        signerName = clientLabel.ifBlank { context.getString(R.string.default_signer) }
         // A spotlight left casting under a signature line would dim the thing being signed.
         spotlight = null
         isSigning = true
@@ -282,7 +283,7 @@ class PresentState(
                 strokes = strokes,
                 padWidth = padWidth,
                 padHeight = padHeight,
-                signerName = signerName.ifBlank { DEFAULT_SIGNER },
+                signerName = signerName.ifBlank { context.getString(R.string.default_signer) },
             ),
             signedPageIndex = rendered.index,
             isPro = isPro,
@@ -339,7 +340,6 @@ class PresentState(
         const val RENDER_WIDTH_PX = 1400
 
         const val RADIX_36 = 36
-        const val DEFAULT_SIGNER = "Client"
         const val MIN_LEGIBILITY = 1f
         const val MAX_LEGIBILITY = 2f
     }

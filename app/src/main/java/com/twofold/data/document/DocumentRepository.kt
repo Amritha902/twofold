@@ -111,6 +111,10 @@ class DocumentRepository(private val context: Context) {
             .ifBlank { DEFAULT_TITLE }
 
         private const val DOCUMENTS_DIR = "documents"
+        /**
+         * Not a string resource: this becomes a *filename*, and a title that changes with the
+         * phone's locale would orphan the document the next time the app opened in another one.
+         */
         const val DEFAULT_TITLE = "Untitled document"
 
         /** Path separators, characters filesystems reject, and control characters. */

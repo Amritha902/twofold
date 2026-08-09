@@ -126,6 +126,14 @@ class SignedPdfExporter(private val context: Context) {
         }
     }
 
+    /**
+     * Deliberately not localised, and neither is the watermark.
+     *
+     * The audit line is a record someone may need to check months later, possibly on a different
+     * device in a different locale. If its wording and date format followed whatever phone produced
+     * it, two copies of the same signed document could read differently and neither would be
+     * obviously canonical. A fixed English line with an ISO-ish timestamp stays comparable.
+     */
     private fun drawAuditLine(
         canvas: Canvas,
         signature: SignatureRecord,

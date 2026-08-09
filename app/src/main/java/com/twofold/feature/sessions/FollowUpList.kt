@@ -10,6 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import com.twofold.R
 import androidx.compose.ui.unit.dp
 import com.twofold.core.design.LocalTwofoldColors
 import com.twofold.data.session.Session
@@ -38,7 +41,7 @@ fun FollowUpList(sessions: List<Session>, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = "Shown but not signed",
+            text = stringResource(R.string.follow_up_heading),
             style = MaterialTheme.typography.labelLarge,
             color = colors.inkMuted,
         )
@@ -60,6 +63,7 @@ fun FollowUpList(sessions: List<Session>, modifier: Modifier = Modifier) {
                     style = MaterialTheme.typography.labelLarge,
                     color = colors.seal,
                 )
+
             }
         }
     }
@@ -70,17 +74,22 @@ fun FollowUpList(sessions: List<Session>, modifier: Modifier = Modifier) {
  *
  * The only thing an agent needs from this list is how stale a lead is, and days-since answers that
  * without arithmetic.
+ *
+ * Uses plurals rather than string formatting. English gets away with "1 days ago" looking merely
+ * sloppy; languages with more than two plural forms do not, and Hindi and Tamil are both on the
+ * list of places this app is for.
  */
+@Composable
 private fun relativeAge(timestamp: Long): String {
     val elapsed = System.currentTimeMillis() - timestamp
-    val days = TimeUnit.MILLISECONDS.toDays(elapsed)
-    val hours = TimeUnit.MILLISECONDS.toHours(elapsed)
+    val days = TimeUnit.MILLISECONDS.toDays(elapsed).toInt()
+    val hours = TimeUnit.MILLISECONDS.toHours(elapsed).toInt()
 
     return when {
-        days >= 2 -> "$days days ago"
-        days == 1L -> "yesterday"
-        hours >= 1 -> "$hours h ago"
-        else -> "just now"
+        days >= 2 -> pluralStringResource(R.plurals.age_days, days, days)
+        days == 1 -> stringResource(R.string.age_yesterday)
+        hours >= 1 -> pluralStringResource(R.plurals.age_hours, hours, hours)
+        else -> stringResource(R.string.age_just_now)
     }
 }
 

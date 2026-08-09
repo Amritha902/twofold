@@ -31,6 +31,8 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.annotation.StringRes
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.revenuecat.purchases.Package
@@ -106,9 +108,9 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
 
     if (document == null) {
         PreparePane(
-            hint = state.error ?: "Import the document you'll be walking your client through.",
+            hint = state.error ?: stringResource(R.string.import_prompt),
             action = {
-                Button(onClick = { openPicker() }) { Text("Choose a PDF") }
+                Button(onClick = { openPicker() }) { Text(stringResource(R.string.choose_pdf)) }
             },
         )
         return
@@ -241,10 +243,10 @@ private fun SigningControls(canComplete: Boolean, onCancel: () -> Unit, onDone: 
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        TextButton(onClick = onCancel) { Text("Cancel") }
+        TextButton(onClick = onCancel) { Text(stringResource(R.string.action_cancel)) }
         // Disabled until there is ink. Exporting an empty signature would produce a signed-looking
         // document that nobody signed.
-        Button(onClick = onDone, enabled = canComplete) { Text("Done") }
+        Button(onClick = onDone, enabled = canComplete) { Text(stringResource(R.string.action_done)) }
     }
 }
 
@@ -271,7 +273,7 @@ private fun NoteEditor(state: PresentState) {
             value = state.clientLabel,
             onValueChange = { state.clientLabel = it },
             modifier = Modifier.fillMaxWidth(),
-            label = { Text("Who are you meeting?") },
+            label = { Text(stringResource(R.string.who_are_you_meeting)) },
             singleLine = true,
         )
 
@@ -279,7 +281,7 @@ private fun NoteEditor(state: PresentState) {
             value = state.currentNotes.note,
             onValueChange = { scope.launch { state.setNote(it) } },
             modifier = Modifier.fillMaxWidth(),
-            label = { Text("Private note for this page") },
+            label = { Text(stringResource(R.string.private_note_label)) },
             minLines = 2,
             maxLines = 4,
         )
@@ -290,13 +292,13 @@ private fun NoteEditor(state: PresentState) {
         state.currentNotes.talkTrack.forEachIndexed { index, line ->
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "— $line",
+                    text = stringResource(R.string.talk_track_line, line),
                     style = MaterialTheme.typography.bodyMedium,
                     color = colors.ink,
                     modifier = Modifier.weight(1f),
                 )
                 TextButton(onClick = { scope.launch { state.removeTalkTrackLine(index) } }) {
-                    Text("Remove")
+                    Text(stringResource(R.string.action_remove))
                 }
             }
         }
@@ -306,7 +308,7 @@ private fun NoteEditor(state: PresentState) {
                 value = draftLine,
                 onValueChange = { draftLine = it },
                 modifier = Modifier.weight(1f),
-                label = { Text("Add a line to say") },
+                label = { Text(stringResource(R.string.talk_track_add_label)) },
                 singleLine = true,
             )
             TextButton(
@@ -317,7 +319,7 @@ private fun NoteEditor(state: PresentState) {
                         draftLine = ""
                     }
                 },
-            ) { Text("Add") }
+            ) { Text(stringResource(R.string.action_add)) }
         }
     }
 }
@@ -337,24 +339,24 @@ private fun PageControls(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Control("Back", "Previous page") { scope.launch { state.previousPage() } }
+        Control(R.string.action_back, R.string.action_back_spoken) { scope.launch { state.previousPage() } }
 
         // Only offered in Twofold mode: asking for a signature when the client cannot see the
         // screen is meaningless, so the control simply isn't there.
         onAskForSignature?.let { ask ->
-            Control("Sign", "Ask your client to sign", ask)
+            Control(R.string.action_sign, R.string.action_sign_spoken, ask)
         }
 
         // Raises the type size on the client's half only. The agent's view is unchanged.
-        Control("Larger", "Make the text larger on your client's half") {
+        Control(R.string.action_larger, R.string.action_larger_spoken) {
             state.adjustLegibility(state.legibility + LEGIBILITY_STEP)
         }
-        Control("Smaller", "Make the text smaller on your client's half") {
+        Control(R.string.action_smaller, R.string.action_smaller_spoken) {
             state.adjustLegibility(state.legibility - LEGIBILITY_STEP)
         }
 
-        Control("Open…", "Open a different document", onImport)
-        Control("Next", "Next page") { scope.launch { state.nextPage() } }
+        Control(R.string.action_open, R.string.action_open_spoken, onImport)
+        Control(R.string.action_next, R.string.action_next_spoken) { scope.launch { state.nextPage() } }
     }
 }
 
@@ -366,12 +368,17 @@ private fun PageControls(
  * they'd do. Larger than what, on whose half?
  */
 @Composable
-private fun Control(label: String, spoken: String, onClick: () -> Unit) {
+private fun Control(
+    @StringRes label: Int,
+    @StringRes spoken: Int,
+    onClick: () -> Unit,
+) {
+    val spokenText = stringResource(spoken)
     TextButton(
         onClick = onClick,
-        modifier = Modifier.semantics { contentDescription = spoken },
+        modifier = Modifier.semantics { contentDescription = spokenText },
     ) {
-        Text(label)
+        Text(stringResource(label))
     }
 }
 

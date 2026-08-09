@@ -19,6 +19,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.twofold.R
 import androidx.compose.ui.unit.dp
 import com.revenuecat.purchases.Package
 import com.twofold.core.design.LocalTwofoldColors
@@ -52,13 +54,13 @@ fun PaywallScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(
-            text = "Twofold Pro",
+            text = stringResource(R.string.pro_title),
             style = MaterialTheme.typography.displaySmall,
             color = colors.ink,
         )
 
         Text(
-            text = "Clean signed documents, unlimited files, and every meeting logged.",
+            text = stringResource(R.string.pro_subtitle),
             style = MaterialTheme.typography.bodyLarge,
             color = colors.inkMuted,
         )
@@ -66,11 +68,11 @@ fun PaywallScreen(
         Spacer(Modifier.height(4.dp))
 
         listOf(
-            "Signed copies without the Twofold watermark",
-            "As many documents as you carry",
-            "Private notes and talk track on every page",
-            "A record of what you showed, and who hasn't signed yet",
-        ).forEach { line ->
+            R.string.pro_benefit_watermark,
+            R.string.pro_benefit_unlimited,
+            R.string.pro_benefit_notes,
+            R.string.pro_benefit_followup,
+        ).map { stringResource(it) }.forEach { line ->
             Row(verticalAlignment = Alignment.Top) {
                 Text(
                     text = "—",
@@ -92,8 +94,7 @@ fun PaywallScreen(
             // Reached when the store is unreachable or products are not configured yet. Say so
             // plainly rather than showing a buy button that cannot work.
             Text(
-                text = "Subscription options aren't available right now. " +
-                    "Check your connection and try again.",
+                text = stringResource(R.string.pro_unavailable),
                 style = MaterialTheme.typography.bodyMedium,
                 color = colors.inkMuted,
             )
@@ -109,7 +110,11 @@ fun PaywallScreen(
                     ),
                 ) {
                     Text(
-                        text = "${option.product.title} · ${option.product.price.formatted}",
+                        text = stringResource(
+                            R.string.pro_package_label,
+                            option.product.title,
+                            option.product.price.formatted,
+                        ),
                         style = MaterialTheme.typography.labelLarge,
                     )
                 }
@@ -118,14 +123,14 @@ fun PaywallScreen(
 
         TextButton(onClick = onDismiss, enabled = !isPurchasing) {
             Text(
-                text = "Not now",
+                text = stringResource(R.string.pro_not_now),
                 style = MaterialTheme.typography.labelLarge,
                 color = colors.inkMuted,
             )
         }
 
         Text(
-            text = "Billed through the Galaxy Store. Cancel any time from your Samsung account.",
+            text = stringResource(R.string.pro_billing_note),
             style = MaterialTheme.typography.labelLarge,
             color = colors.inkMuted,
         )

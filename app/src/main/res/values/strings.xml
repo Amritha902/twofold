@@ -1,3 +1,77 @@
 <resources>
     <string name="app_name">Twofold</string>
+
+    <!-- Empty state -->
+    <string name="import_prompt">Import the document you\'ll be walking your client through.</string>
+    <string name="choose_pdf">Choose a PDF</string>
+
+    <!-- Errors, shown to the agent only -->
+    <string name="error_import_failed">That file could not be imported.</string>
+    <string name="error_open_failed">That PDF could not be opened. It may be damaged or password-protected.</string>
+
+    <!-- Prepare mode -->
+    <string name="who_are_you_meeting">Who are you meeting?</string>
+    <string name="private_note_label">Private note for this page</string>
+    <string name="talk_track_add_label">Add a line to say</string>
+    <string name="action_add">Add</string>
+    <string name="action_remove">Remove</string>
+    <!-- Em dash prefix on each talk-track line. Separated out because the marker differs by
+         typographic convention, not only by language. -->
+    <string name="talk_track_line">— %1$s</string>
+
+    <!-- Controls: short visible labels, longer spoken ones. Six of these share half a folded
+         screen, so translations should keep the visible labels similarly terse. -->
+    <string name="action_back">Back</string>
+    <string name="action_back_spoken">Previous page</string>
+    <string name="action_sign">Sign</string>
+    <string name="action_sign_spoken">Ask your client to sign</string>
+    <string name="action_larger">Larger</string>
+    <string name="action_larger_spoken">Make the text larger on your client\'s half</string>
+    <string name="action_smaller">Smaller</string>
+    <string name="action_smaller_spoken">Make the text smaller on your client\'s half</string>
+    <string name="action_open">Open…</string>
+    <string name="action_open_spoken">Open a different document</string>
+    <string name="action_next">Next</string>
+    <string name="action_next_spoken">Next page</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_done">Done</string>
+
+    <!-- The two panes -->
+    <string name="page_counter">%1$d / %2$d</string>
+    <string name="page_description">Document page %1$d of %2$d</string>
+    <string name="agent_page_description">Your copy of page %1$d of %2$d. Drag across it to highlight part of the page on your client\'s half.</string>
+    <string name="clear_highlight">Clear the highlight</string>
+
+    <!-- Signing -->
+    <string name="sign_prompt">Please sign below</string>
+    <string name="signature_area_description">Signature area. Draw your signature here with your finger.</string>
+    <string name="default_signer">Client</string>
+
+    <!-- Follow-up list -->
+    <string name="follow_up_heading">Shown but not signed</string>
+    <string name="age_just_now">just now</string>
+    <string name="age_yesterday">yesterday</string>
+    <plurals name="age_hours">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="age_days">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+
+    <!-- Paywall -->
+    <string name="pro_title">Twofold Pro</string>
+    <string name="pro_subtitle">Clean signed documents, unlimited files, and every meeting logged.</string>
+    <string name="pro_benefit_watermark">Signed copies without the Twofold watermark</string>
+    <string name="pro_benefit_unlimited">As many documents as you carry</string>
+    <string name="pro_benefit_notes">Private notes and talk track on every page</string>
+    <string name="pro_benefit_followup">A record of what you showed, and who hasn\'t signed yet</string>
+    <string name="pro_unavailable">Subscription options aren\'t available right now. Check your connection and try again.</string>
+    <string name="pro_not_now">Not now</string>
+    <string name="pro_billing_note">Billed through the Galaxy Store. Cancel any time from your Samsung account.</string>
+    <string name="pro_package_label">%1$s · %2$s</string>
+
+    <!-- Document defaults -->
+    <string name="untitled_document">Untitled document</string>
 </resources>

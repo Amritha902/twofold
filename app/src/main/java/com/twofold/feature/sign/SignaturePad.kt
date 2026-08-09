@@ -25,6 +25,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.res.stringResource
+import com.twofold.R
 import androidx.compose.ui.unit.dp
 import com.twofold.core.design.LocalTwofoldColors
 
@@ -52,6 +54,9 @@ fun SignaturePad(
     val current = remember { mutableStateListOf<Offset>() }
     var padSize by remember { mutableStateOf(Size.Zero) }
 
+    // Resolved here rather than inside semantics {}, which is not a composable scope.
+    val signatureAreaDescription = stringResource(R.string.signature_area_description)
+
     Column(
         modifier
             .fillMaxSize()
@@ -59,7 +64,7 @@ fun SignaturePad(
             .padding(horizontal = 40.dp, vertical = 28.dp),
     ) {
         Text(
-            text = "Please sign below",
+            text = stringResource(R.string.sign_prompt),
             style = MaterialTheme.typography.headlineMedium,
             color = colors.ink,
         )
@@ -72,7 +77,7 @@ fun SignaturePad(
                 // with no indication of where, on the one screen where getting it wrong means
                 // signing nothing at all.
                 .semantics {
-                    contentDescription = "Signature area. Draw your signature here with your finger."
+                    contentDescription = signatureAreaDescription
                 }
                 .onSizeChanged { padSize = Size(it.width.toFloat(), it.height.toFloat()) }
                 .pointerInput(Unit) {
