@@ -135,6 +135,18 @@ https://app.revenuecat.com/projects/635c7bd8/apps -> "Show key" into `local.prop
 **Free trial is blocked, not forgotten.** Pricing and trial period are read-only on Test Store
 products — a trial belongs to the real store product. It lands with the Galaxy config in item 1.
 
+**Dashboard checklist is at 4 of 6.** The two left are both correctly incomplete:
+
+- *Create a real app configuration* — blocked on Samsung, nothing to do.
+- *Secure your sandbox access* — currently "Anybody", which is the default and fine while the only
+  store is the Test Store, because those purchases grant nothing real and earn nothing. **Tighten it
+  to "Allowed App User IDs only" on the day the `galx_` key goes live**, not before: a loose sandbox
+  next to a real store configuration lets anyone holding the key grant themselves Pro, and tightening
+  it now would break the anonymous test purchases used to verify the billing flow.
+
+The paywall step is ticked because the app has one — written in its own typography rather than
+RevenueCat's visual editor, which would have replaced a designed screen with a generic one.
+
 ---
 
 ## 6. Book the borrowed foldable
