@@ -64,7 +64,18 @@ client meeting, presentation
 
 ## Age rating
 
-Everyone — no user-generated public content, no ads, no data collection.
+Everyone — no user-generated public content, no ads, no analytics.
+
+**Data safety declaration.** Do not tick "no data collected". It isn't true, and it contradicts the
+privacy policy, which a reviewer will read alongside it. The accurate answer is:
+
+- **Collected:** purchase history and an app-generated anonymous ID, by the billing SDK, for app
+  functionality only. Not linked to an identity, not shared with third parties for advertising, not
+  used for tracking.
+- **Not collected:** name, email, location, contacts, photos, files, messages, health, or any
+  identifier that follows the user across apps.
+- Documents, notes, signatures and the meeting log never leave the device and so are not
+  "collected" in the data-safety sense.
 
 ## Support
 
