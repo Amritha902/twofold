@@ -4,16 +4,24 @@
 
 **[twofold site →](https://amritha902.github.io/twofold/)** · **[watch the demo →](https://amritha902.github.io/twofold/media/twofold-demo.mp4)** · [privacy](https://amritha902.github.io/twofold/privacy.html)
 
-Twofold turns a Galaxy foldable, laid flat between two people, into a two-sided document terminal.
-The crease splits the screen. Your half faces you. Their half faces them, right-side-up.
+Millions of people sign financial documents they cannot read — while the person selling to them
+translates aloud, approximately, in their own interest.
 
-- **Their half** shows the document, clean and readable. Nothing else.
-- **Your half** shows the same document *plus* your private notes, your talk track, and the controls.
-- Point at a clause on your side and it highlights on theirs.
-- Turn a page and theirs turns with it.
+Twofold puts a Galaxy foldable flat on the table between the two of them. The crease splits the
+screen, and each half shows the form of the document that suits whoever is looking at it.
+
+- **Their half** shows one clause, as text, large enough to read across a table.
+- **Your half** shows the whole page as printed, plus your private notes and your talk track.
+- Move to a clause and it appears in front of them.
 - They sign on their half when you're done.
 
 You never hand over your phone. They never see your notes.
+
+**Why a clause and not the page.** That half of a flat foldable is 130 × 63 mm. An A4 page fitted
+into it renders at 20% — a 10pt clause lands on the glass at about 2pt, which is unreadable by
+anyone. Measured, not estimated. So the client's half shows extracted text at 13.5pt instead, and
+the constraint turns out to make a better product: one clause at a time beats a wall of legalese,
+and text can be translated where a page image cannot.
 
 ![Twofold: held in the hand, then set down on the table](docs/media/twofold-hook.gif)
 

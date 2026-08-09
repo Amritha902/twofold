@@ -2,8 +2,8 @@
 
 ## The one sentence
 
-Lay a Galaxy foldable flat between you and your client; the crease becomes the boundary between what
-they see and what only you see.
+Lay a Galaxy foldable flat between you and your client; they read the clause in type they can
+actually see, while you keep the whole page and your notes.
 
 ## The buyer
 
@@ -39,18 +39,20 @@ phone down, and it becomes a two-sided device. That is the ten-second demo and i
 ### The two panes
 
 **Client pane** (far half, rotated 180°)
-- The document. Rendered large, high contrast, generous margins.
+- **One clause, as text.** Not a page image — that half is 130 × 63 mm, and a fitted A4 page puts
+  10pt type on the glass at 2pt. Extracted text at 30sp (13.5pt physical) is readable across a
+  table; a shrunken page is readable by nobody.
 - A **Legibility** control the agent can raise — many clients are 50+ and reading a policy without
   their glasses. This is a small feature with outsized credibility.
-- Highlights and spotlights the agent casts.
 - The signature surface, when called.
 - **Nothing else. Ever.**
 
 **Agent pane** (near half)
-- The same document, plus:
-- **Margin notes** — private, anchored to a page or a region.
+- The whole page as printed — the context a client cannot be given, because at this physical size a
+  full page is readable to nobody. Plus:
+- **Margin notes** — private, per page.
 - **Talk track** — the three things to say on this page, and the objection that always comes up.
-- Controls: page, zoom, highlight, spotlight, legibility, "ask for signature".
+- Controls: clause navigation, legibility, "ask for signature".
 
 ### The private-notes guarantee
 
@@ -76,7 +78,7 @@ this workflow actually uses today when someone signs a printout.
 - Library of imported documents
 - Private margin notes and per-page talk track
 - Automatic Twofold mode on flat posture, with side-swap
-- Synced page turn, zoom, highlight, spotlight
+- Text extraction, clause segmentation, clause-wise navigation driving both halves
 - Client-side legibility control
 - Signature capture and flattened signed PDF export
 - Session history (what was shown, to whom, when, signed or not)
@@ -88,7 +90,9 @@ this workflow actually uses today when someone signs a printout.
 - CRM integration
 - Payments or premium collection
 - Document editing or authoring
-- Translation *(strong v1.5 candidate — see below)*
+- Scanned PDFs. They carry no text layer, so nothing can be extracted; the app says so plainly
+  rather than showing the client a blank half. OCR is the fix and it is not built.
+- Translation *(now one step away — see below)*
 
 ## The v1.5 feature that could matter more than all of v1
 
@@ -98,7 +102,9 @@ The policy is in English. The client reads Tamil, Hindi, Marathi. Today the agen
 badly, and the client signs something they never read. On-device ML Kit translation, rendered only on
 the far half, means the agent works from the original while the client reads their own language.
 
-It is out of v1 because it is a research task, not a build task, and v1 must ship. But it is the
+It was out of v1 while the client's half showed a page image, because you cannot translate a
+bitmap. Now that half already renders extracted text, so this is a translation call on a string
+rather than a rebuild. But it is the
 feature that turns a good tool into one an agent will not work without — and it is the second reason
 the foldable is load-bearing, since it requires two simultaneous views of one document.
 

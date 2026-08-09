@@ -42,10 +42,11 @@ stayed empty.
 
 You lay the phone flat on the table. That's the whole interface.
 
-- **Their half** shows the document, right-side-up to them. Clean, large, nothing else.
+- **Their half** shows one clause as text, right-side-up to them, at a size readable across a
+  table. Not a page image: that half is 130 × 63 mm, and a fitted A4 page renders 10pt type at 2pt.
 - **Your half** shows the same document plus your private notes, your talk track, and the controls.
-- **Point at a clause** by dragging on your copy — it lights up on theirs.
-- **Turn a page** and theirs turns with it, because it's one page index, not two synced viewers.
+- **Move to a clause** and it appears in front of them, because it's one index, not two synced
+  viewers.
 - **Raise the type size on their half only**, for the client who left their glasses at home.
 - **They sign on their half.** The signed copy carries the time and a SHA-256 of the document as
   presented, so the pages signed are provably the pages shown.

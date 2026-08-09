@@ -46,7 +46,7 @@ RevenueCat's Test Store, but it must be validated for real on hardware before su
 | 0 | Aug 8–10 | Registrations filed, toolchain up, repo live, agent interviews begin |
 | 1 | Aug 11–17 | Posture engine + two-pane split running in the emulator — **the core demo exists** |
 | 2 | Aug 18–24 | PDF import, page render + cache, synced page turn and zoom |
-| 3 | Aug 25–31 | Private notes, talk track, highlight, spotlight, legibility control |
+| 3 | Aug 25–31 | Private notes, talk track, text extraction, clause reader, legibility |
 | 4 | Sep 1–7 | Signature capture, signed PDF export, session history |
 | 5 | Sep 8–14 | RevenueCat + paywall, full design pass, **borrowed-device window: real IAP test** |
 | 6 | Sep 15–20 | Store assets, listing copy, Galaxy Store submission |

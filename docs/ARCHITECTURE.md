@@ -8,7 +8,8 @@
 | UI | Jetpack Compose |
 | Foldable | `androidx.window` — `WindowInfoTracker`, `FoldingFeature` |
 | Hinge angle | `Sensor.TYPE_HINGE_ANGLE` (Samsung + Pixel Fold), for transition animation only |
-| PDF | `android.graphics.pdf.PdfRenderer` / `PdfDocument` (AOSP — no licence entanglement) |
+| PDF rendering | `android.graphics.pdf.PdfRenderer` / `PdfDocument` (AOSP) — the agent's half |
+| PDF text | PdfBox-Android 2.0.27 (Apache 2.0) — the client's half needs words, and the platform exposes none |
 | Storage | JSON via `org.json` + app-private files (no Room) |
 | Type | Source Serif 4 + Inter, embedded (SIL OFL) |
 | Billing | `purchases-android` 10.16.1 with `purchases-store-galaxy`, `GalaxyConfiguration` |
@@ -69,14 +70,17 @@ The client renderer takes a type that cannot express agent content:
 
 ```kotlin
 data class ClientPage(
-  val bitmap: Bitmap?,
-  val pageNumber: Int,
-  val pageCount: Int,
+  val clause: Clause?,
+  val clauseNumber: Int,
+  val clauseCount: Int,
   val legibility: Float,
-  val spotlight: Rect?,
+  val isPreparing: Boolean,
 )
 // no notes field. no talk track. no way to add one without changing this type.
 ```
+
+`Clause` is checked too: since `ClientPage` is now a thin wrapper around it, the guarantee is only
+as strong as `Clause` is, and a note attached to a clause would sail past a check on the wrapper.
 
 `ClientPane` is a pure function of `ClientPage`. `AgentPage` is a separate type that composes a
 `ClientPage` plus the private layer. Notes flow agent-ward only, and the compiler enforces it.
