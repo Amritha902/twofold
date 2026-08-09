@@ -12,7 +12,9 @@ import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
 import com.revenuecat.purchases.models.StoreTransaction
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
@@ -20,6 +22,7 @@ import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.galaxy.GalaxyConfiguration
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
+import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener
 import com.twofold.BuildConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -85,17 +88,52 @@ class Entitlements private constructor(private val prefs: SharedPreferences) {
      *
      * @return true when the purchase completed and Pro is now active.
      */
+    /**
+     * Runs the purchase flow and reports whether it succeeded.
+     *
+     * Bounded, because [PurchaseCallback] cannot be relied upon to fire — measured, not feared. On
+     * timeout the question is settled by asking the server rather than by assuming either answer:
+     * if the entitlement is active, the purchase worked and the callback simply never came.
+     */
     suspend fun purchase(activity: Activity, packageToBuy: Package): Boolean {
         if (!isConfigured) return false
 
+        val completed = withTimeoutOrNull(PURCHASE_TIMEOUT_MS) { awaitPurchase(activity, packageToBuy) }
+        if (completed != null) return completed
+
+        refresh()
+        // The listener updates the cached flag when the refresh lands; give it a moment before
+        // reading, so a purchase that did work is not reported as a failure.
+        delay(ENTITLEMENT_SETTLE_MS)
+        return _isPro.value
+    }
+
+    private suspend fun awaitPurchase(activity: Activity, packageToBuy: Package): Boolean {
         return suspendCancellableCoroutine { continuation ->
             Purchases.sharedInstance.purchase(
                 PurchaseParams.Builder(activity, packageToBuy).build(),
                 object : PurchaseCallback {
+                    /**
+                     * A completed transaction means the purchase succeeded. Whether the entitlement
+                     * has *propagated* is a separate question, and answering them as one was a bug.
+                     *
+                     * Observed on a real test purchase: the receipt posted 200, and the CustomerInfo
+                     * handed to this callback still reported `pro` inactive. It was active on the
+                     * next launch. Resuming with that value left the paywall standing over a
+                     * purchase that had gone through — so the agent sees their payment apparently
+                     * fail, and buys again.
+                     *
+                     * So success is reported from the transaction, the cached flag is set from
+                     * whatever the server currently says, and a refresh is fired when those
+                     * disagree. Deliberately not optimistic: setting Pro true regardless would hide
+                     * a real misconfiguration — a product attached to no entitlement would look
+                     * exactly like this and never be noticed.
+                     */
                     override fun onCompleted(storeTransaction: StoreTransaction, customerInfo: CustomerInfo) {
                         val active = customerInfo.entitlements[PRO_ENTITLEMENT]?.isActive == true
                         update(active)
-                        continuation.resume(active)
+                        if (!active) refresh()
+                        continuation.resume(true)
                     }
 
                     override fun onError(error: PurchasesError, userCancelled: Boolean) {
@@ -118,6 +156,12 @@ class Entitlements private constructor(private val prefs: SharedPreferences) {
         private const val TAG = "TwofoldBilling"
         private const val PREFS_NAME = "twofold.entitlements"
         private const val KEY_CACHED_PRO = "cached_pro"
+
+        /** Long enough for a human to finish a store dialog, short enough to never look hung. */
+        private const val PURCHASE_TIMEOUT_MS = 90_000L
+
+        /** Time for a refresh to land in the listener before the answer is read back. */
+        private const val ENTITLEMENT_SETTLE_MS = 2_000L
 
         fun create(context: Context): Entitlements {
             val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -143,6 +187,22 @@ class Entitlements private constructor(private val prefs: SharedPreferences) {
                 }
 
                 Purchases.configure(configuration)
+
+                // The durable path. Every entitlement change RevenueCat knows about arrives here —
+                // a purchase, a restore, an expiry, a subscription bought on another device — so
+                // Pro state does not depend on any single callback firing.
+                //
+                // It is here because one did not. On a Test Store purchase the receipt posted 200
+                // and PurchaseCallback.onCompleted was never invoked, leaving the purchase coroutine
+                // suspended forever and the paywall standing over a completed sale. A flow that can
+                // hang indefinitely on someone else's callback is not one to ship.
+                Purchases.sharedInstance.updatedCustomerInfoListener =
+                    UpdatedCustomerInfoListener { customerInfo ->
+                        entitlements.update(
+                            customerInfo.entitlements[PRO_ENTITLEMENT]?.isActive == true
+                        )
+                    }
+
                 entitlements.refresh()
             }
 

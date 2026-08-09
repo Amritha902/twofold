@@ -170,7 +170,10 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
     var offeringPackages by remember { mutableStateOf<List<Package>>(emptyList()) }
     var isPurchasing by remember { mutableStateOf(false) }
 
-    if (showPaywall) {
+    // `&& !isPro` so the paywall closes the instant the entitlement lands, from whichever source
+    // reports it first — the purchase call returning, or the updated-customer-info listener. Waiting
+    // only on the purchase result is what left it standing over a completed sale.
+    if (showPaywall && !isPro) {
         PaywallScreen(
             packages = offeringPackages,
             isPurchasing = isPurchasing,
@@ -178,9 +181,12 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
                 val activity = context as? Activity ?: return@PaywallScreen
                 scope.launch {
                     isPurchasing = true
-                    entitlements.purchase(activity, option)
+                    val bought = entitlements.purchase(activity, option)
                     isPurchasing = false
-                    showPaywall = false
+                    // Only on success. Dismissing after a failed or cancelled purchase would take
+                    // away the one screen they could retry from, which reads as the app having
+                    // taken the money and moved on.
+                    if (bought) showPaywall = false
                 }
             },
             onDismiss = { showPaywall = false },
