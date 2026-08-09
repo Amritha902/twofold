@@ -157,6 +157,29 @@ behind it while the write-up claimed a presenter view. The distinction that make
 the rotation: in Flex both halves belong to the same person, so neither is turned and there is no
 client pane and no leak surface at all.
 
+## Surviving the fold
+
+A foldable app is judged partly on what happens when someone folds it mid-task, so this is verified
+rather than assumed. Checked on the emulator: with a document open, a private note typed, Hindi
+selected and the meeting kind set, folding to the cover display and unfolding back keeps all four
+and does not crash.
+
+It works because the activity declares `configChanges` for `screenLayout|screenSize|
+smallestScreenSize|density|orientation`. Switching between the inner and cover displays changes all
+of those, and without the declaration Android would recreate the activity — which would drop the
+open `PdfSource`, its file descriptor and the render cache, in the middle of a client meeting.
+
+**On the cover screen** the app degrades to the single `PREPARE` column: clause, follow-up list,
+note editor, controls. `FoldingFeature` reports no fold there, so `HingeState.NONE` maps to
+`PREPARE` and nothing two-sided is offered on a display that cannot be shared.
+
+**Reproducing this on an emulator** is harder than it should be, and the traps cost more time than
+the check: folding puts the device to sleep and unfolding does not wake it, so every reading is
+taken against a black screen unless `adb shell svc power stayon true` is set first; `KEYCODE_WAKEUP`
+lands on the lock screen or notification shade, which `uiautomator dump` then reports instead of the
+app; and `accelerometer_rotation` silently reverts to 1, taking the crease back to vertical. Two
+rounds of results here were measuring the notification shade before that was noticed.
+
 ## Reading a document
 
 Three routes, in order of preference:
