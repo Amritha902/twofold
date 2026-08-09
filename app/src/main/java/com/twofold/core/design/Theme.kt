@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.sp
 import com.twofold.R
 
@@ -84,6 +85,22 @@ private val SourceSerif = FontFamily(
     variable(R.font.source_serif_4, FontWeight.SemiBold),
 )
 
+/**
+ * The Devanagari serif, for Hindi.
+ *
+ * Source Serif 4 contains no Devanagari at all, so Hindi headings fell back to the system sans and
+ * quietly lost the serif/sans distinction the whole design rests on — the split that makes the
+ * client's half read as a document and the agent's controls read as machinery.
+ *
+ * Compose picks a family member by weight and style, not by which script it covers, so this can't
+ * simply be appended to [SourceSerif]. It is selected by locale in [TwofoldTheme] instead.
+ */
+private val NotoSerifDevanagari = FontFamily(
+    variable(R.font.noto_serif_devanagari, FontWeight.Normal),
+    variable(R.font.noto_serif_devanagari, FontWeight.Medium),
+    variable(R.font.noto_serif_devanagari, FontWeight.SemiBold),
+)
+
 /** Neutral, gets out of the way. Used for controls and metadata. */
 private val Inter = FontFamily(
     variable(R.font.inter, FontWeight.Normal),
@@ -97,21 +114,21 @@ private val Inter = FontFamily(
  * Serif for anything that is the document; sans for anything that operates it. The split is the
  * point — it makes the agent's controls read as machinery and the client's half read as paper.
  */
-private val TwofoldTypography = Typography(
+private fun twofoldTypography(serif: FontFamily) = Typography(
     displaySmall = TextStyle(
-        fontFamily = SourceSerif,
+        fontFamily = serif,
         fontSize = 34.sp,
         lineHeight = 42.sp,
         fontWeight = FontWeight.Normal,
     ),
     headlineMedium = TextStyle(
-        fontFamily = SourceSerif,
+        fontFamily = serif,
         fontSize = 26.sp,
         lineHeight = 34.sp,
         fontWeight = FontWeight.Normal,
     ),
     bodyLarge = TextStyle(
-        fontFamily = SourceSerif,
+        fontFamily = serif,
         fontSize = 19.sp,
         lineHeight = 29.sp,
     ),
@@ -135,6 +152,14 @@ fun TwofoldTheme(
 ) {
     val colors = if (darkTheme) DarkColors else LightColors
 
+    // Latin and Devanagari need different serifs; neither font covers the other's script. Sans
+    // stays Inter either way, because Android's own fallback resolves Devanagari to a neutral sans
+    // that sits beside Inter without a visible seam.
+    val serif = when (Locale.current.language) {
+        "hi" -> NotoSerifDevanagari
+        else -> SourceSerif
+    }
+
     CompositionLocalProvider(LocalTwofoldColors provides colors) {
         MaterialTheme(
             colorScheme = if (darkTheme) {
@@ -154,7 +179,7 @@ fun TwofoldTheme(
                     primary = colors.seal,
                 )
             },
-            typography = TwofoldTypography,
+            typography = twofoldTypography(serif),
             content = content,
         )
     }

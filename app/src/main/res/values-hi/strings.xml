@@ -1,0 +1,90 @@
+<resources>
+    <!--
+      Hindi (hi).
+
+      NEEDS REVIEW BY A NATIVE SPEAKER BEFORE RELEASE. This app is used to explain insurance
+      contracts to someone who is about to sign one, so a sentence that is merely plausible is not
+      good enough here. Treat this as a solid first draft, not a shipped translation.
+
+      Choices made deliberately, so a reviewer can disagree with them on purpose:
+
+      - Respectful register throughout (आप, and -ें/-एँ imperatives). The agent is a professional
+        addressing a client, and the client may well be older than them.
+      - "साइन", "क्लाइंट", "PDF", "पेज" and "नोट" are kept as the loanwords Indian field agents
+        actually use. "हस्ताक्षर" is correct but formal-legal, and it is also much longer, which
+        matters for a label sharing half a folded screen with five others.
+      - "पेज %1$d, कुल %2$d" rather than a literal "of", because "3 में से पेज 1" reads awkwardly
+        and inverts the argument order.
+    -->
+
+    <!-- The product name is not translated. -->
+    <string name="app_name">Twofold</string>
+
+    <!-- Empty state -->
+    <string name="import_prompt">वह दस्तावेज़ चुनें जो आप अपने क्लाइंट को दिखाने वाले हैं।</string>
+    <string name="choose_pdf">PDF चुनें</string>
+
+    <!-- Errors, shown to the agent only -->
+    <string name="error_import_failed">यह फ़ाइल आयात नहीं की जा सकी।</string>
+    <string name="error_open_failed">यह PDF नहीं खुल सकी। हो सकता है यह ख़राब हो या पासवर्ड से सुरक्षित हो।</string>
+
+    <!-- Prepare mode -->
+    <string name="who_are_you_meeting">आप किससे मिल रहे हैं?</string>
+    <string name="private_note_label">इस पेज के लिए निजी नोट</string>
+    <string name="talk_track_add_label">कहने के लिए एक पंक्ति जोड़ें</string>
+    <string name="action_add">जोड़ें</string>
+    <string name="action_remove">हटाएँ</string>
+    <string name="talk_track_line">— %1$s</string>
+
+    <!-- Controls. Keep the visible labels short: six of them share half a folded screen. -->
+    <string name="action_back">पीछे</string>
+    <string name="action_back_spoken">पिछला पेज</string>
+    <string name="action_sign">साइन</string>
+    <string name="action_sign_spoken">अपने क्लाइंट से साइन करने को कहें</string>
+    <string name="action_larger">बड़ा</string>
+    <string name="action_larger_spoken">क्लाइंट वाले हिस्से में टेक्स्ट बड़ा करें</string>
+    <string name="action_smaller">छोटा</string>
+    <string name="action_smaller_spoken">क्लाइंट वाले हिस्से में टेक्स्ट छोटा करें</string>
+    <string name="action_open">खोलें…</string>
+    <string name="action_open_spoken">कोई दूसरा दस्तावेज़ खोलें</string>
+    <string name="action_next">आगे</string>
+    <string name="action_next_spoken">अगला पेज</string>
+    <string name="action_cancel">रद्द करें</string>
+    <string name="action_done">हो गया</string>
+
+    <!-- The two panes -->
+    <string name="page_counter">%1$d / %2$d</string>
+    <string name="page_description">दस्तावेज़ का पेज %1$d, कुल %2$d</string>
+    <string name="agent_page_description">पेज %1$d की आपकी प्रति, कुल %2$d। पेज के किसी हिस्से को क्लाइंट वाले हिस्से में उभारने के लिए उस पर उंगली फेरें।</string>
+    <string name="clear_highlight">हाइलाइट हटाएँ</string>
+
+    <!-- Signing -->
+    <string name="sign_prompt">कृपया नीचे साइन करें</string>
+    <string name="signature_area_description">साइन करने की जगह। यहाँ अपनी उंगली से साइन करें।</string>
+    <string name="default_signer">क्लाइंट</string>
+
+    <!-- Follow-up list -->
+    <string name="follow_up_heading">दिखाया गया, पर साइन नहीं हुआ</string>
+    <string name="age_just_now">अभी</string>
+    <string name="age_yesterday">कल</string>
+    <plurals name="age_hours">
+        <item quantity="one">%d घंटा पहले</item>
+        <item quantity="other">%d घंटे पहले</item>
+    </plurals>
+    <plurals name="age_days">
+        <item quantity="one">%d दिन पहले</item>
+        <item quantity="other">%d दिन पहले</item>
+    </plurals>
+
+    <!-- Paywall -->
+    <string name="pro_title">Twofold Pro</string>
+    <string name="pro_subtitle">साफ़ साइन किए हुए दस्तावेज़, बिना किसी सीमा के फ़ाइलें, और हर मीटिंग का रिकॉर्ड।</string>
+    <string name="pro_benefit_watermark">साइन की हुई कॉपी, Twofold वॉटरमार्क के बिना</string>
+    <string name="pro_benefit_unlimited">जितने दस्तावेज़ आप साथ रखें</string>
+    <string name="pro_benefit_notes">हर पेज पर निजी नोट और बात करने की पंक्तियाँ</string>
+    <string name="pro_benefit_followup">आपने क्या दिखाया, और किसने अब तक साइन नहीं किया</string>
+    <string name="pro_unavailable">सदस्यता के विकल्प अभी उपलब्ध नहीं हैं। अपना कनेक्शन जाँचें और दोबारा कोशिश करें।</string>
+    <string name="pro_not_now">अभी नहीं</string>
+    <string name="pro_billing_note">भुगतान Galaxy Store के ज़रिए होता है। आप अपने Samsung खाते से कभी भी रद्द कर सकते हैं।</string>
+    <string name="pro_package_label">%1$s · %2$s</string>
+</resources>

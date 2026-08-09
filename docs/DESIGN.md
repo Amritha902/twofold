@@ -43,10 +43,21 @@ document tool used in the evening in someone's living room needs it.
 
 | Role | Face | Notes |
 |---|---|---|
-| Document chrome, headings | **Source Serif 4** | Editorial, credible, reads as printed matter |
+| Document chrome, headings (Latin) | **Source Serif 4** | Editorial, credible, reads as printed matter |
+| Document chrome, headings (Devanagari) | **Noto Serif Devanagari** | Same role, for Hindi |
 | UI, controls, metadata | **Inter** | Neutral, gets out of the way |
 
-Both are open-licensed and shipped in the APK — no network fetch, because the app works offline.
+All three are open-licensed and shipped in the APK — no network fetch, because the app works
+offline.
+
+**Why a second serif.** Source Serif 4 contains no Devanagari at all, so Hindi headings fell back
+to the system sans and quietly lost the serif/sans split the whole design rests on — the thing that
+makes the client's half read as paper and the agent's controls read as machinery. Compose selects a
+family member by weight and style, not by script coverage, so the two serifs cannot live in one
+family; the theme picks between them by locale.
+
+Sans stays Inter in both, because Android's own fallback resolves Devanagari to a neutral sans that
+sits beside Inter without a visible seam. Only the serif needed solving.
 
 ## The crease
 
