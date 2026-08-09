@@ -104,6 +104,11 @@
     <string name="they_asked">उन्होंने इसके बारे में पूछा।</string>
     <string name="questions_counted">अब तक %1$d के बारे में पूछा — हस्ताक्षरित प्रति पर दर्ज।</string>
 
+    <!-- Documents -->
+    <string name="documents_heading">आपके पास मौजूद दस्तावेज़</string>
+    <string name="remove_document">यह दस्तावेज़ हटाएँ</string>
+    <string name="remove_confirm">हटाने के लिए फिर दबाएँ</string>
+
     <!-- Signing -->
     <string name="sign_prompt">कृपया नीचे साइन करें</string>
     <string name="signature_area_description">साइन करने की जगह। यहाँ अपनी उंगली से साइन करें।</string>

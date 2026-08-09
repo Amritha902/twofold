@@ -51,6 +51,7 @@ import com.twofold.core.fold.FoldStateTracker
 import com.twofold.core.fold.FlexScaffold
 import com.twofold.core.fold.TwofoldScaffold
 import com.twofold.data.document.ClientLanguage
+import com.twofold.data.document.DocumentRef
 import com.twofold.data.document.ModelState
 import com.twofold.data.document.SpeechReadiness
 import com.twofold.data.document.DocumentRepository
@@ -299,6 +300,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
                 .windowInsetsPadding(WindowInsets.safeDrawing)
         ) {
             ClientPane(clientPage, Modifier.weight(1f))
+            DocumentShelf(state) { ref -> scope.launch { state.open(ref) } }
             FollowUpList(followUps)
             NoteEditor(state)
             PageControls(state, onImport = openPicker, onAskForSignature = null)
@@ -378,6 +380,66 @@ private fun TwofoldScaffoldFlex(
     )
 }
 
+/**
+ * Which document is open, and every other one you are carrying.
+ *
+ * Only on the prepare screen. A client watching someone scroll a list of other people's policies is
+ * being shown the agent's whole book of business, which is exactly the thing the two halves exist
+ * to keep apart.
+ */
+@Composable
+private fun DocumentShelf(state: PresentState, onOpen: (DocumentRef) -> Unit) {
+    val colors = LocalTwofoldColors.current
+    if (state.documents.size < 2) return
+
+    Column(
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.documents_heading),
+            style = MaterialTheme.typography.labelLarge,
+            color = colors.inkMuted,
+        )
+        Row(Modifier.horizontalScroll(rememberScrollState())) {
+            state.documents.forEach { ref ->
+                val isOpen = ref.id == state.document?.id
+                TextButton(onClick = { onOpen(ref) }) {
+                    Text(
+                        text = ref.title,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (isOpen) colors.seal else colors.inkMuted,
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Removing the open document, behind a second tap.
+ *
+ * Not a dialog: a dialog on a folded phone covers the screen and needs dismissing, and this is a
+ * one-line action. Arming the button and letting it disarm is enough friction to stop a misplaced
+ * tap deleting a client's policy, and cheap enough that the honest action stays available.
+ */
+@Composable
+private fun RemoveDocument(state: PresentState) {
+    val scope = rememberCoroutineScope()
+    val colors = LocalTwofoldColors.current
+    var armed by remember(state.document?.id) { mutableStateOf(false) }
+
+    TextButton(onClick = {
+        if (armed) scope.launch { state.deleteCurrent(); armed = false } else armed = true
+    }) {
+        Text(
+            text = stringResource(if (armed) R.string.remove_confirm else R.string.remove_document),
+            style = MaterialTheme.typography.labelLarge,
+            color = if (armed) colors.seal else colors.inkMuted,
+        )
+    }
+}
+
 @Composable
 private fun SigningControls(canComplete: Boolean, onCancel: () -> Unit, onDone: () -> Unit) {
     Row(
@@ -452,6 +514,8 @@ private fun NoteEditor(state: PresentState) {
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
+            RemoveDocument(state)
+
             OutlinedTextField(
                 value = draftLine,
                 onValueChange = { draftLine = it },

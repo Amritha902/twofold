@@ -284,6 +284,41 @@ class PresentState(
     var document by mutableStateOf<DocumentRef?>(null)
         private set
 
+    /**
+     * Everything imported, newest first.
+     *
+     * The app used to open `list().firstOrNull()` and offer no way back to anything else, so an
+     * agent carrying five clients' policies could reach exactly one of them — and re-importing from
+     * the filesystem was the only route to the other four.
+     */
+    var documents by mutableStateOf<List<DocumentRef>>(emptyList())
+        private set
+
+    suspend fun refreshDocuments() {
+        documents = repository.list()
+    }
+
+    /**
+     * Removes the open document and moves to whatever is left.
+     *
+     * Deliberately available, and deliberately not silent — see the confirmation in the UI. An agent
+     * is carrying other people's insurance policies around on a phone, and "there is no way to take
+     * this off the device" is a bad answer to give any of them.
+     */
+    suspend fun deleteCurrent(): Boolean {
+        val open = document ?: return false
+
+        closeCurrent()
+        document = null
+        clauses = emptyList()
+        currentClause = null
+
+        val removed = repository.delete(open)
+        refreshDocuments()
+        documents.firstOrNull()?.let { open(it) }
+        return removed
+    }
+
     /** The page the agent has asked for. May briefly lead [rendered] while a render is in flight. */
     var pageIndex by mutableIntStateOf(0)
         private set
@@ -349,6 +384,7 @@ class PresentState(
         source = opened
         store = PageStore(context, opened, scope)
         document = ref
+        refreshDocuments()
         pageIndex = 0
         notes = notesRepository.load(ref.id)
 

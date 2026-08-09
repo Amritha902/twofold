@@ -90,6 +90,11 @@
     <string name="they_asked">They asked about this one.</string>
     <string name="questions_counted">Asked about %1$d so far — recorded on the signed copy.</string>
 
+    <!-- Carrying more than one client's document -->
+    <string name="documents_heading">Documents you are carrying</string>
+    <string name="remove_document">Remove this document</string>
+    <string name="remove_confirm">Tap again to remove it</string>
+
     <!-- Signing -->
     <string name="sign_prompt">Please sign below</string>
     <string name="signature_area_description">Signature area. Draw your signature here with your finger.</string>
