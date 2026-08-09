@@ -8,14 +8,22 @@ Last checked against the rules page: **2026-08-09**. Submissions close **Sep 30,
 
 ---
 
-## 1. Galaxy Store commercial seller registration — **do this first, today**
+## 1. Galaxy Store — seller account done, **commercial status not started**
 
-**Why it's first:** bank verification is quoted at up to **10 business days**, and nothing about the
-Galaxy category can complete without it. Every day this waits comes off the end of the schedule, not
-the start. Ship-by is Sep 20 to leave a store-review buffer.
+**Status 2026-08-09:** the seller account exists and reached Step 4 Completion. That grants
+**free-application publishing only.** The portal says it plainly: *"After signing a commercial seller
+request, you can sell paid applications."*
 
-**Where:** https://seller.samsungapps.com — register as a **Commercial Seller** (not Individual;
-Individual cannot sell paid content or IAP).
+**What is left:** the **Request Commercial Seller Status** button on that completion page. That is
+the step carrying the bank verification and the up-to-**10-business-day** queue — so the clock has
+not started yet, and it is the same clock everything else waits on. Ship-by is Sep 20 to leave a
+store-review buffer.
+
+Without commercial status there is no IAP, and without IAP there is no RevenueCat purchase, which is
+an eligibility requirement for every category.
+
+**Where:** https://seller.samsungapps.com — the button is on the completion page you already
+reached, or under App Management.
 
 **Have ready before you start:**
 - PAN card
@@ -51,11 +59,27 @@ purchase, the store seller account stops being a hard dependency at all.
 
 **Where:** https://revenuecat-shipaton-2026.devpost.com — "Join hackathon".
 
-**Use your student email** `amritha.s2023@vitstudent.ac.in` somewhere on the account, or add it as a
-secondary address. The **Next Gen Award** is students-only and is the safety net if Samsung's queue
-misses the deadline — it takes a video and open-source code instead of a published store listing.
+**Use the Devpost account you already have** — the personal one with GitHub linked. Do not create a
+second account for the student entry. The Next Gen page is explicit that what it needs is *"a student
+or academic email on Devpost"* — an email **on the account**, not a separate account. Two accounts
+would also risk reading as duplicate entries, and the GitHub link on the existing one is worth
+keeping.
 
-**Time:** 5 minutes. No lead time, but do it before the video upload since you'll want the account.
+**Add `amritha.s2023@vitstudent.ac.in`** as a second email under Devpost → Settings → Emails, and
+verify it.
+
+**Confirmed eligible:** Next Gen checks academic domains against JetBrains/swot, and
+`vitstudent.ac.in` is listed there as *Vellore Institute of Technology, Vellore*. Checked directly
+against the swot repository on 2026-08-09.
+
+**Your Devpost handle** is the username in your profile URL — `devpost.com/<handle>`. Click your
+avatar, top right, then your profile; the handle is the last part of the address. That is what goes
+in the RevenueCat email.
+
+**Next Gen prizes:** $15,000 / $10,000 / $5,000. Worth entering on its own merits, not only as a
+hedge.
+
+**Time:** 5 minutes. Do it before the video upload since you'll want the account.
 
 ---
 
