@@ -32,8 +32,17 @@ reached, or under App Management.
 - A business/contact address and phone number
 - Your email
 
-**Cost:** ₹0. There is no registration fee — the earlier worry about a seller fee was checked and is
-wrong.
+**Cost: nothing.** Verified against Samsung's own FAQ on 2026-08-09, which says outright: *"No,
+there is no sign-up nor annual fee to publish in Galaxy Store."* For comparison, Apple charges
+$99/year and Google Play $25 one-off.
+
+The **Financial Information** step is not a payment page and reads like one. "Settle the revenue
+generated in the Galaxy Store" means *pay you*. Minimum Remittance is the smallest amount Samsung
+will bother wiring; Payment Account is where your earnings land. Nothing is charged.
+
+**Samsung's cut, when you do earn:** 15% on subscriptions — you keep **85%**. Paid apps and one-off
+in-app items are 20/80. Apple and Google both take 30% in year one, so this is a genuine advantage
+and belongs in the HAMM award pitch rather than sitting in a footnote.
 
 **Time:** ~20 minutes of form-filling, then you wait.
 
