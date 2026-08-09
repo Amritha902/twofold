@@ -61,6 +61,8 @@
 
     <string name="preparing_document">दस्तावेज़ पढ़ा जा रहा है…</string>
 
+    <string name="text_is_approximate">स्कैन से पढ़ा गया — शब्द पूरी तरह सही न हों। भरोसा करने से पहले अपने पेज से मिलाएँ।</string>
+
     <!-- Signing -->
     <string name="sign_prompt">कृपया नीचे साइन करें</string>
     <string name="signature_area_description">साइन करने की जगह। यहाँ अपनी उंगली से साइन करें।</string>

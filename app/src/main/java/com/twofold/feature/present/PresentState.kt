@@ -16,6 +16,7 @@ import com.twofold.data.document.DocumentRef
 import com.twofold.data.document.DocumentRepository
 import com.twofold.data.document.PageStore
 import com.twofold.data.document.PdfSource
+import com.twofold.data.document.OcrTextExtractor
 import com.twofold.data.document.PdfTextExtractor
 import com.twofold.data.notes.DocumentNotes
 import com.twofold.data.notes.NotesRepository
@@ -44,6 +45,7 @@ class PresentState(
     private val repository = DocumentRepository(context)
     private val notesRepository = NotesRepository(context)
     private val textExtractor = PdfTextExtractor(context)
+    private val ocrExtractor = OcrTextExtractor()
 
     private var source: PdfSource? = null
     private var store: PageStore? = null
@@ -60,8 +62,24 @@ class PresentState(
 
     val currentClause: Clause? get() = clauses.getOrNull(clauseIndex)
 
-    /** True when the PDF yielded no usable text — a scan, most likely. Agent's eyes only. */
+    /** True when neither the text layer nor OCR produced anything readable. Agent's eyes only. */
     var hasNoText by mutableStateOf(false)
+        private set
+
+    /** True while OCR is reading a scanned document. Far slower than the text-layer path. */
+    var isRecognising by mutableStateOf(false)
+        private set
+
+    /**
+     * True when the clauses came from OCR rather than an embedded text layer.
+     *
+     * It matters because OCR is *approximate*. It reads in visual order, so a two-column benefits
+     * table can flatten into the paragraph below it and end up under the wrong heading — observed,
+     * not hypothetical. The agent is told; the client is not, because a warning on their half
+     * would undermine a document the agent is about to talk them through, and reconciling it is
+     * the agent's job rather than theirs.
+     */
+    var textIsApproximate by mutableStateOf(false)
         private set
 
     private var notes by mutableStateOf(DocumentNotes(""))
@@ -139,9 +157,18 @@ class PresentState(
         pageIndex = 0
         notes = notesRepository.load(ref.id)
 
-        // Text first, then clauses. A scanned PDF yields nothing usable, which is reported rather
-        // than leaving the client staring at a blank half with no explanation to the agent.
-        val pages = textExtractor.extractPages(ref.file)
+        // Text layer first, because it is instant and exact. A scan has none, so fall back to
+        // reading the pages with OCR — slow, but those are precisely the documents most likely to
+        // need explaining, and an empty client half would be the worst possible answer.
+        var pages = textExtractor.extractPages(ref.file)
+        if (!textExtractor.hasUsableText(pages)) {
+            isRecognising = true
+            pages = ocrExtractor.extractPages(opened)
+            isRecognising = false
+            textIsApproximate = true
+        } else {
+            textIsApproximate = false
+        }
         hasNoText = !textExtractor.hasUsableText(pages)
         clauses = if (hasNoText) emptyList() else ClauseSegmenter.segmentAll(pages)
         clauseIndex = 0

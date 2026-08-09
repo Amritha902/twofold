@@ -45,6 +45,8 @@
 
     <string name="preparing_document">Reading the document…</string>
 
+    <string name="text_is_approximate">Read from a scan — wording may be imperfect. Check against your page before relying on it.</string>
+
     <!-- Signing -->
     <string name="sign_prompt">Please sign below</string>
     <string name="signature_area_description">Signature area. Draw your signature here with your finger.</string>

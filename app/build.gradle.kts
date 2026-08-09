@@ -37,6 +37,13 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "REVENUECAT_GALAXY_KEY", "\"$revenueCatGalaxyKey\"")
+
+        ndk {
+            // arm64 only. Every Galaxy foldable is arm64, and the OCR pipeline ships a ~10MB
+            // native library per ABI — carrying x86, x86_64 and armeabi-v7a added 28MB to serve
+            // devices this app cannot be used on anyway.
+            abiFilters += "arm64-v8a"
+        }
     }
 
     buildTypes {
@@ -55,6 +62,15 @@ android {
         compose = true
         buildConfig = true
     }
+
+    packaging {
+        resources {
+            // PdfBox pulls in BouncyCastle whole, including post-quantum test vectors for
+            // algorithms no PDF has ever been encrypted with. 5MB of picnic and SIKE parameters.
+            excludes += "/org/bouncycastle/pqc/**"
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
@@ -72,6 +88,8 @@ dependencies {
     implementation(libs.androidx.window)
 
     implementation(libs.pdfbox.android)
+    implementation(libs.mlkit.text.recognition)
+    implementation(libs.mlkit.text.recognition.devanagari)
 
     implementation(libs.revenuecat.purchases)
     implementation(libs.revenuecat.purchases.galaxy)

@@ -108,6 +108,8 @@ data class AgentPage(
     val pageBitmap: Bitmap? = null,
     val pageNumber: Int = 1,
     val pageCount: Int = 1,
+    /** Clauses came from OCR, so treat the wording as approximate. Agent's half only. */
+    val textIsApproximate: Boolean = false,
 )
 
 /**
@@ -241,6 +243,14 @@ fun AgentPane(
                 style = MaterialTheme.typography.labelLarge,
                 color = colors.inkMuted,
             )
+
+            if (page.textIsApproximate) {
+                Text(
+                    text = stringResource(R.string.text_is_approximate),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = colors.seal,
+                )
+            }
 
             // What the client is reading right now — so the agent knows what is in front of them
             // without looking up from their own half.

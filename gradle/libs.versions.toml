@@ -8,6 +8,7 @@ composeBom = "2026.06.01"
 window = "1.5.1"
 revenuecat = "10.16.1"
 pdfbox = "2.0.27.0"
+mlkitTextRecognition = "16.0.1"
 junit = "4.13.2"
 androidxJunit = "1.2.1"
 espresso = "3.6.1"
@@ -28,6 +29,11 @@ androidx-window = { group = "androidx.window", name = "window", version.ref = "w
 # Text extraction. Apache 2.0, which is one-way compatible into this project's AGPL.
 # android.graphics.pdf renders pages but exposes no text, and the client's half needs words.
 pdfbox-android = { group = "com.tom-roush", name = "pdfbox-android", version.ref = "pdfbox" }
+
+# On-device OCR, for scanned PDFs that carry no text layer. Bundled rather than Play-delivered so
+# it still works where an agent has no signal, which is most of the time.
+mlkit-text-recognition = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkitTextRecognition" }
+mlkit-text-recognition-devanagari = { group = "com.google.mlkit", name = "text-recognition-devanagari", version.ref = "mlkitTextRecognition" }
 
 # Galaxy Store in-app purchases. The -store-galaxy module is what makes this possible at all;
 # without it RevenueCat only speaks Play and App Store.

@@ -134,6 +134,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         pageBitmap = state.rendered.bitmap,
         pageNumber = state.rendered.index + 1,
         pageCount = state.pageCount,
+        textIsApproximate = state.textIsApproximate,
     )
 
     // A meeting starts when the phone is put down in front of someone and ends when it is picked
