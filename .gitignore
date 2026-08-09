@@ -3,7 +3,11 @@
 /local.properties
 /.idea/
 .DS_Store
-/build
+
+# Build output. NOT "/build" — that only anchors the root, which let app/build/
+# be tracked for 25 commits. The generated BuildConfig.java carries the
+# RevenueCat key, so this must stay ignored in a public repo.
+build/
 /captures
 .externalNativeBuild
 .cxx

@@ -1,7 +1,0 @@
-int drawable ic_launcher_background 0x0
-int drawable ic_launcher_foreground 0x0
-int font inter 0x0
-int font source_serif_4 0x0
-int mipmap ic_launcher 0x0
-int string app_name 0x0
-int style Theme_Twofold 0x0
