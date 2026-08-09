@@ -90,6 +90,7 @@ dependencies {
     implementation(libs.pdfbox.android)
     implementation(libs.mlkit.text.recognition)
     implementation(libs.mlkit.text.recognition.devanagari)
+    implementation(libs.mlkit.translate)
 
     implementation(libs.revenuecat.purchases)
     implementation(libs.revenuecat.purchases.galaxy)

@@ -42,6 +42,8 @@ import com.twofold.core.fold.DeviceMode
 import com.twofold.core.fold.FoldState
 import com.twofold.core.fold.FoldStateTracker
 import com.twofold.core.fold.TwofoldScaffold
+import com.twofold.data.document.ClientLanguage
+import com.twofold.data.document.ModelState
 import com.twofold.data.document.DocumentRepository
 import com.twofold.feature.paywall.Entitlements
 import com.twofold.feature.paywall.PaywallScreen
@@ -135,6 +137,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         pageNumber = state.rendered.index + 1,
         pageCount = state.pageCount,
         textIsApproximate = state.textIsApproximate,
+        sourceClause = state.sourceClause,
     )
 
     // A meeting starts when the phone is put down in front of someone and ends when it is picked
@@ -278,6 +281,8 @@ private fun NoteEditor(state: PresentState) {
             singleLine = true,
         )
 
+        LanguagePicker(state)
+
         OutlinedTextField(
             value = state.currentNotes.note,
             onValueChange = { scope.launch { state.setNote(it) } },
@@ -323,6 +328,52 @@ private fun NoteEditor(state: PresentState) {
             ) { Text(stringResource(R.string.action_add)) }
         }
     }
+}
+
+/**
+ * Which language the client reads. Lives on the prepare screen on purpose: a language pack is tens
+ * of megabytes, and no client should sit watching a progress bar while it arrives.
+ */
+@Composable
+private fun LanguagePicker(state: PresentState) {
+    val scope = rememberCoroutineScope()
+    val colors = LocalTwofoldColors.current
+
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(
+            text = stringResource(R.string.lang_heading),
+            style = MaterialTheme.typography.labelLarge,
+            color = colors.inkMuted,
+        )
+        Row {
+            listOf(
+                ClientLanguage.ORIGINAL to R.string.lang_original,
+                ClientLanguage.HINDI to R.string.lang_hindi,
+                ClientLanguage.TAMIL to R.string.lang_tamil,
+                ClientLanguage.BENGALI to R.string.lang_bengali,
+                ClientLanguage.MARATHI to R.string.lang_marathi,
+            ).forEach { (language, label) ->
+                val selected = state.clientLanguage == language
+                TextButton(onClick = { scope.launch { state.setClientLanguage(language) } }) {
+                    Text(
+                        text = stringResource(label),
+                        color = if (selected) colors.seal else colors.inkMuted,
+                    )
+                }
+            }
+        }
+        when (state.modelState) {
+            ModelState.DOWNLOADING -> StatusLine(stringResource(R.string.lang_downloading), colors.inkMuted)
+            ModelState.FAILED -> StatusLine(stringResource(R.string.lang_failed), colors.seal)
+            ModelState.READY -> StatusLine(stringResource(R.string.lang_ready), colors.note)
+            else -> Unit
+        }
+    }
+}
+
+@Composable
+private fun StatusLine(text: String, color: androidx.compose.ui.graphics.Color) {
+    Text(text = text, style = MaterialTheme.typography.bodyMedium, color = color)
 }
 
 @Composable

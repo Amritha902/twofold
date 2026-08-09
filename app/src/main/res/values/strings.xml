@@ -47,6 +47,18 @@
 
     <string name="text_is_approximate">Read from a scan — wording may be imperfect. Check against your page before relying on it.</string>
 
+
+    <!-- Client language -->
+    <string name="lang_heading">What does your client read?</string>
+    <string name="lang_original">English</string>
+    <string name="lang_hindi">हिन्दी</string>
+    <string name="lang_tamil">தமிழ்</string>
+    <string name="lang_bengali">বাংলা</string>
+    <string name="lang_marathi">मराठी</string>
+    <string name="lang_downloading">Downloading the language pack…</string>
+    <string name="lang_failed">Could not download that language. Connect once, then try again.</string>
+    <string name="lang_ready">Ready — your client will read this in their language, offline.</string>
+
     <!-- Signing -->
     <string name="sign_prompt">Please sign below</string>
     <string name="signature_area_description">Signature area. Draw your signature here with your finger.</string>

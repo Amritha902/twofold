@@ -9,6 +9,7 @@ window = "1.5.1"
 revenuecat = "10.16.1"
 pdfbox = "2.0.27.0"
 mlkitTextRecognition = "16.0.1"
+mlkitTranslate = "17.0.3"
 junit = "4.13.2"
 androidxJunit = "1.2.1"
 espresso = "3.6.1"
@@ -34,6 +35,11 @@ pdfbox-android = { group = "com.tom-roush", name = "pdfbox-android", version.ref
 # it still works where an agent has no signal, which is most of the time.
 mlkit-text-recognition = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkitTextRecognition" }
 mlkit-text-recognition-devanagari = { group = "com.google.mlkit", name = "text-recognition-devanagari", version.ref = "mlkitTextRecognition" }
+
+# On-device translation. The client reads the clause in their language while the agent works from
+# the original — two renderings of one document at the same instant, which is the thing only a
+# foldable can show.
+mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkitTranslate" }
 
 # Galaxy Store in-app purchases. The -store-galaxy module is what makes this possible at all;
 # without it RevenueCat only speaks Play and App Store.

@@ -110,6 +110,14 @@ data class AgentPage(
     val pageCount: Int = 1,
     /** Clauses came from OCR, so treat the wording as approximate. Agent's half only. */
     val textIsApproximate: Boolean = false,
+    /**
+     * The clause in its original wording.
+     *
+     * Separate from `page.clause`, which may be translated for the client. The agent must always
+     * see the document as written — they are the one who has to stand behind it, and an agent
+     * reading a machine translation of their own policy back to themselves has lost the thread.
+     */
+    val sourceClause: Clause? = null,
 )
 
 /**
@@ -254,7 +262,7 @@ fun AgentPane(
 
             // What the client is reading right now — so the agent knows what is in front of them
             // without looking up from their own half.
-            page.page.clause?.let { clause ->
+            (page.sourceClause ?: page.page.clause)?.let { clause ->
                 Text(
                     text = stringResource(
                         R.string.showing_clause, clause.label, clause.heading.orEmpty(),

@@ -12,6 +12,9 @@ import androidx.compose.ui.geometry.Offset
 import com.twofold.R
 import com.twofold.data.document.Clause
 import com.twofold.data.document.ClauseSegmenter
+import com.twofold.data.document.ClauseTranslator
+import com.twofold.data.document.ClientLanguage
+import com.twofold.data.document.ModelState
 import com.twofold.data.document.DocumentRef
 import com.twofold.data.document.DocumentRepository
 import com.twofold.data.document.PageStore
@@ -46,6 +49,7 @@ class PresentState(
     private val notesRepository = NotesRepository(context)
     private val textExtractor = PdfTextExtractor(context)
     private val ocrExtractor = OcrTextExtractor()
+    private val translator = ClauseTranslator()
 
     private var source: PdfSource? = null
     private var store: PageStore? = null
@@ -60,7 +64,47 @@ class PresentState(
     var clauseIndex by mutableIntStateOf(0)
         private set
 
-    val currentClause: Clause? get() = clauses.getOrNull(clauseIndex)
+    /** The clause as written. The agent always sees this; the client may see a translation. */
+    val sourceClause: Clause? get() = clauses.getOrNull(clauseIndex)
+
+    /**
+     * The clause as the client will read it — translated when a language is set.
+     *
+     * Held separately from the source so the agent always keeps the original wording. The whole
+     * point is that the two halves show different renderings of the same clause at the same moment.
+     */
+    var currentClause by mutableStateOf<Clause?>(null)
+        private set
+
+    /** The language the client reads. The agent's half never changes. */
+    var clientLanguage by mutableStateOf(ClientLanguage.ORIGINAL)
+        private set
+
+    var modelState by mutableStateOf(ModelState.NOT_NEEDED)
+        private set
+
+    /**
+     * Chooses the client's language, downloading the pack if needed.
+     *
+     * Called from the prepare screen rather than mid-meeting: a pack is tens of megabytes, and a
+     * client should never be watching a progress bar.
+     */
+    suspend fun setClientLanguage(language: ClientLanguage) {
+        clientLanguage = language
+        modelState = if (language == ClientLanguage.ORIGINAL) ModelState.NOT_NEEDED else ModelState.DOWNLOADING
+        modelState = translator.prepare(language)
+        refreshClientClause()
+    }
+
+    private suspend fun refreshClientClause() {
+        val source = sourceClause
+        currentClause = when {
+            source == null -> null
+            clientLanguage == ClientLanguage.ORIGINAL -> source
+            modelState != ModelState.READY -> source
+            else -> translator.translate(source)
+        }
+    }
 
     /** True when neither the text layer nor OCR produced anything readable. Agent's eyes only. */
     var hasNoText by mutableStateOf(false)
@@ -172,6 +216,7 @@ class PresentState(
         hasNoText = !textExtractor.hasUsableText(pages)
         clauses = if (hasNoText) emptyList() else ClauseSegmenter.segmentAll(pages)
         clauseIndex = 0
+        refreshClientClause()
 
         isLoading = false
         renderCurrent()
@@ -186,6 +231,7 @@ class PresentState(
     suspend fun goToClause(index: Int) {
         if (clauses.isEmpty()) return
         clauseIndex = index.coerceIn(0, clauses.lastIndex)
+        refreshClientClause()
 
         val page = currentClause?.pageIndex ?: return
         if (page != pageIndex) {
@@ -370,6 +416,7 @@ class PresentState(
 
     /** Releases the PdfRenderer and its file descriptor. Not optional — both leak otherwise. */
     fun closeCurrent() {
+        translator.close()
         store?.clear()
         source?.close()
         source = null

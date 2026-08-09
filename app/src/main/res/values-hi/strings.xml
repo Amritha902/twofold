@@ -63,6 +63,18 @@
 
     <string name="text_is_approximate">स्कैन से पढ़ा गया — शब्द पूरी तरह सही न हों। भरोसा करने से पहले अपने पेज से मिलाएँ।</string>
 
+
+    <!-- Client language -->
+    <string name="lang_heading">आपका क्लाइंट क्या पढ़ता है?</string>
+    <string name="lang_original">English</string>
+    <string name="lang_hindi">हिन्दी</string>
+    <string name="lang_tamil">தமிழ்</string>
+    <string name="lang_bengali">বাংলা</string>
+    <string name="lang_marathi">मराठी</string>
+    <string name="lang_downloading">भाषा पैक डाउनलोड हो रहा है…</string>
+    <string name="lang_failed">यह भाषा डाउनलोड नहीं हो सकी। एक बार कनेक्ट करके दोबारा कोशिश करें।</string>
+    <string name="lang_ready">तैयार — आपका क्लाइंट इसे अपनी भाषा में पढ़ेगा, बिना इंटरनेट के।</string>
+
     <!-- Signing -->
     <string name="sign_prompt">कृपया नीचे साइन करें</string>
     <string name="signature_area_description">साइन करने की जगह। यहाँ अपनी उंगली से साइन करें।</string>
