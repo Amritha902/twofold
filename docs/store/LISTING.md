@@ -80,10 +80,7 @@ privacy policy, which a reviewer will read alongside it. The accurate answer is:
 ## Support
 
 - Support email: amritha16112005@gmail.com
-- Privacy policy URL: `https://amritha902.github.io/twofold/privacy.html`
-  *(the page is written — see [../privacy.html](../privacy.html). It goes live once the repo is
-  public and GitHub Pages is set to serve from the `docs/` folder on `master`. Making the repo
-  public is needed for the Next Gen award anyway.)*
+- Privacy policy URL: **https://amritha902.github.io/twofold/privacy.html** — live, verified 200.
 
 ---
 
@@ -155,9 +152,6 @@ enhancement guarded by a null check.
 
 1. **Commercial seller account** — not started. Free, but verification can take up to 10 business
    days. Everything else is ready and waiting on this.
-2. **Privacy policy hosting** — the page is written and checked against the app's actual declared
-   permissions. It needs the repo made public and GitHub Pages enabled (Settings → Pages → source
-   `master` / `docs`), which also satisfies the Next Gen award's open-source requirement.
-3. **RevenueCat dashboard** — `pro` entitlement and the subscription product, then a real purchase
+2. **RevenueCat dashboard** — `pro` entitlement and the subscription product, then a real purchase
    on hardware. Galaxy Store IAP cannot be tested on an emulator.
-4. **Release build** — signed with an upload key, which needs the seller account first.
+3. **Release build** — signed with an upload key, which needs the seller account first.
