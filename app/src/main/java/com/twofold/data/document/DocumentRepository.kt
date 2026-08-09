@@ -30,20 +30,45 @@ class DocumentRepository(private val context: Context) {
 
     suspend fun import(uri: Uri): DocumentRef? = withContext(Dispatchers.IO) {
         runCatching {
-            val id = System.currentTimeMillis().toString(RADIX_36)
-            val target = File(documentsDir, "$id.pdf")
+            // The stored filename IS the title, because list() has nothing else to read it from.
+            // Naming files after a timestamp id instead meant the document was called
+            // "Term Life Protect" until the app restarted and then "msl7n5on" forever after —
+            // in front of a client.
+            val target = uniqueFile(displayName(uri) ?: DEFAULT_TITLE)
 
             context.contentResolver.openInputStream(uri)?.use { input ->
                 target.outputStream().use { output -> input.copyTo(output) }
             } ?: return@runCatching null
 
             DocumentRef(
-                id = id,
-                title = displayName(uri) ?: DEFAULT_TITLE,
+                id = target.nameWithoutExtension,
+                title = target.nameWithoutExtension,
                 file = target,
                 importedAt = System.currentTimeMillis(),
             )
         }.getOrNull()
+    }
+
+    /**
+     * A writable filename that preserves the document's name and doesn't collide.
+     *
+     * Importing the same document twice is normal — a policy gets reissued — so the second one
+     * gets a numbered suffix rather than silently overwriting the first.
+     */
+    private fun uniqueFile(rawTitle: String): File {
+        val safe = rawTitle
+            .replace(ILLEGAL_FILENAME_CHARS, " ")
+            .trim()
+            .take(MAX_TITLE_LENGTH)
+            .ifBlank { DEFAULT_TITLE }
+
+        var candidate = File(documentsDir, "$safe.pdf")
+        var n = 2
+        while (candidate.exists()) {
+            candidate = File(documentsDir, "$safe ($n).pdf")
+            n++
+        }
+        return candidate
     }
 
     suspend fun list(): List<DocumentRef> = withContext(Dispatchers.IO) {
@@ -76,6 +101,11 @@ class DocumentRepository(private val context: Context) {
     private companion object {
         const val DOCUMENTS_DIR = "documents"
         const val DEFAULT_TITLE = "Untitled document"
-        const val RADIX_36 = 36
+
+        /** Path separators, characters filesystems reject, and control characters. */
+        val ILLEGAL_FILENAME_CHARS = Regex("""[/\\:*?"<>|\x00-\x1F]""")
+
+        /** Long enough for a real policy name, short of any filesystem limit. */
+        const val MAX_TITLE_LENGTH = 80
     }
 }

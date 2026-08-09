@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Twofold" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--
+      Light variant. The dark one lives in values-night/ rather than using a DayNight parent,
+      because Theme.Material.DayNight is an AppCompat concept and this app has no AppCompat
+      dependency — the framework has no such style.
+
+      windowBackground matters: it is what shows behind and around the Compose content, and
+      hardcoding a light one left the strip under the controls white in dark mode.
+    -->
+    <style name="Theme.Twofold" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
 </resources>
