@@ -7,6 +7,7 @@
 
     <!-- Errors, shown to the agent only -->
     <string name="error_import_failed">That file could not be imported.</string>
+    <string name="no_text_warning">No readable text could be taken from this PDF. It may be a scan. Your client\'s half will be empty.</string>
     <string name="error_open_failed">That PDF could not be opened. It may be damaged or password-protected.</string>
 
     <!-- Prepare mode -->
@@ -22,7 +23,7 @@
     <!-- Controls: short visible labels, longer spoken ones. Six of these share half a folded
          screen, so translations should keep the visible labels similarly terse. -->
     <string name="action_back">Back</string>
-    <string name="action_back_spoken">Previous page</string>
+    <string name="action_back_spoken">Previous clause</string>
     <string name="action_sign">Sign</string>
     <string name="action_sign_spoken">Ask your client to sign</string>
     <string name="action_larger">Larger</string>
@@ -32,15 +33,17 @@
     <string name="action_open">Open…</string>
     <string name="action_open_spoken">Open a different document</string>
     <string name="action_next">Next</string>
-    <string name="action_next_spoken">Next page</string>
+    <string name="action_next_spoken">Next clause</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_done">Done</string>
 
     <!-- The two panes -->
-    <string name="page_counter">%1$d / %2$d</string>
-    <string name="page_description">Document page %1$d of %2$d</string>
-    <string name="agent_page_description">Your copy of page %1$d of %2$d. Drag across it to highlight part of the page on your client\'s half.</string>
-    <string name="clear_highlight">Clear the highlight</string>
+    <string name="clause_counter">%1$d / %2$d</string>
+    <string name="clause_description">Clause %1$d of %2$d</string>
+    <string name="showing_clause">Showing clause %1$s  %2$s</string>
+    <string name="agent_page_description">Your copy of page %1$d of %2$d, as it is printed.</string>
+
+    <string name="preparing_document">Reading the document…</string>
 
     <!-- Signing -->
     <string name="sign_prompt">Please sign below</string>

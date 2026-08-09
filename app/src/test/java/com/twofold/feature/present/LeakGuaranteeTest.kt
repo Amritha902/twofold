@@ -46,7 +46,10 @@ class LeakGuaranteeTest {
 
     @Test
     fun `ClientPage exposes only the fields the client is meant to see`() {
-        val expected = setOf("bitmap", "pageNumber", "pageCount", "legibility", "spotlight")
+        // isPreparing was added deliberately after this test failed and made someone justify it:
+        // it is UI state about the app, not information about the agent, so a client seeing it
+        // reveals nothing. That failure is the test working, not the test being in the way.
+        val expected = setOf("clause", "clauseNumber", "clauseCount", "legibility", "isPreparing")
 
         val actual = ClientPage::class.java.declaredFields
             .map { it.name }
@@ -54,7 +57,22 @@ class LeakGuaranteeTest {
             .toSet()
 
         // Deliberately an equality check, not a subset check. Adding a field to ClientPage should
-        // require someone to come here and think about whether a client should see it.
+        // require someone to come here and think about whether a client should see it. This set
+        // changed once already, when the client's half stopped showing a page image and started
+        // showing a clause — which is exactly the kind of change that should not pass silently.
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `the Clause the client reads carries no agent-private data either`() {
+        // ClientPage is now a thin wrapper around Clause, so the guarantee is only as strong as
+        // Clause is. A note attached to a clause would sail straight through the check above.
+        val forbidden = listOf("note", "talktrack", "talk_track", "private", "script", "agent")
+
+        val offenders = com.twofold.data.document.Clause::class.java.declaredFields
+            .map { it.name }
+            .filter { field -> forbidden.any { field.lowercase().contains(it) } }
+
+        assertTrue("Clause must not carry agent-private data, but found: $offenders", offenders.isEmpty())
     }
 }

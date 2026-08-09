@@ -71,6 +71,8 @@ dependencies {
     // The foldable posture API. Load-bearing.
     implementation(libs.androidx.window)
 
+    implementation(libs.pdfbox.android)
+
     implementation(libs.revenuecat.purchases)
     implementation(libs.revenuecat.purchases.galaxy)
 

@@ -9,12 +9,14 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import com.twofold.R
+import com.twofold.data.document.Clause
+import com.twofold.data.document.ClauseSegmenter
 import com.twofold.data.document.DocumentRef
 import com.twofold.data.document.DocumentRepository
 import com.twofold.data.document.PageStore
 import com.twofold.data.document.PdfSource
+import com.twofold.data.document.PdfTextExtractor
 import com.twofold.data.notes.DocumentNotes
 import com.twofold.data.notes.NotesRepository
 import com.twofold.data.notes.PageNotes
@@ -41,9 +43,26 @@ class PresentState(
 ) {
     private val repository = DocumentRepository(context)
     private val notesRepository = NotesRepository(context)
+    private val textExtractor = PdfTextExtractor(context)
 
     private var source: PdfSource? = null
     private var store: PageStore? = null
+
+    /**
+     * The document as readable units. This — not the page — is what the client's half shows and
+     * what navigation moves through, because a whole page is physically unreadable on that half.
+     */
+    var clauses by mutableStateOf<List<Clause>>(emptyList())
+        private set
+
+    var clauseIndex by mutableIntStateOf(0)
+        private set
+
+    val currentClause: Clause? get() = clauses.getOrNull(clauseIndex)
+
+    /** True when the PDF yielded no usable text — a scan, most likely. Agent's eyes only. */
+    var hasNoText by mutableStateOf(false)
+        private set
 
     private var notes by mutableStateOf(DocumentNotes(""))
 
@@ -59,15 +78,6 @@ class PresentState(
      * anyone does. The agent raises it for them.
      */
     var legibility by mutableFloatStateOf(1f)
-        private set
-
-    /**
-     * A region of the current page to draw the client's eye to, in normalised page coordinates.
-     *
-     * Transient by design — it is cast during a conversation and gone when the page turns. Nothing
-     * about a spotlight should outlive the sentence that prompted it.
-     */
-    var spotlight by mutableStateOf<Rect?>(null)
         private set
 
     var document by mutableStateOf<DocumentRef?>(null)
@@ -128,23 +138,39 @@ class PresentState(
         document = ref
         pageIndex = 0
         notes = notesRepository.load(ref.id)
+
+        // Text first, then clauses. A scanned PDF yields nothing usable, which is reported rather
+        // than leaving the client staring at a blank half with no explanation to the agent.
+        val pages = textExtractor.extractPages(ref.file)
+        hasNoText = !textExtractor.hasUsableText(pages)
+        clauses = if (hasNoText) emptyList() else ClauseSegmenter.segmentAll(pages)
+        clauseIndex = 0
+
         isLoading = false
-
         renderCurrent()
     }
 
-    suspend fun goToPage(index: Int) {
-        val count = pageCount
-        if (count == 0) return
-        pageIndex = index.coerceIn(0, count - 1)
-        spotlight = null
-        pagesSeen.add(pageIndex)
-        renderCurrent()
+    /**
+     * Moves to a clause, and brings the agent's page image along with it.
+     *
+     * The two halves stay on one document position: the client reads clause N, the agent sees the
+     * page clause N is printed on. They cannot drift apart, because there is one index.
+     */
+    suspend fun goToClause(index: Int) {
+        if (clauses.isEmpty()) return
+        clauseIndex = index.coerceIn(0, clauses.lastIndex)
+
+        val page = currentClause?.pageIndex ?: return
+        if (page != pageIndex) {
+            pageIndex = page.coerceIn(0, (pageCount - 1).coerceAtLeast(0))
+            pagesSeen.add(pageIndex)
+            renderCurrent()
+        }
     }
 
-    suspend fun nextPage() = goToPage(pageIndex + 1)
+    suspend fun nextClause() = goToClause(clauseIndex + 1)
 
-    suspend fun previousPage() = goToPage(pageIndex - 1)
+    suspend fun previousClause() = goToClause(clauseIndex - 1)
 
     // region the private layer
 
@@ -171,10 +197,6 @@ class PresentState(
     /** Named `adjust` rather than `set` — the generated property setter already owns that name. */
     fun adjustLegibility(scale: Float) {
         legibility = scale.coerceIn(MIN_LEGIBILITY, MAX_LEGIBILITY)
-    }
-
-    fun castSpotlight(region: Rect?) {
-        spotlight = region
     }
 
     // region session recording
@@ -251,7 +273,6 @@ class PresentState(
         // "signed by Client".
         signerName = clientLabel.ifBlank { context.getString(R.string.default_signer) }
         // A spotlight left casting under a signature line would dim the thing being signed.
-        spotlight = null
         isSigning = true
     }
 

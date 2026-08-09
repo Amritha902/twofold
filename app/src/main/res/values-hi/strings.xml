@@ -26,6 +26,7 @@
 
     <!-- Errors, shown to the agent only -->
     <string name="error_import_failed">यह फ़ाइल आयात नहीं की जा सकी।</string>
+    <string name="no_text_warning">इस PDF से पढ़ने लायक टेक्स्ट नहीं निकाला जा सका। यह शायद स्कैन है। क्लाइंट वाला हिस्सा ख़ाली रहेगा।</string>
     <string name="error_open_failed">यह PDF नहीं खुल सकी। हो सकता है यह ख़राब हो या पासवर्ड से सुरक्षित हो।</string>
 
     <!-- Prepare mode -->
@@ -38,7 +39,7 @@
 
     <!-- Controls. Keep the visible labels short: six of them share half a folded screen. -->
     <string name="action_back">पीछे</string>
-    <string name="action_back_spoken">पिछला पेज</string>
+    <string name="action_back_spoken">पिछला खंड</string>
     <string name="action_sign">साइन</string>
     <string name="action_sign_spoken">अपने क्लाइंट से साइन करने को कहें</string>
     <string name="action_larger">बड़ा</string>
@@ -48,15 +49,17 @@
     <string name="action_open">खोलें…</string>
     <string name="action_open_spoken">कोई दूसरा दस्तावेज़ खोलें</string>
     <string name="action_next">आगे</string>
-    <string name="action_next_spoken">अगला पेज</string>
+    <string name="action_next_spoken">अगला खंड</string>
     <string name="action_cancel">रद्द करें</string>
     <string name="action_done">हो गया</string>
 
     <!-- The two panes -->
-    <string name="page_counter">%1$d / %2$d</string>
-    <string name="page_description">दस्तावेज़ का पेज %1$d, कुल %2$d</string>
-    <string name="agent_page_description">पेज %1$d की आपकी प्रति, कुल %2$d। पेज के किसी हिस्से को क्लाइंट वाले हिस्से में उभारने के लिए उस पर उंगली फेरें।</string>
-    <string name="clear_highlight">हाइलाइट हटाएँ</string>
+    <string name="clause_counter">%1$d / %2$d</string>
+    <string name="clause_description">खंड %1$d, कुल %2$d</string>
+    <string name="showing_clause">खंड %1$s दिखाया जा रहा है  %2$s</string>
+    <string name="agent_page_description">पेज %1$d की आपकी प्रति, कुल %2$d, जैसी छपी है।</string>
+
+    <string name="preparing_document">दस्तावेज़ पढ़ा जा रहा है…</string>
 
     <!-- Signing -->
     <string name="sign_prompt">कृपया नीचे साइन करें</string>

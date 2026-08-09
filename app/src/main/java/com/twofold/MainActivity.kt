@@ -116,13 +116,14 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         return
     }
 
-    // Both page fields come from `rendered`, so the number can never describe a different image.
+    // The client reads a clause; the agent sees the page it is printed on. One index drives both,
+    // so the two halves cannot drift apart.
     val clientPage = ClientPage(
-        bitmap = state.rendered.bitmap,
-        pageNumber = state.rendered.index + 1,
-        pageCount = state.pageCount,
+        clause = state.currentClause,
+        clauseNumber = state.clauseIndex + 1,
+        clauseCount = state.clauses.size,
         legibility = state.legibility,
-        spotlight = state.spotlight,
+        isPreparing = state.isLoading,
     )
 
     val agentPage = AgentPage(
@@ -130,6 +131,9 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         documentTitle = document.title,
         notes = state.currentNotes.note,
         talkTrack = state.currentNotes.talkTrack,
+        pageBitmap = state.rendered.bitmap,
+        pageNumber = state.rendered.index + 1,
+        pageCount = state.pageCount,
     )
 
     // A meeting starts when the phone is put down in front of someone and ends when it is picked
@@ -183,11 +187,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
             },
             nearPane = {
                 Column(Modifier.fillMaxWidth()) {
-                    AgentPane(
-                        page = agentPage,
-                        modifier = Modifier.weight(1f),
-                        onSpotlight = { state.castSpotlight(it) },
-                    )
+                    AgentPane(page = agentPage, modifier = Modifier.weight(1f))
                     if (state.isSigning) {
                         SigningControls(
                             canComplete = strokes.isNotEmpty(),
@@ -339,7 +339,7 @@ private fun PageControls(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Control(R.string.action_back, R.string.action_back_spoken) { scope.launch { state.previousPage() } }
+        Control(R.string.action_back, R.string.action_back_spoken) { scope.launch { state.previousClause() } }
 
         // Only offered in Twofold mode: asking for a signature when the client cannot see the
         // screen is meaningless, so the control simply isn't there.
@@ -356,7 +356,7 @@ private fun PageControls(
         }
 
         Control(R.string.action_open, R.string.action_open_spoken, onImport)
-        Control(R.string.action_next, R.string.action_next_spoken) { scope.launch { state.nextPage() } }
+        Control(R.string.action_next, R.string.action_next_spoken) { scope.launch { state.nextClause() } }
     }
 }
 
