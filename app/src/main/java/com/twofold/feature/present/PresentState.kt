@@ -51,6 +51,16 @@ class PresentState(
     private val ocrExtractor = OcrTextExtractor()
     private val translator = ClauseTranslator()
 
+    /**
+     * The client's language survives a restart.
+     *
+     * An agent sets Hindi once and expects it to stay set. Losing it on relaunch means discovering
+     * mid-meeting that the client's half is in English, which is the moment it matters most. The
+     * language pack itself is already cached by ML Kit, so restoring is instant after the first
+     * download.
+     */
+    private val prefs = context.getSharedPreferences("twofold.present", Context.MODE_PRIVATE)
+
     private var source: PdfSource? = null
     private var store: PageStore? = null
 
@@ -77,7 +87,10 @@ class PresentState(
         private set
 
     /** The language the client reads. The agent's half never changes. */
-    var clientLanguage by mutableStateOf(ClientLanguage.ORIGINAL)
+    var clientLanguage by mutableStateOf(
+        runCatching { ClientLanguage.valueOf(prefs.getString(KEY_LANGUAGE, null) ?: "ORIGINAL") }
+            .getOrDefault(ClientLanguage.ORIGINAL)
+    )
         private set
 
     var modelState by mutableStateOf(ModelState.NOT_NEEDED)
@@ -91,6 +104,7 @@ class PresentState(
      */
     suspend fun setClientLanguage(language: ClientLanguage) {
         clientLanguage = language
+        prefs.edit().putString(KEY_LANGUAGE, language.name).apply()
         modelState = if (language == ClientLanguage.ORIGINAL) ModelState.NOT_NEEDED else ModelState.DOWNLOADING
         modelState = translator.prepare(language)
         refreshClientClause()
@@ -216,6 +230,12 @@ class PresentState(
         hasNoText = !textExtractor.hasUsableText(pages)
         clauses = if (hasNoText) emptyList() else ClauseSegmenter.segmentAll(pages)
         clauseIndex = 0
+
+        // Re-arm the translator for the remembered language before the first clause is shown, so a
+        // client never briefly sees English on a device set to Hindi.
+        if (clientLanguage != ClientLanguage.ORIGINAL && modelState != ModelState.READY) {
+            modelState = translator.prepare(clientLanguage)
+        }
         refreshClientClause()
 
         isLoading = false
@@ -435,6 +455,7 @@ class PresentState(
         const val RENDER_WIDTH_PX = 1400
 
         const val RADIX_36 = 36
+        const val KEY_LANGUAGE = "client_language"
         const val MIN_LEGIBILITY = 1f
         const val MAX_LEGIBILITY = 2f
     }

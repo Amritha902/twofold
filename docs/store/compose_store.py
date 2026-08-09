@@ -84,7 +84,7 @@ def promo(dest):
     canvas = Image.new("RGB", (pw, ph), PAPER)
     d = ImageDraw.Draw(canvas)
 
-    shot = Image.open(SP / "shot_twofold.png").convert("RGB")
+    shot = Image.open(SP / "shot_hindi.png").convert("RGB")
     scale = (ph - 150) / shot.height
     shot = shot.resize((int(shot.width * scale), int(shot.height * scale)), Image.LANCZOS)
     sx = pw - shot.width - 90
@@ -97,13 +97,13 @@ def promo(dest):
     max_w = sx - 200
 
     y = 300
-    for line in wrap(d, "One device. Two sides of the table.", head_f, max_w):
+    for line in wrap(d, "They read what they sign.", head_f, max_w):
         d.text((100, y), line, font=head_f, fill=INK)
         y += 112
     y += 24
     d.line([(100, y), (220, y)], fill=SEAL, width=5)
     y += 52
-    for line in wrap(d, "They read the document. You keep your notes.", sub_f, max_w):
+    for line in wrap(d, "The clause in their language, while you work from the original.", sub_f, max_w):
         d.text((100, y), line, font=sub_f, fill=INK_MUTED)
         y += 52
 
@@ -130,21 +130,21 @@ def icon(dest, size=512):
 
 
 print("screenshots:")
+screenshot("shot_hindi.png",
+           "They read it in their own language.",
+           "The clause in Hindi on their half, the English original on yours — one document, at the same moment. On-device, so the policy never leaves your phone.",
+           "01-own-language.png")
 screenshot("shot_twofold.png",
            "One device. Two sides of the table.",
-           "They read the document. You keep your notes, your talk track, and the controls.",
-           "01-two-sided.png")
+           "They read the clause, set large enough to read across a table. You keep the whole page, your notes and your talk track.",
+           "02-two-sided.png")
 screenshot("shot_prepare.png",
-           "Prepare before you sit down.",
-           "Write a private note and a talk track for each page. Held in your hand, it is yours alone.",
-           "02-prepare.png")
-screenshot("shot_spotlight.png",
-           "Point at a clause.",
-           "Drag across your copy and it lights up on theirs. No reaching across the table.",
-           "03-spotlight.png")
+           "Set it up before you sit down.",
+           "Choose what your client reads, write a private note, and line up what you want to say. Held in your hand, it is yours alone.",
+           "03-prepare.png")
 screenshot("shot_signing.png",
            "They sign on their half.",
-           "You never hand over your phone. The signed copy carries the time and a fingerprint of the document.",
+           "You never hand over your phone. The signed copy carries the time and a fingerprint of the document as presented.",
            "04-signature.png")
 print("promo:")
 promo("promo-16x9.png")
