@@ -37,9 +37,10 @@ wrong.
 
 ## 2. Send the RevenueCat email — today
 
-Draft is written; three questions in it. It matters because the answer changes the *schedule*, not
-just the paperwork: if only a live store purchase counts, the borrowed foldable has to be booked for
-the narrow window between Samsung approving you and Sep 20.
+**The draft is in [`revenuecat-email.md`](revenuecat-email.md)** — copy the block, fill in the
+Devpost handle, send. Three questions in it, and each answer changes the schedule rather than just
+the paperwork. The one that matters most is Q2: if RevenueCat Ads counts as an alternative to a
+purchase, the store seller account stops being a hard dependency at all.
 
 **To:** shipaton@revenuecat.com
 **Time:** 2 minutes. Replies take days during a hackathon, so the cost of asking late is real.
