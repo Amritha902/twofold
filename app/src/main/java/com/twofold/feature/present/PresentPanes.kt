@@ -37,6 +37,12 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.twofold.core.design.LocalTwofoldColors
@@ -128,8 +134,16 @@ fun ClientPane(page: ClientPage, modifier: Modifier = Modifier) {
                 ) {
                     Image(
                         bitmap = bitmap.asImageBitmap(),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
+                        // The page IS the content of this half, so it gets the description and the
+                        // page counter below is hidden from screen readers to avoid saying "2 of 3"
+                        // twice. The text of a scanned page can't be read out, but knowing where
+                        // you are in the document is most of what a client needs.
+                        contentDescription = "Document page ${page.pageNumber} of ${page.pageCount}",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            // Turning a page otherwise announces nothing: focus stays on the
+                            // button and the reader has no idea the document moved.
+                            .semantics { liveRegion = LiveRegionMode.Polite },
                         // Fit, never Crop. Cropping a legal document silently hides text from the
                         // one person who most needs to read all of it.
                         contentScale = ContentScale.Fit,
@@ -176,6 +190,8 @@ fun ClientPane(page: ClientPage, modifier: Modifier = Modifier) {
             text = "${page.pageNumber} / ${page.pageCount}",
             style = MaterialTheme.typography.labelLarge,
             color = colors.inkMuted,
+            // Already announced by the page image above.
+            modifier = Modifier.clearAndSetSemantics {},
         )
     }
 }
@@ -213,13 +229,28 @@ fun AgentPane(
 
             Image(
                 bitmap = bitmap.asImageBitmap(),
-                contentDescription = null,
+                // This copy is a control, not just content — you drag on it to light a region on
+                // the client's half. Say what it does, since a drag gesture is invisible.
+                contentDescription = "Your copy of page ${page.page.pageNumber} of " +
+                    "${page.page.pageCount}. Drag across it to highlight part of the page on your " +
+                    "client's half.",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .fillMaxHeight()
                     // Same shape as the client's sheet, so a drag here maps to what they see.
                     .aspectRatio(bitmap.width.toFloat() / bitmap.height.toFloat())
                     .background(colors.paperRaised)
+                    // A drag cannot be performed with a screen reader, so the one part of this that
+                    // can be exposed as a discrete action is exposed. Casting a highlight still
+                    // needs sight; clearing one should not.
+                    .semantics {
+                        customActions = listOf(
+                            CustomAccessibilityAction("Clear the highlight") {
+                                onSpotlight(null)
+                                true
+                            }
+                        )
+                    }
                     .onSizeChanged { paneSize = Size(it.width.toFloat(), it.height.toFloat()) }
                     .pointerInput(bitmap) {
                         detectDragGestures(

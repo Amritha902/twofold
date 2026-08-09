@@ -29,6 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.revenuecat.purchases.Package
@@ -335,24 +337,41 @@ private fun PageControls(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        TextButton(onClick = { scope.launch { state.previousPage() } }) { Text("Back") }
+        Control("Back", "Previous page") { scope.launch { state.previousPage() } }
 
         // Only offered in Twofold mode: asking for a signature when the client cannot see the
         // screen is meaningless, so the control simply isn't there.
         onAskForSignature?.let { ask ->
-            TextButton(onClick = ask) { Text("Sign") }
+            Control("Sign", "Ask your client to sign", ask)
         }
 
         // Raises the type size on the client's half only. The agent's view is unchanged.
-        TextButton(
-            onClick = { state.adjustLegibility(state.legibility + LEGIBILITY_STEP) }
-        ) { Text("Larger") }
-        TextButton(
-            onClick = { state.adjustLegibility(state.legibility - LEGIBILITY_STEP) }
-        ) { Text("Smaller") }
+        Control("Larger", "Make the text larger on your client's half") {
+            state.adjustLegibility(state.legibility + LEGIBILITY_STEP)
+        }
+        Control("Smaller", "Make the text smaller on your client's half") {
+            state.adjustLegibility(state.legibility - LEGIBILITY_STEP)
+        }
 
-        TextButton(onClick = onImport) { Text("Open…") }
-        TextButton(onClick = { scope.launch { state.nextPage() } }) { Text("Next") }
+        Control("Open…", "Open a different document", onImport)
+        Control("Next", "Next page") { scope.launch { state.nextPage() } }
+    }
+}
+
+/**
+ * A control whose visible label is short and whose spoken label is not.
+ *
+ * Six controls have to fit across one half of a folded screen, so the visible text stays terse —
+ * but "Next" and "Larger" announced on their own tell a screen-reader user nothing about what
+ * they'd do. Larger than what, on whose half?
+ */
+@Composable
+private fun Control(label: String, spoken: String, onClick: () -> Unit) {
+    TextButton(
+        onClick = onClick,
+        modifier = Modifier.semantics { contentDescription = spoken },
+    ) {
+        Text(label)
     }
 }
 

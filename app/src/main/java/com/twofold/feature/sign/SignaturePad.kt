@@ -23,6 +23,8 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.twofold.core.design.LocalTwofoldColors
 
@@ -66,6 +68,12 @@ fun SignaturePad(
             Modifier
                 .fillMaxWidth()
                 .weight(1f)
+                // Without this the signature area is silent — a screen-reader user is asked to sign
+                // with no indication of where, on the one screen where getting it wrong means
+                // signing nothing at all.
+                .semantics {
+                    contentDescription = "Signature area. Draw your signature here with your finger."
+                }
                 .onSizeChanged { padSize = Size(it.width.toFloat(), it.height.toFloat()) }
                 .pointerInput(Unit) {
                     detectDragGestures(
