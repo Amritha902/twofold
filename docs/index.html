@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twofold — one device, two sides of the table</title>
+<style>
+  :root {
+    --paper:#f6f3ee; --paper-raised:#fffdf9; --ink:#1b1917;
+    --ink-muted:#6e675c; --rule:#e0d9ce; --seal:#7a3428;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper:#17150f; --paper-raised:#201d16; --ink:#ede7dc;
+            --ink-muted:#9c9384; --rule:#35301f; --seal:#c26a54; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       font-size:17px;line-height:1.65}
+  main{max-width:46rem;margin:0 auto;padding:4rem 1.5rem 6rem}
+  h1{font-family:ui-serif,Georgia,serif;font-size:clamp(2.2rem,7vw,3.4rem);
+     font-weight:400;line-height:1.1;margin:0 0 .75rem}
+  h2{font-family:ui-serif,Georgia,serif;font-size:1.35rem;font-weight:400;margin:3rem 0 .75rem}
+  .tagline{font-family:ui-serif,Georgia,serif;font-size:1.3rem;color:var(--ink-muted);margin:0 0 2rem}
+  .rule{width:120px;height:3px;background:var(--seal);border:0;margin:2rem 0}
+  p{margin:0 0 1rem} ul{margin:0 0 1rem;padding-left:1.25rem} li{margin-bottom:.5rem}
+  a{color:var(--seal);text-underline-offset:3px}
+  img{max-width:100%;height:auto;display:block;border:1px solid var(--rule);margin:1.5rem 0}
+  .links{display:flex;flex-wrap:wrap;gap:1.25rem;margin:2rem 0}
+  footer{color:var(--ink-muted);font-size:.9rem;border-top:1px solid var(--rule);
+         margin-top:4rem;padding-top:1.5rem}
+</style>
+</head>
+<body>
+<main>
+  <h1>Twofold</h1>
+  <p class="tagline">One device. Two sides of the table.</p>
+
+  <p>Lay a Galaxy foldable flat between you and your client. The crease splits the screen.
+     Their half faces them, right-side-up. Your half faces you.</p>
+
+  <p>They see the document — clean, large, nothing else. You see the same document
+     <em>plus</em> your private notes, your talk track, and the controls. You never hand over your
+     phone. They never see your notes.</p>
+
+  <img src="media/twofold-hook.gif"
+       alt="Twofold held in the hand as a private editor, then set down on a table where it becomes two-sided">
+
+  <hr class="rule">
+
+  <h2>Why it needs a foldable</h2>
+  <p>Not “works better on” — cannot exist otherwise. A conventional phone has one screen facing one
+     direction. To show a document to the person opposite you either turn the phone around and read
+     upside-down, hand it over and lose control of it, or carry a laptop that doesn't fit on the
+     table.</p>
+
+  <h2>How it decides</h2>
+  <p>Posture drives the app, not the layout. Folded or held, it's a private editor. Open and lying
+     flat, it's a two-sided device. Nobody presses “present” — they put the phone down.</p>
+  <p>A detail most foldable apps miss: <code>FLAT</code> is reported both when a device lies on a
+     table <em>and</em> when it's fully open in someone's hands. Twofold also checks gravity before
+     it splits the screen, so your private notes never rotate toward whoever is standing behind
+     you.</p>
+
+  <div class="links">
+    <a href="https://github.com/Amritha902/twofold">Source on GitHub</a>
+    <a href="privacy.html">Privacy policy</a>
+    <a href="media/twofold-demo.mp4">Demo video</a>
+  </div>
+
+  <footer>
+    Built for the RevenueCat Shipaton 2026 Galaxy category. Twofold is not a qualified electronic
+    signature service; a signed copy is a record of assent, the digital equivalent of signing a
+    printout.
+  </footer>
+</main>
+</body>
+</html>
