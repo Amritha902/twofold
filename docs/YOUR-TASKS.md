@@ -8,22 +8,21 @@ Last checked against the rules page: **2026-08-09**. Submissions close **Sep 30,
 
 ---
 
-## 1. Galaxy Store — seller account done, **commercial status not started**
+## 1. Galaxy Store — ✅ **submitted 2026-08-09, now waiting**
 
-**Status 2026-08-09:** the seller account exists and reached Step 4 Completion. That grants
-**free-application publishing only.** The portal says it plainly: *"After signing a commercial seller
-request, you can sell paid applications."*
+Seller portal shows *Type of Sales: Commercial Distribution Request in Progress*. The request is with
+a Samsung reviewer and the up-to-10-business-day clock is running. Nothing more to do until the
+approval email arrives. Ship-by is Sep 20 to leave a store-review buffer.
 
-**What is left:** the **Request Commercial Seller Status** button on that completion page. That is
-the step carrying the bank verification and the up-to-**10-business-day** queue — so the clock has
-not started yet, and it is the same clock everything else waits on. Ship-by is Sep 20 to leave a
-store-review buffer.
+**When the approval email lands, three things unlock at once:**
+1. Create the Galaxy app configuration in RevenueCat and swap the `test_` key for the `galx_` one.
+2. Set a **free trial** on the Galaxy products — the submission requires a trial or promo code so
+   judges can test premium features, and it cannot be configured on Test Store products.
+3. Make the real purchase on the borrowed foldable.
 
-Without commercial status there is no IAP, and without IAP there is no RevenueCat purchase, which is
-an eligibility requirement for every category.
-
-**Where:** https://seller.samsungapps.com — the button is on the completion page you already
-reached, or under App Management.
+**Use the License Tester setting for that purchase.** The seller portal's own note: a registered
+License Tester buying paid content in an app under beta test is not charged. Add the Samsung account
+on the borrowed device there, and the required real purchase costs nothing.
 
 **Have ready before you start:**
 - PAN card
@@ -119,17 +118,22 @@ video needs no narration anyway.
 
 ---
 
-## 5. RevenueCat dashboard — then hand it to me
+## 5. RevenueCat — ✅ **dashboard configured 2026-08-09**
 
-Create the account and the project, then tell me and I'll do the product/offering/entitlement setup
-and reconcile it against `Entitlements.kt`. You paste me the **public SDK key**; it ships inside the
-APK so it isn't a secret, but I'd rather you be the one to move it.
+Project `635c7bd8`. Entitlement `pro` created and attached to Monthly, Yearly and Lifetime; the
+`default` offering is current with three packages.
 
-One thing to know going in: the submission rules require **a free trial or a promo code so judges
-can unlock the IAP and test premium features**. A free trial on the Pro offering is the simpler of
-the two, and the app is now built to display one — see `PaywallScreen`.
+**A bug was caught doing this.** Onboarding auto-created an entitlement with the identifier
+`Twofold Pro`, but the app looks up `pro`. Identifiers are immutable, so a paying subscriber would
+have been shown the paywall forever with no error anywhere. Fixed by creating `pro` properly; the
+auto-created one is renamed "Auto-created (unused)" and left in place — deleting it is your call.
 
-**Time:** 10 minutes for you, then mine.
+**Still yours, 20 seconds:** copy the Test Store key from
+https://app.revenuecat.com/projects/635c7bd8/apps -> "Show key" into `local.properties`, after
+`REVENUECAT_GALAXY_KEY=`. The file is prepared and gitignored.
+
+**Free trial is blocked, not forgotten.** Pricing and trial period are read-only on Test Store
+products — a trial belongs to the real store product. It lands with the Galaxy config in item 1.
 
 ---
 
