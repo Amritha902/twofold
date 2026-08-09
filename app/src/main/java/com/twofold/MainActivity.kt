@@ -6,11 +6,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -44,6 +49,7 @@ import com.twofold.core.fold.FoldStateTracker
 import com.twofold.core.fold.TwofoldScaffold
 import com.twofold.data.document.ClientLanguage
 import com.twofold.data.document.ModelState
+import com.twofold.data.document.SpeechReadiness
 import com.twofold.data.document.DocumentRepository
 import com.twofold.feature.paywall.Entitlements
 import com.twofold.feature.paywall.PaywallScreen
@@ -53,6 +59,7 @@ import com.twofold.feature.present.ClientPage
 import com.twofold.feature.present.ClientPane
 import com.twofold.feature.present.PreparePane
 import com.twofold.feature.present.PresentState
+import com.twofold.data.session.MeetingKind
 import com.twofold.data.session.Session
 import com.twofold.feature.sessions.FollowUpList
 import com.twofold.feature.sign.SignaturePad
@@ -110,6 +117,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
 
     if (document == null) {
         PreparePane(
+            modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing),
             hint = state.error ?: stringResource(R.string.import_prompt),
             action = {
                 Button(onClick = { openPicker() }) { Text(stringResource(R.string.choose_pdf)) }
@@ -138,6 +146,8 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         pageCount = state.pageCount,
         textIsApproximate = state.textIsApproximate,
         sourceClause = state.sourceClause,
+        wasQuestioned = state.currentClauseWasQuestioned,
+        questionCount = state.questionedClauses.size,
     )
 
     // A meeting starts when the phone is put down in front of someone and ends when it is picked
@@ -186,7 +196,12 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
                         },
                     )
                 } else {
-                    ClientPane(clientPage)
+                    ClientPane(
+                        page = clientPage,
+                        explainLabel = state.explainLabel,
+                        explainAcknowledged = state.currentClauseWasQuestioned,
+                        onExplain = { state.markCurrentClauseQuestioned() },
+                    )
                 }
             },
             nearPane = {
@@ -229,11 +244,45 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
         )
 
         // Folded or held: private by definition, so this is where notes get written.
-        DeviceMode.PRESENT, DeviceMode.PREPARE -> Column(Modifier.fillMaxWidth()) {
+        DeviceMode.PRESENT, DeviceMode.PREPARE -> Column(
+            Modifier
+                .fillMaxWidth()
+                .windowInsetsPadding(WindowInsets.safeDrawing)
+        ) {
             ClientPane(clientPage, Modifier.weight(1f))
             FollowUpList(followUps)
             NoteEditor(state)
             PageControls(state, onImport = openPicker, onAskForSignature = null)
+        }
+    }
+}
+
+/**
+ * Which of these meetings this is. Wording only — see [MeetingKind].
+ *
+ * Scrolls horizontally. Six labels do not fit across a folded phone, and a row that silently clips
+ * its last two options is worse than one that admits it has more.
+ */
+@Composable
+private fun MeetingKindPicker(state: PresentState) {
+    val colors = LocalTwofoldColors.current
+
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(
+            text = stringResource(R.string.kind_heading),
+            style = MaterialTheme.typography.labelLarge,
+            color = colors.inkMuted,
+        )
+        Row(Modifier.horizontalScroll(rememberScrollState())) {
+            MeetingKind.entries.forEach { kind ->
+                val selected = state.meetingKind == kind
+                TextButton(onClick = { state.chooseMeetingKind(kind) }) {
+                    Text(
+                        text = stringResource(kind.label),
+                        color = if (selected) colors.seal else colors.inkMuted,
+                    )
+                }
+            }
         }
     }
 }
@@ -277,9 +326,11 @@ private fun NoteEditor(state: PresentState) {
             value = state.clientLabel,
             onValueChange = { state.clientLabel = it },
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(stringResource(R.string.who_are_you_meeting)) },
+            label = { Text(stringResource(state.meetingKind.partyPrompt)) },
             singleLine = true,
         )
+
+        MeetingKindPicker(state)
 
         LanguagePicker(state)
 
@@ -345,7 +396,7 @@ private fun LanguagePicker(state: PresentState) {
             style = MaterialTheme.typography.labelLarge,
             color = colors.inkMuted,
         )
-        Row {
+        Row(Modifier.horizontalScroll(rememberScrollState())) {
             listOf(
                 ClientLanguage.ORIGINAL to R.string.lang_original,
                 ClientLanguage.HINDI to R.string.lang_hindi,
@@ -368,6 +419,12 @@ private fun LanguagePicker(state: PresentState) {
             ModelState.READY -> StatusLine(stringResource(R.string.lang_ready), colors.note)
             else -> Unit
         }
+
+        // Only when the engine has actually said no. While it is still binding the answer is
+        // unknown, and announcing a missing feature that is merely slow is its own kind of wrong.
+        if (state.speech == SpeechReadiness.NO_VOICE) {
+            StatusLine(stringResource(R.string.speech_unavailable), colors.inkMuted)
+        }
     }
 }
 
@@ -384,6 +441,8 @@ private fun PageControls(
 ) {
     val scope = rememberCoroutineScope()
 
+    val inMeeting = onAskForSignature != null
+
     Row(
         Modifier
             .fillMaxWidth()
@@ -392,6 +451,19 @@ private fun PageControls(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Control(R.string.action_back, R.string.action_back_spoken) { scope.launch { state.previousClause() } }
+
+        // The clause, out loud, in the client's language — for the larger group who cannot read it
+        // in any language. Hidden rather than disabled when the phone has no such voice: a control
+        // that is permanently greyed out is just clutter on a half this size.
+        if (inMeeting && state.canSpeak) {
+            if (state.isSpeaking) {
+                Control(R.string.action_stop, R.string.action_stop_spoken) { state.stopSpeaking() }
+            } else {
+                Control(R.string.action_read, R.string.action_read_spoken) {
+                    scope.launch { state.speakCurrentClause() }
+                }
+            }
+        }
 
         // Only offered in Twofold mode: asking for a signature when the client cannot see the
         // screen is meaningless, so the control simply isn't there.
@@ -407,7 +479,12 @@ private fun PageControls(
             state.adjustLegibility(state.legibility - LEGIBILITY_STEP)
         }
 
-        Control(R.string.action_open, R.string.action_open_spoken, onImport)
+        // Not offered mid-meeting. Opening a file picker while someone is reading a contract in
+        // front of you shows them your document library, which is every other client you have.
+        if (!inMeeting) {
+            Control(R.string.action_open, R.string.action_open_spoken, onImport)
+        }
+
         Control(R.string.action_next, R.string.action_next_spoken) { scope.launch { state.nextClause() } }
     }
 }

@@ -59,6 +59,35 @@
     <string name="lang_failed">Could not download that language. Connect once, then try again.</string>
     <string name="lang_ready">Ready — your client will read this in their language, offline.</string>
 
+    <!-- What kind of meeting this is. Changes the wording only — see MeetingKind. -->
+    <string name="kind_heading">What are you sitting down to sign?</string>
+    <string name="kind_insurance">Insurance</string>
+    <string name="kind_lending">Loan</string>
+    <string name="kind_medical">Consent</string>
+    <string name="kind_tenancy">Tenancy</string>
+    <string name="kind_employment">Employment</string>
+    <string name="kind_other">Other</string>
+    <string name="party_client">Who are you meeting?</string>
+    <string name="party_borrower">Who is borrowing?</string>
+    <string name="party_patient">Who is the patient?</string>
+    <string name="party_tenant">Who is renting?</string>
+    <string name="party_employee">Who is signing on?</string>
+    <string name="party_signer">Who is signing?</string>
+
+    <!-- Reading the clause out loud. Translation helps a client who can read their own language;
+         this is for the larger number who cannot read one at all. -->
+    <string name="action_read">Read</string>
+    <string name="action_read_spoken">Read this clause aloud in your client\'s language</string>
+    <string name="action_stop">Stop</string>
+    <string name="action_stop_spoken">Stop reading aloud</string>
+    <string name="speech_unavailable">This phone has no voice for that language. Everything else still works.</string>
+
+    <!-- The client's only control, other than signing. Shown on their half and translated into
+         their language along with the clause. -->
+    <string name="client_explain_spoken">Ask for this clause to be explained</string>
+    <string name="they_asked">They asked about this one.</string>
+    <string name="questions_counted">Asked about %1$d so far — recorded on the signed copy.</string>
+
     <!-- Signing -->
     <string name="sign_prompt">Please sign below</string>
     <string name="signature_area_description">Signature area. Draw your signature here with your finger.</string>

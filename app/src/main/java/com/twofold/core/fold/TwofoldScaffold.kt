@@ -6,7 +6,12 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -39,7 +44,7 @@ fun TwofoldScaffold(
     val creaseFraction = foldState.creaseFraction
 
     if (!foldState.isTwofold || creaseFraction == null) {
-        Box(modifier.fillMaxSize()) { nearPane() }
+        Box(modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) { nearPane() }
         return
     }
 
@@ -49,13 +54,32 @@ fun TwofoldScaffold(
 
         Column(Modifier.fillMaxSize()) {
             // Far half: rotated 180° so the client reads it the right way up.
+            //
+            // The inset padding sits *outside* the rotation and *inside* the fixed height, and both
+            // halves of that matter. Inside the height, because the crease position is a fraction of
+            // the whole window — inset the window first and the split lands off the physical fold.
+            // Outside the rotation, because insets are in screen space: this pane's own "bottom" is
+            // the top of the screen, so padding applied within the rotated content would go to the
+            // wrong edge entirely. That was not theoretical. Under the edge-to-edge behaviour that
+            // is now mandatory, the client's button sat underneath the status bar, which quietly ate
+            // every tap on it.
             Box(
                 Modifier
                     .fillMaxWidth()
                     .height(farHeight)
-                    .rotate(180f)
             ) {
-                if (agentOnNearHalf) farPane() else nearPane()
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(
+                                WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+                            )
+                        )
+                        .rotate(180f)
+                ) {
+                    if (agentOnNearHalf) farPane() else nearPane()
+                }
             }
 
             // The crease. Not hidden, not decorated — a single hairline on the fold itself.
@@ -72,6 +96,11 @@ fun TwofoldScaffold(
                 Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal
+                        )
+                    )
             ) {
                 if (agentOnNearHalf) nearPane() else farPane()
             }

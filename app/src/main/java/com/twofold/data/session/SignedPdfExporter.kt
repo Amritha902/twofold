@@ -52,6 +52,7 @@ class SignedPdfExporter(private val context: Context) {
         sourceFile: File,
         signature: SignatureRecord,
         signedPageIndex: Int,
+        questionedClauses: List<String>,
         isPro: Boolean,
     ): File? = withContext(Dispatchers.IO) {
         runCatching {
@@ -69,7 +70,10 @@ class SignedPdfExporter(private val context: Context) {
                 page.canvas.drawBitmap(bitmap, 0f, 0f, null)
                 if (index == signedPageIndex) {
                     drawSignature(page.canvas, signature, bitmap.width, bitmap.height)
-                    drawAuditLine(page.canvas, signature, hash, bitmap.width, bitmap.height)
+                    drawAuditLine(
+                        page.canvas, signature, hash, questionedClauses,
+                        bitmap.width, bitmap.height,
+                    )
                 }
                 if (!isPro) {
                     drawWatermark(page.canvas, bitmap.width, bitmap.height)
@@ -138,6 +142,7 @@ class SignedPdfExporter(private val context: Context) {
         canvas: Canvas,
         signature: SignatureRecord,
         documentHash: String,
+        questionedClauses: List<String>,
         pageWidth: Int,
         pageHeight: Int,
     ) {
@@ -152,7 +157,20 @@ class SignedPdfExporter(private val context: Context) {
             isAntiAlias = true
         }
 
-        canvas.drawText(text, pageWidth * AUDIT_MARGIN, pageHeight * (1f - AUDIT_MARGIN), paint)
+        val baseline = pageHeight * (1f - AUDIT_MARGIN)
+        canvas.drawText(text, pageWidth * AUDIT_MARGIN, baseline, paint)
+
+        // The clauses the signer stopped on. Only written when there were some — an absent line
+        // means nothing was asked, and a line reading "asked about: none" would invite being read
+        // as evidence that nothing needed asking, which it is not.
+        if (questionedClauses.isNotEmpty()) {
+            canvas.drawText(
+                "Explained on request: ${questionedClauses.joinToString(", ").take(QUESTION_LINE_CHARS)}",
+                pageWidth * AUDIT_MARGIN,
+                baseline - paint.textSize * AUDIT_LINE_SPACING,
+                paint,
+            )
+        }
     }
 
     /**
@@ -199,6 +217,8 @@ class SignedPdfExporter(private val context: Context) {
         const val AUDIT_TEXT_FRACTION = 0.012f
         const val AUDIT_MARGIN = 0.04f
         const val HASH_PREFIX_CHARS = 16
+        const val QUESTION_LINE_CHARS = 120
+        const val AUDIT_LINE_SPACING = 1.5f
         const val WATERMARK_ALPHA = 48
         const val WATERMARK_TEXT_FRACTION = 0.075f
         const val WATERMARK_ANGLE = -30f

@@ -10,13 +10,25 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
-/** A language the client's half can be shown in. English means "show the original". */
-enum class ClientLanguage(val code: String?) {
-    ORIGINAL(null),
-    HINDI(TranslateLanguage.HINDI),
-    TAMIL(TranslateLanguage.TAMIL),
-    BENGALI(TranslateLanguage.BENGALI),
-    MARATHI(TranslateLanguage.MARATHI),
+/**
+ * A language the client's half can be shown in. English means "show the original".
+ *
+ * [explainLabel] is written by hand and deliberately not a string resource. It follows the
+ * *client's* language, not the phone's, so `values-hi` must never get a say in it — an agent whose
+ * own device is set to Hindi is still showing an English-reading client an English button.
+ *
+ * It is not machine-translated either, and that was a deliberate reversal. Translating "Explain
+ * this" through ML Kit produced "यह समझाओ" — the familiar imperative, the form used with a child or
+ * a subordinate. For an app whose entire argument is that the person signing deserves to be
+ * addressed properly, having their one button address them informally is the sort of detail that
+ * quietly undoes the point. Five short strings are worth writing correctly.
+ */
+enum class ClientLanguage(val code: String?, val explainLabel: String) {
+    ORIGINAL(null, "Explain this"),
+    HINDI(TranslateLanguage.HINDI, "यह समझाइए"),
+    TAMIL(TranslateLanguage.TAMIL, "இதை விளக்குங்கள்"),
+    BENGALI(TranslateLanguage.BENGALI, "এটি বুঝিয়ে বলুন"),
+    MARATHI(TranslateLanguage.MARATHI, "हे समजावून सांगा"),
 }
 
 /** Where a language pack is in its lifecycle. The agent needs to know before a meeting, not during. */

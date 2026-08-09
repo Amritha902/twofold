@@ -10,6 +10,8 @@
 | Hinge angle | `Sensor.TYPE_HINGE_ANGLE` (Samsung + Pixel Fold), for transition animation only |
 | PDF rendering | `android.graphics.pdf.PdfRenderer` / `PdfDocument` (AOSP) — the agent's half |
 | PDF text | PdfBox-Android 2.0.27 (Apache 2.0) — the client's half needs words, and the platform exposes none |
+| Scanned text | ML Kit text recognition, on-device, Latin + Devanagari |
+| Translation | ML Kit on-device translation — Hindi, Tamil, Bengali, Marathi |
 | Storage | JSON via `org.json` + app-private files (no Room) |
 | Type | Source Serif 4 + Inter, embedded (SIL OFL) |
 | Billing | `purchases-android` 10.16.1 with `purchases-store-galaxy`, `GalaxyConfiguration` |
@@ -141,6 +143,36 @@ One entitlement, `pro`. Everything gates on `customerInfo.entitlements["pro"]?.i
 requires a physical Galaxy device signed into a Samsung account. The purchase path is therefore built
 against RevenueCat's Test Store first, and validated for real only during the borrowed-device window.
 See [SHIPATON.md](SHIPATON.md).
+
+## Reading a document
+
+Three routes, in order of preference:
+
+1. **Embedded text layer** via PdfBox. Instant and exact.
+2. **OCR** when there is none, which is common — much Indian paperwork arrives as a scan. Slow
+   (~1s a page) and *approximate*: it reads in visual order, so a two-column table can flatten into
+   the paragraph below it and land under the wrong heading. The agent's half says so; the client's
+   does not, because a warning there would undermine a document the agent is about to explain.
+3. **Nothing readable**, reported honestly rather than showing a blank half.
+
+Text is then split by `ClauseSegmenter` — pure, Android-free, and unit-tested, for the same reason
+`FoldLogic` is.
+
+## Translation
+
+The client's clause is translated on-device; the agent always keeps the source wording, held
+separately on `AgentPage` so an agent never ends up reading a machine translation of their own
+policy back to themselves.
+
+The language is chosen on the prepare screen, not mid-meeting: a pack is tens of megabytes and a
+client should never watch a progress bar. It persists across restarts, and the translator re-arms
+before the first clause renders so the client never briefly sees the wrong language.
+
+## Size
+
+On-device OCR ships a ~10MB native library **per ABI**, which took the release APK from 6.7MB to
+55.5MB. Restricting to `arm64-v8a` — every Galaxy foldable is arm64 — and dropping BouncyCastle's
+post-quantum test vectors brings it to ~23MB.
 
 ## Offline
 

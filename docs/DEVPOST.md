@@ -15,8 +15,8 @@ Twofold
 *(Devpost caps this around 200 characters.)*
 
 ```
-Lay a Galaxy foldable flat between you and your client. The crease splits the screen — they read
-the document, you keep your notes. One device, two audiences, deliberately unequal.
+Millions sign financial documents they cannot read. Lay a Galaxy foldable flat on the table and
+they read the clause in their own language, while you work from the original.
 ```
 
 ---
@@ -43,7 +43,8 @@ stayed empty.
 You lay the phone flat on the table. That's the whole interface.
 
 - **Their half** shows one clause as text, right-side-up to them, at a size readable across a
-  table. Not a page image: that half is 130 × 63 mm, and a fitted A4 page renders 10pt type at 2pt.
+  table — and in Hindi, Tamil, Bengali or Marathi if that is what they read. Not a page image: that
+  half is 130 × 63 mm, and a fitted A4 page renders 10pt type at 2pt.
 - **Your half** shows the same document plus your private notes, your talk track, and the controls.
 - **Move to a clause** and it appears in front of them, because it's one index, not two synced
   viewers.
@@ -70,6 +71,20 @@ cross-platform layer would only have got in the way of both.
 - **Storage** — JSON in app-private files. No Room: the entire persisted schema is smaller than one
   screen displays, and a migration framework for that is more machinery than the data deserves.
 
+### The thing I would show a judge first
+
+**One document, two languages, at the same instant.** The client reads clause 3 in Hindi; the agent
+reads it in English, on the same screen, in the same second. That needs two surfaces facing
+opposite directions, which needs a foldable.
+
+Samsung's own Interpreter proves two-sided translation matters — but it does live *speech*, on the
+cover screen. Nobody has done it for the *document*, which is the thing people actually sign. And
+it only became possible after the client's half stopped being a picture of a page, because you
+cannot translate a bitmap.
+
+It runs on-device. A stranger's insurance policy is not something to upload to a translation
+server.
+
 ### Challenges I ran into
 
 **`FLAT` doesn't mean "on a table."** This is the one that mattered. `FoldingFeature.State.FLAT` is
@@ -91,6 +106,15 @@ screen ever reached — the session log, the spotlight, the talk-track editor, t
 "It's built" and "it's reachable" turned out to be different claims. I ended up enumerating every
 declared function in the app and checking each was referenced from a screen — which found a fifth,
 a page-geometry helper written for a layout that never needed it.
+
+**The product turned on an assumption nobody had measured.** I built the whole two-sided document
+viewer before working out that the client's half is 130 × 63 mm — and that an A4 page fitted into
+it renders 10pt type at 2pt. Unreadable. Every screenshot hid it, because a 2076px render on a
+monitor is nothing like 63mm of glass across a table. It demoed beautifully and did not work.
+
+The fix forced a better product. Text instead of a page image; one clause at a time; and, because
+text can be translated where a bitmap cannot, the client's own language. The constraint was the
+design.
 
 **Nothing is real until it runs.** The app compiled and passed tests for a full day before it ever
 met a folding device. First run, the signed PDF came out attributed to *the document's own
@@ -133,13 +157,11 @@ my test document was mostly empty white, which had been quietly making every scr
 
 ### What's next
 
-**The client's half in the client's own language, while the agent works from the original.**
-On-device, offline, both views of one document at the same moment — which is a thing only a foldable
-can do. Millions of people in India sign financial documents they cannot read, while the person
-selling to them translates aloud, approximately, in their own interest. That's the version worth
-building.
+**More languages, and better handling of scans.** Four Indian languages are in; there are twenty-two
+official ones. And OCR currently reads a two-column benefits table in visual order, so it can attach
+figures to the wrong clause — the agent is warned, but the honest fix is layout-aware extraction.
 
-Before that: ten conversations with real agents. The thesis is well-argued and completely
+Before either: ten conversations with real agents. The thesis is well-argued and completely
 unvalidated, and I'd rather find out in week one than after launch.
 
 ---

@@ -75,6 +75,33 @@
     <string name="lang_failed">यह भाषा डाउनलोड नहीं हो सकी। एक बार कनेक्ट करके दोबारा कोशिश करें।</string>
     <string name="lang_ready">तैयार — आपका क्लाइंट इसे अपनी भाषा में पढ़ेगा, बिना इंटरनेट के।</string>
 
+    <!-- What kind of meeting this is -->
+    <string name="kind_heading">आप क्या हस्ताक्षर कराने बैठे हैं?</string>
+    <string name="kind_insurance">बीमा</string>
+    <string name="kind_lending">ऋण</string>
+    <string name="kind_medical">सहमति</string>
+    <string name="kind_tenancy">किरायेदारी</string>
+    <string name="kind_employment">नौकरी</string>
+    <string name="kind_other">अन्य</string>
+    <string name="party_client">आप किससे मिल रहे हैं?</string>
+    <string name="party_borrower">ऋण कौन ले रहा है?</string>
+    <string name="party_patient">मरीज़ कौन है?</string>
+    <string name="party_tenant">किराए पर कौन ले रहा है?</string>
+    <string name="party_employee">कौन शामिल हो रहा है?</string>
+    <string name="party_signer">हस्ताक्षर कौन कर रहा है?</string>
+
+    <!-- Reading aloud -->
+    <string name="action_read">पढ़ें</string>
+    <string name="action_read_spoken">यह खंड ग्राहक की भाषा में ज़ोर से पढ़ें</string>
+    <string name="action_stop">रोकें</string>
+    <string name="action_stop_spoken">पढ़ना रोकें</string>
+    <string name="speech_unavailable">इस फ़ोन में उस भाषा की आवाज़ नहीं है। बाकी सब काम करता है।</string>
+
+    <!-- The client's own control -->
+    <string name="client_explain_spoken">इस खंड को समझाने के लिए कहें</string>
+    <string name="they_asked">उन्होंने इसके बारे में पूछा।</string>
+    <string name="questions_counted">अब तक %1$d के बारे में पूछा — हस्ताक्षरित प्रति पर दर्ज।</string>
+
     <!-- Signing -->
     <string name="sign_prompt">कृपया नीचे साइन करें</string>
     <string name="signature_area_description">साइन करने की जगह। यहाँ अपनी उंगली से साइन करें।</string>

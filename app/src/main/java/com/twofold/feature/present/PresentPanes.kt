@@ -20,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -110,6 +112,10 @@ data class AgentPage(
     val pageCount: Int = 1,
     /** Clauses came from OCR, so treat the wording as approximate. Agent's half only. */
     val textIsApproximate: Boolean = false,
+    /** The client tapped to have this clause explained. */
+    val wasQuestioned: Boolean = false,
+    /** How many they have asked about so far — all of which reach the signed copy. */
+    val questionCount: Int = 0,
     /**
      * The clause in its original wording.
      *
@@ -133,7 +139,20 @@ data class AgentPage(
  * which is the entire point of the exercise.
  */
 @Composable
-fun ClientPane(page: ClientPage, modifier: Modifier = Modifier) {
+fun ClientPane(
+    page: ClientPage,
+    modifier: Modifier = Modifier,
+    /**
+     * The client's own button, already in the client's language.
+     *
+     * Passed in rather than added to [ClientPage] on purpose. A callback carries no data, so the
+     * leak guarantee is untouched — the type still has nowhere to put a private note. The moment
+     * this becomes a *field*, that stops being true.
+     */
+    explainLabel: String = "",
+    explainAcknowledged: Boolean = false,
+    onExplain: (() -> Unit)? = null,
+) {
     val colors = LocalTwofoldColors.current
     val clause = page.clause
 
@@ -188,16 +207,41 @@ fun ClientPane(page: ClientPage, modifier: Modifier = Modifier) {
 
         Spacer(Modifier.height(12.dp))
 
-        Text(
-            text = stringResource(R.string.clause_counter, page.clauseNumber, page.clauseCount),
-            style = MaterialTheme.typography.labelLarge,
-            color = colors.inkMuted,
-            modifier = Modifier
-                .fillMaxWidth()
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // Understated on purpose. A prominent button would read as the app inviting the client
+            // to doubt the person sitting opposite; a quiet one reads as permission to ask, which
+            // is the thing that is actually missing from the conversation.
+            if (onExplain != null && explainLabel.isNotBlank()) {
+                val spoken = stringResource(R.string.client_explain_spoken)
+                TextButton(
+                    onClick = onExplain,
+                    modifier = Modifier.semantics { contentDescription = spoken },
+                ) {
+                    Text(
+                        text = explainLabel,
+                        style = MaterialTheme.typography.labelLarge,
+                        // Once asked, it stays marked. Tapping again and seeing nothing change is
+                        // how someone concludes the button did nothing the first time.
+                        color = if (explainAcknowledged) colors.seal else colors.inkMuted,
+                    )
+                }
+            } else {
+                Spacer(Modifier.height(0.dp))
+            }
+
+            Text(
+                text = stringResource(R.string.clause_counter, page.clauseNumber, page.clauseCount),
+                style = MaterialTheme.typography.labelLarge,
+                color = colors.inkMuted,
                 // Announced by the live region above.
-                .clearAndSetSemantics {},
-            textAlign = TextAlign.Center,
-        )
+                modifier = Modifier.clearAndSetSemantics {},
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 
@@ -269,6 +313,25 @@ fun AgentPane(
                     ).trim(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = colors.seal,
+                )
+            }
+
+            // The whole point of the client's button: it has to land somewhere the agent will see
+            // it mid-sentence, without looking up.
+            if (page.wasQuestioned) {
+                Text(
+                    text = stringResource(R.string.they_asked),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = colors.seal,
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Assertive },
+                )
+            }
+
+            if (page.questionCount > 0) {
+                Text(
+                    text = stringResource(R.string.questions_counted, page.questionCount),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = colors.inkMuted,
                 )
             }
 
