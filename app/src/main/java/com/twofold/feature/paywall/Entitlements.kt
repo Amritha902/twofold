@@ -3,6 +3,7 @@ package com.twofold.feature.paywall
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
@@ -15,6 +16,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.galaxy.GalaxyConfiguration
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
@@ -43,7 +45,8 @@ class Entitlements private constructor(private val prefs: SharedPreferences) {
     /** Cached at first read so the very first frame after launch is already correct. */
     val isPro: StateFlow<Boolean> = _isPro.asStateFlow()
 
-    val isConfigured: Boolean get() = BuildConfig.REVENUECAT_GALAXY_KEY.isNotBlank()
+    val isConfigured: Boolean
+        get() = BillingKey.isUsable(BuildConfig.REVENUECAT_GALAXY_KEY, BuildConfig.DEBUG)
 
     fun refresh() {
         if (!isConfigured) return
@@ -112,6 +115,7 @@ class Entitlements private constructor(private val prefs: SharedPreferences) {
         /** The single entitlement. Everything paid gates on this one flag. */
         const val PRO_ENTITLEMENT = "pro"
 
+        private const val TAG = "TwofoldBilling"
         private const val PREFS_NAME = "twofold.entitlements"
         private const val KEY_CACHED_PRO = "cached_pro"
 
@@ -119,15 +123,26 @@ class Entitlements private constructor(private val prefs: SharedPreferences) {
             val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             val entitlements = Entitlements(prefs)
 
+            val key = BuildConfig.REVENUECAT_GALAXY_KEY
+            BillingKey.warning(key, BuildConfig.DEBUG)?.let { Log.w(TAG, it) }
+
             if (entitlements.isConfigured) {
                 Purchases.logLevel = if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.ERROR
+
                 // GalaxyConfiguration, not the generic PurchasesConfiguration. The generic builder
                 // compiles fine and then routes purchases to Play Billing, which on a Galaxy Store
                 // build means every purchase silently fails.
-                Purchases.configure(
-                    GalaxyConfiguration.Builder(context, BuildConfig.REVENUECAT_GALAXY_KEY)
-                        .build()
-                )
+                //
+                // The Test Store is the exception, and only in debug: it is not a Samsung store, so
+                // it takes the plain builder. See BillingKey for why a test key never reaches a
+                // release build at all.
+                val configuration = if (BillingKey.usesGalaxyStore(key)) {
+                    GalaxyConfiguration.Builder(context, key).build()
+                } else {
+                    PurchasesConfiguration.Builder(context, key).build()
+                }
+
+                Purchases.configure(configuration)
                 entitlements.refresh()
             }
 

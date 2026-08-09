@@ -1,6 +1,7 @@
 package com.twofold.data.document
 
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.devanagari.DevanagariTextRecognizerOptions
@@ -57,14 +58,37 @@ class OcrTextExtractor {
         }
     }
 
+    /**
+     * Recognised text for one page, in reading order.
+     *
+     * Not `Text.text`, which is what this used to return. That property concatenates blocks roughly
+     * as they were found, which is close enough for prose and wrong for the two-column benefit
+     * tables every policy summary opens with — it could emit every label, then every figure, then
+     * the paragraph below, which segments a number under the wrong heading. See [ReadingOrder].
+     */
     private suspend fun TextRecognizer.recognise(image: InputImage): String =
         suspendCancellableCoroutine { continuation ->
             process(image)
-                .addOnSuccessListener { continuation.resume(it.text) }
+                .addOnSuccessListener { result ->
+                    continuation.resume(ReadingOrder.text(result.readingBlocks()))
+                }
                 // A page that cannot be recognised yields nothing rather than failing the whole
                 // document — one unreadable page should not cost the agent the other nine.
                 .addOnFailureListener { continuation.resume("") }
         }
+
+    /**
+     * ML Kit's blocks as plain geometry.
+     *
+     * A block without a bounding box cannot be placed, so it is dropped rather than guessed at — an
+     * unplaceable fragment landing at the top of a clause is worse than it being absent, because the
+     * client cannot tell the difference and the agent has no reason to look.
+     */
+    private fun Text.readingBlocks(): List<TextBlock> = textBlocks.mapNotNull { block ->
+        val box = block.boundingBox ?: return@mapNotNull null
+        val text = block.text.trim().ifBlank { return@mapNotNull null }
+        TextBlock(text, box.left, box.top, box.right, box.bottom)
+    }
 
     private companion object {
         /** Wider than the screen needs; recognition accuracy on small print depends on it. */
