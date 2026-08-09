@@ -56,11 +56,7 @@ class DocumentRepository(private val context: Context) {
      * gets a numbered suffix rather than silently overwriting the first.
      */
     private fun uniqueFile(rawTitle: String): File {
-        val safe = rawTitle
-            .replace(ILLEGAL_FILENAME_CHARS, " ")
-            .trim()
-            .take(MAX_TITLE_LENGTH)
-            .ifBlank { DEFAULT_TITLE }
+        val safe = sanitizeTitle(rawTitle)
 
         var candidate = File(documentsDir, "$safe.pdf")
         var n = 2
@@ -98,14 +94,32 @@ class DocumentRepository(private val context: Context) {
                 if (index < 0) null else cursor.getString(index)?.removeSuffix(".pdf")
             }
 
-    private companion object {
-        const val DOCUMENTS_DIR = "documents"
+    companion object {
+        /**
+         * Turns a picked file's display name into something safe to store as a filename.
+         *
+         * Public and pure so it can be unit-tested. The bug it guards against — the title
+         * degenerating into a base-36 id after a restart — was found by running the app, and a
+         * test on this function would have found it first.
+         */
+        fun sanitizeTitle(rawTitle: String): String = rawTitle
+            .replace(ILLEGAL_FILENAME_CHARS, " ")
+            .replace(WHITESPACE_RUN, " ")
+            .trim()
+            .take(MAX_TITLE_LENGTH)
+            .trim()
+            .ifBlank { DEFAULT_TITLE }
+
+        private const val DOCUMENTS_DIR = "documents"
         const val DEFAULT_TITLE = "Untitled document"
 
         /** Path separators, characters filesystems reject, and control characters. */
-        val ILLEGAL_FILENAME_CHARS = Regex("""[/\\:*?"<>|\x00-\x1F]""")
+        private val ILLEGAL_FILENAME_CHARS = Regex("""[/\\:*?"<>|\x00-\x1F]""")
+
+        /** Collapses the runs of spaces left behind once illegal characters are replaced. */
+        private val WHITESPACE_RUN = Regex("""\s{2,}""")
 
         /** Long enough for a real policy name, short of any filesystem limit. */
-        const val MAX_TITLE_LENGTH = 80
+        private const val MAX_TITLE_LENGTH = 80
     }
 }
