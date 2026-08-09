@@ -180,6 +180,24 @@ lands on the lock screen or notification shade, which `uiautomator dump` then re
 app; and `accelerometer_rotation` silently reverts to 1, taking the crease back to vertical. Two
 rounds of results here were measuring the notification shade before that was noticed.
 
+## Two settings a judge might have on
+
+Both checked on the device rather than assumed, because either could make the app look broken to
+someone who never changed a setting for us.
+
+**Dark mode** works: `isSystemInDarkTheme()` swaps the palette, the framework theme has a
+`values-night` counterpart so the window background matches before Compose draws, and the warm ink
+and seal red both hold up against dark paper.
+
+**200% font scale** holds without clipping. Every control stays on screen and reachable, and the
+agent's column scrolls rather than truncating. It works because the client's half was already sized
+in `sp` from a physical measurement rather than a fixed `dp`, so system scaling compounds with the
+legibility control instead of fighting it.
+
+That check found a string rather than a layout: with the type large enough to read properly,
+"Showing clause —" was obviously useless. Text a document never numbered has no clause number to
+quote, so it is now named by position — the same way the jump strip announces it.
+
 ## Reading a document
 
 Three routes, in order of preference:

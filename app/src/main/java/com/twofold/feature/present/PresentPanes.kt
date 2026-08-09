@@ -318,9 +318,20 @@ fun AgentPane(
             // without looking up from their own half.
             (page.sourceClause ?: page.page.clause)?.let { clause ->
                 Text(
-                    text = stringResource(
-                        R.string.showing_clause, clause.label, clause.heading.orEmpty(),
-                    ).trim(),
+                    // "Showing clause —" told the agent nothing. Text the document never numbered
+                    // has no clause number to quote, so it is named by position instead, matching
+                    // what the jump strip announces.
+                    text = if (clause.label == Clause.UNNUMBERED) {
+                        stringResource(
+                            R.string.showing_section,
+                            page.page.clauseNumber,
+                            page.page.clauseCount,
+                        )
+                    } else {
+                        stringResource(
+                            R.string.showing_clause, clause.label, clause.heading.orEmpty(),
+                        ).trim()
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     color = colors.seal,
                 )
