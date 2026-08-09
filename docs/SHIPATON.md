@@ -16,9 +16,28 @@ Planning started Aug 8, 2026. Roughly six usable weeks at a few hours per week.
 1. **First public release must land inside Aug 1 – Sep 30, 2026.** An update to an already-released
    app is ineligible. Twofold is new, so this is satisfied, but it means nothing ships early "just to
    test the pipeline" under a different listing.
-2. **RevenueCat SDK must power at least one real in-app or web purchase.** Not a mock paywall.
-3. **Galaxy category requires publication on the Samsung Galaxy Store**, a live listing URL, and a
-   written description of the Galaxy optimization. 20% of the category score is exactly that.
+2. **RevenueCat SDK must power at least one real in-app or web purchase.** Not a mock paywall. The
+   headline blurb also mentions "or serve ads through RevenueCat Ads", but the formal REQUIREMENTS
+   section says purchase only — do not plan around the ads route until that is confirmed.
+3. **Galaxy category requires publication on the Samsung Galaxy Store.** Note the wording checked on
+   the rules page 2026-08-09: *"Galaxy Store exclusivity may receive bonus consideration but is not
+   required."* Publishing to Galaxy Store is required for the category; being Galaxy-**only** is a
+   bonus, not an entry condition.
+
+**Devpost submission checklist, verbatim from the rules page (checked 2026-08-09):**
+
+| Required | State |
+|---|---|
+| Text description of features and functionality | Done — `docs/DEVPOST.md` |
+| Demo video, **≤2 minutes**, **hosted on YouTube or Vimeo**, publicly visible | **Gap.** The 34s cut exists but is an mp4 on GitHub Pages. A YouTube or Vimeo upload is mandatory. |
+| Video shows the app *running on the device it was built for* | **Risk.** Current footage is an emulator. Reshoot on the borrowed foldable if at all possible. |
+| URL to the fully published app | Blocked on Galaxy Store seller verification |
+| **1024×1024** app icon | Done — `docs/store/icon-1024.png` |
+| ≥1 screenshot at **1179×2556, no device frame** | Done — `docs/store/devpost-01-two-sided.png`, `-02-prepare.png` |
+| Free trial **or** a promo code so judges can unlock the IAP | **Gap.** Neither is configured yet. A free trial on the Pro offering is the simpler of the two. |
+
+Two of those gaps are new information and neither was in the earlier plan: the video must be on
+YouTube or Vimeo rather than self-hosted, and judges must be able to get past the paywall.
 
 ## Critical path
 
@@ -69,8 +88,13 @@ One app, several categories. Primary target first, then whatever is nearly free.
 | OneSignal ($45K) | Low | Genuinely useful here: nudge the agent when a presented document went unsigned |
 | Stripe web-to-app ($30K) | Medium | A web funnel selling Pro. Only if weeks 1–4 land on time. |
 
-Galaxy Store **exclusivity earns bonus consideration** and costs us nothing, since Play and App Store
-aren't in scope for this timeline. Ship Galaxy-only.
+Galaxy Store **exclusivity earns bonus consideration but is explicitly not required**, so shipping
+Galaxy-only is a choice rather than an obligation — and that matters as a hedge. A Google Play
+developer account is a one-off $25 with review usually inside 48 hours, against Samsung commercial
+seller verification quoted at up to 10 business days. If Samsung's queue looks like missing Sep 20,
+publishing to Play as well keeps every non-Galaxy category alive (Grand Prize, HAMM, Design, Peace,
+#BuildInPublic) at the cost of only the exclusivity bonus. Galaxy Store publication is still
+mandatory for the Galaxy category itself; nothing substitutes for it there.
 
 ## The submission itself
 

@@ -251,6 +251,11 @@ rather than asserted.
 A [14-second cut](https://amritha902.github.io/twofold/media/twofold-hook.mp4) of just the
 transition is there too, for anywhere that won't play 34 seconds.
 
+> **Before submitting:** the rules require the video to be **hosted on YouTube or Vimeo and publicly
+> visible**, with that link on the form. A self-hosted mp4 does not satisfy it. The rules also say
+> the video should show the app *running on the device it was built for* — the current cut is an
+> emulator recording, so reshoot on the borrowed foldable if the device window allows.
+
 ---
 
 ## A note on how this was built
