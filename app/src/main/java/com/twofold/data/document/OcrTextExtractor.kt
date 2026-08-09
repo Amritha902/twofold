@@ -30,27 +30,21 @@ class OcrTextExtractor {
      * rendered at [OCR_WIDTH_PX], wider than the display needs, because recognition accuracy on
      * small print falls away quickly below it.
      */
-    suspend fun extractPages(source: PdfSource): List<String> = withContext(Dispatchers.Default) {
+    suspend fun extractPages(
+        source: PdfSource,
+        onPage: suspend (index: Int, text: String) -> Unit = { _, _ -> },
+    ): List<String> = withContext(Dispatchers.Default) {
         val latin = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         val devanagari = TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build())
 
         try {
             (0 until source.pageCount).map { index ->
-                val bitmap = source.renderPage(index, OCR_WIDTH_PX)
-                    ?: return@map ""
-                val image = InputImage.fromBitmap(bitmap, 0)
-
-                val latinText = latin.recognise(image)
-
-                // Devanagari is only attempted when the Latin pass comes back thin. Running both on
-                // every page would double an already slow operation, and most policy documents are
-                // printed in English even when the conversation is not.
-                if (latinText.count(Char::isLetter) >= MIN_LETTERS_PER_PAGE) {
-                    latinText
-                } else {
-                    val devanagariText = devanagari.recognise(image)
-                    if (devanagariText.length > latinText.length) devanagariText else latinText
-                }
+                val page = readPage(source, index, latin, devanagari)
+                // Emitted as it is read, not at the end. A policy document runs to dozens of pages
+                // and recognition is linear, so waiting for the last one means a blank client half
+                // for as long as the document is long.
+                onPage(index, page)
+                page
             }
         } finally {
             latin.close()
@@ -66,6 +60,26 @@ class OcrTextExtractor {
      * tables every policy summary opens with — it could emit every label, then every figure, then
      * the paragraph below, which segments a number under the wrong heading. See [ReadingOrder].
      */
+    private suspend fun readPage(
+        source: PdfSource,
+        index: Int,
+        latin: TextRecognizer,
+        devanagari: TextRecognizer,
+    ): String {
+        val bitmap = source.renderPage(index, OCR_WIDTH_PX) ?: return ""
+        val image = InputImage.fromBitmap(bitmap, 0)
+
+        val latinText = latin.recognise(image)
+
+        // Devanagari is only attempted when the Latin pass comes back thin. Running both on every
+        // page would double an already slow operation, and most policy documents are printed in
+        // English even when the conversation is not.
+        if (latinText.count(Char::isLetter) >= MIN_LETTERS_PER_PAGE) return latinText
+
+        val devanagariText = devanagari.recognise(image)
+        return if (devanagariText.length > latinText.length) devanagariText else latinText
+    }
+
     private suspend fun TextRecognizer.recognise(image: InputImage): String =
         suspendCancellableCoroutine { continuation ->
             process(image)

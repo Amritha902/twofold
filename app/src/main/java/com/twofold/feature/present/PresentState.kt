@@ -34,6 +34,8 @@ import com.twofold.data.session.SessionLog
 import com.twofold.data.session.SignatureRecord
 import com.twofold.data.session.SignedPdfExporter
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /** An image and the page number it belongs to, carried together so they cannot disagree. */
@@ -388,7 +390,24 @@ class PresentState(
         }
 
         isRecognising = true
-        val recognised = ocrExtractor.extractPages(opened)
+        val soFar = mutableListOf<String>()
+
+        val recognised = ocrExtractor.extractPages(opened) { _, pageText ->
+            soFar += pageText
+
+            // Publish after every page so the client's half fills as the document is read rather
+            // than all at once at the end. Compose state, so back on the main thread.
+            withContext(Dispatchers.Main) {
+                clauses = ClauseSegmenter.segmentAll(soFar)
+                if (clauses.isNotEmpty() && currentClause == null) {
+                    // The first readable clause. Show it immediately — the rest can still be
+                    // arriving while the agent is already talking through this one.
+                    refreshClientClause()
+                    renderCurrent()
+                }
+            }
+        }
+
         isRecognising = false
         return ExtractedText(recognised, isApproximate = true)
     }
