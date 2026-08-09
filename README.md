@@ -58,4 +58,8 @@ Pre-release. Building for the [RevenueCat Shipaton 2026](https://revenuecat-ship
 
 ## License
 
-Not yet licensed. All rights reserved pending release.
+[GNU AGPL-3.0](LICENSE). You may read, run, modify and share this code; if you run a modified
+version as a network service, you must publish your changes under the same licence.
+
+Copyright is held solely by the author, who is therefore not bound by it — commercial and dual
+licensing remain available on request.
