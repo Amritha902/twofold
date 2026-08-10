@@ -104,10 +104,10 @@ privacy policy, which a reviewer will read alongside it. The accurate answer is:
 | File | Size | Use |
 |---|---|---|
 | `01-own-language.png` | 1600×2000 | Screenshot 1 — the clause in the client's language |
-| `02-two-sided.png` | 1600×2000 | Screenshot 2 — the two halves |
-| `03-prepare.png` | 1600×2000 | Screenshot 3 — setting up before the meeting |
-| `04-signature.png` | 1600×2000 | Screenshot 4 — signing |
-| `05-they-can-ask.png` | 1600×2000 | Screenshot 5 — the client's own button |
+| `02-two-sided.png` | 1600×2000 | Screenshot 2 — the two halves, with the clause jump strip |
+| `03-flex-mode.png` | 1600×2000 | Screenshot 3 — half-open on a desk, the third posture |
+| `04-they-can-ask.png` | 1600×2000 | Screenshot 4 — the client's own button |
+| `05-signature.png` | 1600×2000 | Screenshot 5 — signing |
 | `promo-16x9.png` | 1920×1080 | Promotional graphic |
 | `icon-512.png` | 512×512 | Galaxy Store icon |
 | `icon-1024.png` | 1024×1024 | Devpost submission icon (required size) |
