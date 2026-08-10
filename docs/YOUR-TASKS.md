@@ -155,6 +155,21 @@ RevenueCat's visual editor, which would have replaced a designed screen with a g
 
 ---
 
+## 5b. OneSignal — built, but it cannot deliver until you do one thing
+
+**Done from my side:** the app publishes `has_follow_ups` and `unsigned_documents` tags when a
+meeting ends; a segment *"Agents with unsigned documents"* filters on `has_follow_ups = true`; and a
+push draft *"Follow up on unsigned documents"* targets that segment — *"Still waiting on a
+signature / You showed a document that was never signed. A quick call today is usually all it
+takes."* Saved as a draft, not sent.
+
+**Yours, and nothing is deliverable without it:** OneSignal logs `Missing Google Project number`.
+Push needs Firebase Cloud Messaging credentials. OneSignal → Settings → Push → Android → upload the
+FCM service account JSON from a Firebase project. That needs your Google account and handles a
+credentials file, so it is not mine to do.
+
+Until then the tags accumulate and the campaign sits ready. After it, the loop closes.
+
 ## 6. Book the borrowed foldable
 
 Two separate reasons, and the second is new:
