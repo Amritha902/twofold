@@ -43,7 +43,8 @@ stayed empty.
 You lay the phone flat on the table. That's the whole interface.
 
 - **Their half** shows one clause as text, right-side-up to them, at a size readable across a
-  table — and in Hindi, Tamil, Bengali or Marathi if that is what they read. Not a page image: that
+  table — and in Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada or Urdu if that is what
+  they read. Not a page image: that
   half is 130 × 63 mm, and a fitted A4 page renders 10pt type at 2pt.
 - **Your half** shows the same document plus your private notes, your talk track, and the controls.
 - **Move to a clause** and it appears in front of them, because it's one index, not two synced
@@ -209,7 +210,7 @@ my test document was mostly empty white, which had been quietly making every scr
 
 ### What's next
 
-**More languages, and better handling of scans.** Four Indian languages are in; there are twenty-two
+**More languages, and better handling of scans.** Eight Indian languages are in; there are twenty-two
 official ones. And OCR currently reads a two-column benefits table in visual order, so it can attach
 figures to the wrong clause — the agent is warned, but the honest fix is layout-aware extraction.
 

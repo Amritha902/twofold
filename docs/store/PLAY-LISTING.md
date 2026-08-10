@@ -43,9 +43,9 @@ Twofold turns a foldable laid flat on a table into a two-sided document reader. 
 the screen, and each half shows the form of the document that suits whoever is looking at it.
 
 THEIR HALF
-One clause at a time, as text, large enough to read across a table — and in Hindi, Tamil, Bengali or
-Marathi if that is what they read. If they read nothing at all, it can be spoken to them in the same
-language. They also get one button of their own: a quiet way to say they would like a clause
+One clause at a time, as text, large enough to read across a table — and in Hindi, Bengali, Telugu,
+Marathi, Tamil, Gujarati, Kannada or Urdu if that is what they read. If they read nothing at all,
+it can be spoken to them in the same language. They also get one button of their own: a quiet way to say they would like a clause
 explained.
 
 YOUR HALF

@@ -26,9 +26,13 @@ import kotlin.coroutines.resume
 enum class ClientLanguage(val code: String?, val explainLabel: String) {
     ORIGINAL(null, "Explain this"),
     HINDI(TranslateLanguage.HINDI, "यह समझाइए"),
-    TAMIL(TranslateLanguage.TAMIL, "இதை விளக்குங்கள்"),
     BENGALI(TranslateLanguage.BENGALI, "এটি বুঝিয়ে বলুন"),
+    TELUGU(TranslateLanguage.TELUGU, "దీన్ని వివరించండి"),
     MARATHI(TranslateLanguage.MARATHI, "हे समजावून सांगा"),
+    TAMIL(TranslateLanguage.TAMIL, "இதை விளக்குங்கள்"),
+    GUJARATI(TranslateLanguage.GUJARATI, "આ સમજાવો"),
+    KANNADA(TranslateLanguage.KANNADA, "ಇದನ್ನು ವಿವರಿಸಿ"),
+    URDU(TranslateLanguage.URDU, "یہ سمجھائیے"),
 }
 
 /** Where a language pack is in its lifecycle. The agent needs to know before a meeting, not during. */

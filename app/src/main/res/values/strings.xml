@@ -59,6 +59,12 @@
     <string name="lang_tamil">தமிழ்</string>
     <string name="lang_bengali">বাংলা</string>
     <string name="lang_marathi">मराठी</string>
+    <!-- Each written in its own script: the person choosing is looking for their language, not
+         its English name. -->
+    <string name="lang_telugu">తెలుగు</string>
+    <string name="lang_gujarati">ગુજરાતી</string>
+    <string name="lang_kannada">ಕನ್ನಡ</string>
+    <string name="lang_urdu">اردو</string>
     <string name="lang_downloading">Downloading the language pack…</string>
     <string name="lang_failed">Could not download that language. Connect once, then try again.</string>
     <string name="lang_ready">Ready — your client will read this in their language, offline.</string>

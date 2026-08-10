@@ -11,7 +11,7 @@
 | PDF rendering | `android.graphics.pdf.PdfRenderer` / `PdfDocument` (AOSP) — the agent's half |
 | PDF text | PdfBox-Android 2.0.27 (Apache 2.0) — the client's half needs words, and the platform exposes none |
 | Scanned text | ML Kit text recognition, on-device, Latin + Devanagari |
-| Translation | ML Kit on-device translation — Hindi, Tamil, Bengali, Marathi |
+| Translation | ML Kit on-device translation — Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada, Urdu |
 | Storage | JSON via `org.json` + app-private files (no Room) |
 | Type | Source Serif 4 + Inter, embedded (SIL OFL) |
 | Billing | `purchases-android` 10.16.1 with `purchases-store-galaxy`, `GalaxyConfiguration` |
@@ -213,6 +213,12 @@ Text is then split by `ClauseSegmenter` — pure, Android-free, and unit-tested,
 `FoldLogic` is.
 
 ## Translation
+
+Machine translation, with the limits that implies. It renders product names literally — "Term Life
+Protect" comes back as *اصطلاح زندگی کی حفاظت*, translating "term" in the grammatical sense — so the
+agent's half always keeps the original wording and is the copy to read from when the exact words
+matter. Eight languages, which is every Indian language ML Kit supports: Malayalam, Punjabi, Odia
+and Assamese are not offered because they cannot be, not because they were skipped.
 
 The client's clause is translated on-device; the agent always keeps the source wording, held
 separately on `AgentPage` so an agent never ends up reading a machine translation of their own

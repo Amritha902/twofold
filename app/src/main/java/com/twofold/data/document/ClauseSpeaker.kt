@@ -151,7 +151,13 @@ private val ClientLanguage.speechLocale: Locale
     get() = when (this) {
         ClientLanguage.ORIGINAL -> Locale.ENGLISH
         ClientLanguage.HINDI -> Locale("hi", "IN")
-        ClientLanguage.TAMIL -> Locale("ta", "IN")
         ClientLanguage.BENGALI -> Locale("bn", "IN")
+        ClientLanguage.TELUGU -> Locale("te", "IN")
         ClientLanguage.MARATHI -> Locale("mr", "IN")
+        ClientLanguage.TAMIL -> Locale("ta", "IN")
+        ClientLanguage.GUJARATI -> Locale("gu", "IN")
+        ClientLanguage.KANNADA -> Locale("kn", "IN")
+        // ur-IN rather than ur-PK: the reader is in India. Where no such voice is installed,
+        // SpeechReadiness reports NO_VOICE and the Read control simply is not offered.
+        ClientLanguage.URDU -> Locale("ur", "IN")
     }

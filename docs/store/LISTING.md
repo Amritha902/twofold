@@ -46,7 +46,8 @@ You never hand over your phone. They never see your notes.
 BUILT FOR THE WAY FIELD AGENTS ACTUALLY WORK
 
 • Nothing is handed over. You keep the device and the conversation.
-• Their language, not just yours. On-device translation into Hindi, Tamil, Bengali and Marathi.
+• Their language, not just yours. On-device translation into eight Indian languages — Hindi,
+  Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada and Urdu.
 • Read out loud. For the clients who cannot read the document in any language.
 • They can ask. One button on their half, and a signed copy that records what they asked about.
 • Not only insurance. Loans, medical consent, tenancy, employment — the wording follows the work.

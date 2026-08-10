@@ -555,9 +555,13 @@ private fun LanguagePicker(state: PresentState) {
             listOf(
                 ClientLanguage.ORIGINAL to R.string.lang_original,
                 ClientLanguage.HINDI to R.string.lang_hindi,
-                ClientLanguage.TAMIL to R.string.lang_tamil,
                 ClientLanguage.BENGALI to R.string.lang_bengali,
+                ClientLanguage.TELUGU to R.string.lang_telugu,
                 ClientLanguage.MARATHI to R.string.lang_marathi,
+                ClientLanguage.TAMIL to R.string.lang_tamil,
+                ClientLanguage.GUJARATI to R.string.lang_gujarati,
+                ClientLanguage.KANNADA to R.string.lang_kannada,
+                ClientLanguage.URDU to R.string.lang_urdu,
             ).forEach { (language, label) ->
                 val selected = state.clientLanguage == language
                 TextButton(onClick = { scope.launch { state.setClientLanguage(language) } }) {

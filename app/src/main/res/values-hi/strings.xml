@@ -74,6 +74,12 @@
     <string name="lang_tamil">தமிழ்</string>
     <string name="lang_bengali">বাংলা</string>
     <string name="lang_marathi">मराठी</string>
+    <!-- Each written in its own script: the person choosing is looking for their language, not
+         its English name. -->
+    <string name="lang_telugu">తెలుగు</string>
+    <string name="lang_gujarati">ગુજરાતી</string>
+    <string name="lang_kannada">ಕನ್ನಡ</string>
+    <string name="lang_urdu">اردو</string>
     <string name="lang_downloading">भाषा पैक डाउनलोड हो रहा है…</string>
     <string name="lang_failed">यह भाषा डाउनलोड नहीं हो सकी। एक बार कनेक्ट करके दोबारा कोशिश करें।</string>
     <string name="lang_ready">तैयार — आपका क्लाइंट इसे अपनी भाषा में पढ़ेगा, बिना इंटरनेट के।</string>
