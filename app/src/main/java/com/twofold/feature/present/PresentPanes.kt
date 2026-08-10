@@ -192,6 +192,13 @@ fun ClientPane(
                 // it fit would be worse than asking someone to scroll.
                 .verticalScroll(rememberScrollState())
                 .semantics { liveRegion = LiveRegionMode.Polite },
+            // Centred, which costs nothing and only ever applies to short clauses: once the text is
+            // taller than the half, scrolling takes over and it starts from the top as before.
+            //
+            // It matters because this is the first surface a client ever looks at, and a two-line
+            // clause pinned to the top edge with two thirds of the glass empty beneath it reads as
+            // something failing to load rather than as a document being shown to them.
+            contentAlignment = Alignment.Center,
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 clause?.heading?.takeIf { it.isNotBlank() }?.let { heading ->

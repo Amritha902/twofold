@@ -45,8 +45,8 @@ the screen, and each half shows the form of the document that suits whoever is l
 THEIR HALF
 One clause at a time, as text, large enough to read across a table — and in Hindi, Bengali, Telugu,
 Marathi, Tamil, Gujarati, Kannada or Urdu if that is what they read. If they read nothing at all,
-it can be spoken to them in the same language. They also get one button of their own: a quiet way to say they would like a clause
-explained.
+it can be spoken to them in the same language. They also get one button of their own: a quiet way
+to say they would like a clause explained.
 
 YOUR HALF
 The whole page as printed, plus your private notes and your talk track. Move to a clause and it
