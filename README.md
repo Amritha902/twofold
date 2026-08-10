@@ -36,8 +36,8 @@ itself — through the same extraction, translation and speech as anything else 
 
 | | |
 |---|---|
-| **[The demo — 34s](https://amritha902.github.io/twofold/media/twofold-demo.mp4)** | The whole thing, from an empty install: open the bundled document, say it's a tenancy and that the client reads Hindi, set the phone down, move through clauses, read one aloud, the client asks for one to be explained, and they sign — as *Tenant*, because that's what the meeting was. |
-| [Just the hook — 14s](https://amritha902.github.io/twofold/media/twofold-hook.mp4) | Held, then set down, and the clause appears in Hindi. No narration; it doesn't need any. |
+| **[The demo — 49s](https://amritha902.github.io/twofold/media/twofold-demo.mp4)** | The whole thing from an empty install: open the bundled document, say it's a tenancy and that the client reads Hindi, prop it half-open to prepare, lay it flat and watch it split, jump straight to a clause, read one aloud, the client asks for one to be explained, and they sign — as *Tenant*, because that's what the meeting was. |
+| [Just the hook — 18s](https://amritha902.github.io/twofold/media/twofold-hook.mp4) | Propped half-open, then laid flat, and the clause appears in Hindi. No narration; it doesn't need any. |
 
 Both were recorded on a folding device. Nothing is mocked up.
 

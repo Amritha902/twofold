@@ -238,14 +238,15 @@ the instructions, read through the same extraction, translation and speech as an
 
 ## Video
 
-**[twofold-demo.mp4](https://amritha902.github.io/twofold/media/twofold-demo.mp4) — 34 seconds, no
+**[twofold-demo.mp4](https://amritha902.github.io/twofold/media/twofold-demo.mp4) — 49 seconds, no
 narration.** Recorded on a foldable from an empty install, so nothing is set up off camera.
 
 Open the document the app ships with. Say the meeting is a **tenancy** and that the client reads
-**Hindi**. Set the phone down — it splits at the crease, and the clause is now in front of them, in
-their language, while the original stays on the near half. Move through clauses. Press **Read** and
-it is spoken aloud. The client taps the one button that is theirs, and the agent's half says *They
-asked about this one — recorded on the signed copy.* Then they sign.
+**Hindi**. Prop it half-open on the desk and it becomes a workbench — page above the crease, your
+settings and controls below. Lay it flat and it splits: the clause is now in front of them, in their
+language, while the original stays on the near half. Jump straight to a clause rather than stepping
+through. Press **Read** and it is spoken aloud. The client taps the one button that is theirs, and
+the agent's half says *They asked about this one — recorded on the signed copy.* Then they sign.
 
 The last frame is the one to watch: the signature line reads **Tenant**, not "Client". The meeting
 kind reaches the signed document, which is the whole "this isn't an insurance app" claim shown

@@ -113,8 +113,8 @@ privacy policy, which a reviewer will read alongside it. The accurate answer is:
 | `icon-1024.png` | 1024×1024 | Devpost submission icon (required size) |
 | `devpost-01-two-sided.png` | 1179×2556 | Devpost screenshot, no device frame (required size) |
 | `devpost-02-read-and-sign.png` | 1179×2556 | Devpost screenshot, no device frame |
-| `../media/twofold-demo.mp4` | 34s | Listing video |
-| `../media/twofold-hook.mp4` | 14s | Devpost / social |
+| `../media/twofold-demo.mp4` | 49s | Listing video |
+| `../media/twofold-hook.mp4` | 18s | Devpost / social |
 
 All captures are from the app running on a folding device, at native resolution, with a clean
 status bar. Nothing is mocked up.

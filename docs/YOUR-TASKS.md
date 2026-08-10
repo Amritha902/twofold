@@ -97,7 +97,8 @@ The rules are explicit: the video must be **hosted on YouTube or Vimeo and publi
 the link on the submission form. A self-hosted mp4 does not satisfy it, so the file currently on
 GitHub Pages does not count.
 
-**File:** `docs/media/twofold-demo.mp4` — 34s, already inside the 2-minute limit.
+**File:** `docs/media/twofold-demo.mp4` — 49s, well inside the 2-minute limit. Reshot to include
+Flex Mode and the clause jump, so it now shows all three postures.
 
 **Title:** `Twofold — one document, two sides of the table (Galaxy Fold)`
 
