@@ -132,8 +132,14 @@ auto-created one is renamed "Auto-created (unused)" and left in place — deleti
 https://app.revenuecat.com/projects/635c7bd8/apps -> "Show key" into `local.properties`, after
 `REVENUECAT_GALAXY_KEY=`. The file is prepared and gitignored.
 
-**Free trial is blocked, not forgotten.** Pricing and trial period are read-only on Test Store
-products — a trial belongs to the real store product. It lands with the Galaxy config in item 1.
+**Free trial: done.** I had this wrong — a trial is read-only *after* a product is created, but it
+is settable *at* creation. So `twofold_pro_monthly` and `twofold_pro_yearly` now exist with a
+one-week trial, are attached to `pro`, and are the products the `default` offering serves. Verified
+in the app: the paywall reads *"Twofold Pro · 1 week free, then $5.99"*.
+
+That closes the submission requirement that judges be able to unlock the in-app purchase and test
+premium features, for the Test Store path. The Galaxy products will need the same trial set when
+they are created, and it cannot be added afterwards — set it at creation.
 
 **Dashboard checklist is at 4 of 6.** The two left are both correctly incomplete:
 
