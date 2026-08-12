@@ -8,6 +8,18 @@ Last checked against the rules page: **2026-08-09**. Submissions close **Sep 30,
 
 ---
 
+## 0. Reconnect Gmail — **blocks me from reading any access emails** (2 minutes)
+
+You said new accesses arrived by email. I cannot read them: the Gmail connector returns
+*"This connector requires additional permissions. The user needs to reconnect it with the
+appropriate access."*
+
+Reconnect it in **Settings → Connectors → Gmail** and grant read access. Until then, forward or
+paste anything that arrives — approval emails from Samsung, RevenueCat, OneSignal or Devpost all
+unlock work that is otherwise stalled, and I have no way to see them.
+
+---
+
 ## 1. Galaxy Store — ✅ **submitted 2026-08-09, now waiting**
 
 Seller portal shows *Type of Sales: Commercial Distribution Request in Progress*. The request is with
