@@ -76,7 +76,8 @@ Pre-release. Building for the [RevenueCat Shipaton 2026](https://revenuecat-ship
 | [Design](docs/DESIGN.md) | Visual identity and the rules it follows |
 | [Shipaton plan](docs/SHIPATON.md) | Dates, critical path, category strategy |
 | [Devpost submission](docs/DEVPOST.md) | The write-up, paste-ready |
-| [Store listing](docs/store/LISTING.md) | Galaxy Store copy and assets |
+| [Next Gen entry](docs/NEXT-GEN.md) | **The primary award target** — requirements and what is left |
+| [Store listing](docs/store/LISTING.md) | Galaxy Store copy and assets (category closed 2026-08-12) |
 | [Privacy policy](https://amritha902.github.io/twofold/privacy.html) | What leaves the device, and what doesn't |
 
 ## License
