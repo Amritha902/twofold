@@ -28,13 +28,17 @@ Everything else in the hackathon needs a published app. This one needs a video a
 **This is the one thing that can disqualify the entry outright**, and it is not about the app at
 all. Verification runs against the [JetBrains/swot](https://github.com/JetBrains/swot) domain list.
 
-**Checked 2026-08-12: both `vit.txt` and `vitstudent.txt` exist in swot.** A VIT address will
-verify.
+**Checked 2026-08-12: both `vit.txt` and `vitstudent.txt` exist in swot.** A VIT address verifies.
 
-**So: the Devpost account must be registered with the `@vitstudent.ac.in` address, not
-`amritha16112005@gmail.com`.** If the account was created with the personal Gmail, change the
-primary email in Devpost account settings — or the entry fails eligibility no matter how good the
-app is. Do this before submitting anything.
+**Confirmed 2026-08-12: Amritha holds a `@vitstudent.ac.in` address.** The domain matches
+`vitstudent.txt` exactly, so eligibility is satisfiable. The address itself is deliberately not
+written into this file — this repository is public, and an institutional address in a public repo
+gets scraped. It is on record in the working notes instead.
+
+**The remaining action is on Devpost, not here:** the account must be registered with that student
+address rather than the personal Gmail. If it was created with the Gmail, change the primary email
+in Devpost account settings before submitting. Nothing about the app affects this, and no amount of
+polish compensates for getting it wrong.
 
 ### 2. Public repo with a detectable licence — ✅ **done**
 
