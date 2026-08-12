@@ -52,6 +52,11 @@ import com.twofold.core.fold.FlexScaffold
 import com.twofold.core.fold.TwofoldScaffold
 import com.twofold.data.document.ClientLanguage
 import com.twofold.data.document.DocumentRef
+import android.Manifest
+import com.twofold.data.notes.Dictation
+import com.twofold.data.notes.DictationReadiness
+import com.twofold.data.notes.Problem
+import com.twofold.data.notes.VoiceNote
 import com.twofold.data.document.ModelState
 import com.twofold.data.document.SpeechReadiness
 import com.twofold.data.document.DocumentRepository
@@ -483,6 +488,13 @@ private fun NoteEditor(state: PresentState) {
             singleLine = true,
         )
 
+        // A name is the one thing here typed while walking up to a door, and it is also the thing
+        // most often spelled wrong in a hurry. `mergeInline` rather than `merge` — this field is a
+        // name, not a sentence, and must not have a full stop inserted into the middle of it.
+        DictateButton(R.string.dictate_spoken_name) { spoken ->
+            state.clientLabel = Dictation.mergeInline(state.clientLabel, spoken)
+        }
+
         MeetingKindPicker(state)
 
         LanguagePicker(state)
@@ -495,6 +507,12 @@ private fun NoteEditor(state: PresentState) {
             minLines = 2,
             maxLines = 4,
         )
+
+        // Dictation for the note. An agent writes these between appointments — in a car, standing
+        // outside a door with a folder under one arm — and typing does not happen there.
+        DictateButton(R.string.dictate_spoken_note) { spoken ->
+            scope.launch { state.setNote(Dictation.merge(state.currentNotes.note, spoken)) }
+        }
 
         // Talk track: the three things to say on this page, and the objection that always comes up.
         // Kept as separate lines rather than a paragraph because they are read at a glance,
@@ -533,6 +551,12 @@ private fun NoteEditor(state: PresentState) {
                 },
             ) { Text(stringResource(R.string.action_add)) }
         }
+
+        // The talk track is the field that stays emptiest in every test of this app, because it is
+        // the one nobody will type on a phone. Speaking a line is the version that gets used.
+        DictateButton(R.string.dictate_spoken_line) { spoken ->
+                draftLine = Dictation.merge(draftLine, spoken)
+            }
     }
 }
 
@@ -583,6 +607,101 @@ private fun LanguagePicker(state: PresentState) {
         // unknown, and announcing a missing feature that is merely slow is its own kind of wrong.
         if (state.speech == SpeechReadiness.NO_VOICE) {
             StatusLine(stringResource(R.string.speech_unavailable), colors.inkMuted)
+        }
+    }
+}
+
+/**
+ * Hold-free dictation: tap to start, tap to stop.
+ *
+ * Not press-and-hold. The agent doing this is holding a folder, a pen and somebody's paperwork, and
+ * a gesture that needs a finger kept on glass for twenty seconds is a gesture they will not use.
+ *
+ * Absent entirely when the phone has no on-device recogniser, rather than disabled or falling back
+ * to the network kind — see [VoiceNote]. These notes name clients and describe their finances.
+ */
+@Composable
+private fun DictateButton(
+    /** What this particular button dictates into — a screen reader user hears only this. */
+    @StringRes spokenLabel: Int,
+    onDictated: (String) -> Unit,
+) {
+    val context = LocalContext.current
+    val colors = LocalTwofoldColors.current
+    val voice = remember { VoiceNote(context) }
+    var listening by remember { mutableStateOf(false) }
+    var partial by remember { mutableStateOf("") }
+
+    var problem by remember { mutableStateOf<Problem?>(null) }
+
+    val permission = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (!granted) {
+            problem = Problem.NO_PERMISSION
+        } else {
+            listening = true
+            problem = null
+            voice.start(
+                onPartial = { partial = it },
+                onResult = onDictated,
+                onStopped = { why -> listening = false; partial = ""; problem = why },
+            )
+        }
+    }
+
+    DisposableEffect(Unit) { onDispose { voice.stop() } }
+
+    if (voice.readiness != DictationReadiness.READY) {
+        StatusLine(stringResource(R.string.dictate_unavailable), colors.inkMuted)
+        return
+    }
+
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        val spoken = stringResource(spokenLabel)
+        TextButton(
+            onClick = {
+                if (listening) {
+                    voice.stop()
+                    listening = false
+                    partial = ""
+                } else {
+                    permission.launch(Manifest.permission.RECORD_AUDIO)
+                }
+            },
+            modifier = Modifier.semantics { contentDescription = spoken },
+        ) {
+            Text(
+                text = stringResource(if (listening) R.string.dictate_stop else R.string.dictate),
+                style = MaterialTheme.typography.labelLarge,
+                color = if (listening) colors.seal else colors.inkMuted,
+            )
+        }
+        // Partial text as it is heard. Dictation with no feedback until the end feels broken, and
+        // someone will stop and start over halfway through a sentence.
+        if (partial.isNotBlank()) {
+            Text(
+                text = partial,
+                style = MaterialTheme.typography.bodyMedium,
+                color = colors.inkMuted,
+                modifier = Modifier.padding(start = 8.dp),
+            )
+        }
+
+        // Say why it stopped, when there is something to be done about it.
+        problem?.let { why ->
+            Text(
+                text = stringResource(
+                    when (why) {
+                        Problem.NO_LANGUAGE_PACK -> R.string.dictate_no_pack
+                        Problem.NO_PERMISSION -> R.string.dictate_no_permission
+                        else -> R.string.dictate_failed
+                    }
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                color = colors.seal,
+                modifier = Modifier.padding(start = 8.dp),
+            )
         }
     }
 }

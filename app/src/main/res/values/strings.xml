@@ -103,6 +103,18 @@
     <string name="remove_document">Remove this document</string>
     <string name="remove_confirm">Tap again to remove it</string>
 
+    <!-- Dictating a note rather than typing it -->
+    <string name="dictate">Speak</string>
+    <string name="dictate_spoken_name">Say the name instead of typing it</string>
+    <string name="dictate_spoken_note">Dictate the private note for this page instead of typing it</string>
+    <string name="dictate_spoken_line">Dictate a line to say instead of typing it</string>
+    <string name="dictate_stop">Listening — tap to stop</string>
+    <string name="dictate_unavailable">This phone cannot transcribe speech without sending it away, so dictation is off.</string>
+
+    <string name="dictate_no_pack">Speech pack not downloaded. Add it in Settings → System → Languages, then try again.</string>
+    <string name="dictate_no_permission">Twofold needs the microphone to take a dictated note.</string>
+    <string name="dictate_failed">That didn\'t work. Try again, or type the note.</string>
+
     <!-- Signing -->
     <string name="sign_prompt">Please sign below</string>
     <string name="signature_area_description">Signature area. Draw your signature here with your finger.</string>

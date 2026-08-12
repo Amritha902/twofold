@@ -25,7 +25,12 @@ from pathlib import Path
 
 MAIN = Path(__file__).resolve().parent.parent / "app" / "src" / "main" / "java"
 
-DECL = re.compile(r"^\s*(?:@\w+(?:\([^)]*\))?\s*)*(?:public\s+|private\s+|internal\s+|protected\s+)?"
+# `[^\S\n]*` rather than `\s*` for the leading indent, and it matters: `\s` matches newlines, so a
+# declaration preceded by a blank line matched from the *previous* line. That shifted the computed
+# line number by one, the `override` test then read the wrong line, and framework callbacks were
+# reported as unreachable. Two false positives is all it takes for a check to start being ignored.
+DECL = re.compile(r"^[^\S\n]*(?:@\w+(?:\([^)]*\))?[^\S\n]*)*"
+                  r"(?:public\s+|private\s+|internal\s+|protected\s+)?"
                   r"(?:override\s+|open\s+|abstract\s+|inline\s+|suspend\s+|operator\s+)*"
                   r"fun\s+(?:<[^>]+>\s*)?(?:[\w.<>?]+\.)?(\w+)\s*\(", re.M)
 
@@ -39,7 +44,8 @@ ENTRY_POINTS = {
 }
 
 # An override satisfies an interface the framework calls; that is its reachability.
-OVERRIDE = re.compile(r"^\s*(?:@\w+(?:\([^)]*\))?\s*)*(?:private\s+|internal\s+|protected\s+)?override\s+", re.M)
+OVERRIDE = re.compile(r"^[^\S\n]*(?:@\w+(?:\([^)]*\))?[^\S\n]*)*"
+                      r"(?:private\s+|internal\s+|protected\s+)?override\s+")
 
 
 def declarations() -> dict[str, list[tuple[Path, int]]]:

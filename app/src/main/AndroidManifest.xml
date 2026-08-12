@@ -4,6 +4,17 @@
     <!-- Asked for at the moment it explains itself, not on first launch. See NudgePolicy. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- Dictating a note. On-device recognition only — see VoiceNote for why the network kind is
+         refused rather than used as a fallback. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Required on Android 11+ for SpeechRecognizer to see an on-device recogniser at all. -->
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
     <application
         android:name=".TwofoldApplication"
         android:allowBackup="true"
