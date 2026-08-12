@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
@@ -480,6 +482,13 @@ private fun NoteEditor(state: PresentState) {
     Column(
         Modifier
             .fillMaxWidth()
+            // Capped and centred rather than edge-to-edge. On a Fold's inner display this column is
+            // over 2000px wide, and a full-width box for a person's name looks like a stretched
+            // phone layout rather than something built for the screen. A line of text also becomes
+            // genuinely hard to read much past this width — the eye loses its place on the return
+            // sweep. Phones are narrower than the cap, so they are unaffected.
+            .wrapContentWidth()
+            .widthIn(max = 640.dp)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         // Generous spacing *between* groups. Within a group — a field and the button that fills it
         // — the spacing is much tighter, because on screen an evenly-spaced column reads as a list
