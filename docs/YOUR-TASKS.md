@@ -27,22 +27,21 @@ that is smaller than it feels: checked twice against the Devpost prize text, tha
 cash figure at all** — its prize is a Times Square billboard, a trophy, and three weeks of featured
 placement on the Galaxy Store. Every award with money attached is still open.
 
-**Two things to do, in this order:**
+**The reason, verbatim from Samsung (2026-08-10):**
 
-### a) Paste me the rejection reason
+> Reject reason: - Please apply as a Corporate Commercial seller.
 
-I cannot read it — the Gmail connector needs reconnecting (task 0). Samsung rejections at this stage
-are usually one of a small set, and most are re-submittable:
+**This is not fixable with a corrected document, and it closes Galaxy for us.** Samsung is not
+saying a scan was unreadable or a name did not match; it is saying an *individual* may not sell paid
+content at all. A Corporate Commercial seller account requires a registered business entity — a
+Pvt Ltd, or at minimum a proprietorship with GST registration. That is weeks of paperwork and real
+money, in exchange for an award that pays **no cash**.
 
-- name on the bank account not exactly matching the PAN or the government ID
-- an address on the application differing from the address on the ID
-- a business-registration document expected for "Commercial" that an individual seller cannot supply
-- an unreadable or expired ID scan
+**Recommendation: do not re-apply.** Free-only distribution on Galaxy Store remains open to an
+individual, but a free listing cannot carry the RevenueCat purchase the hackathon requires, so it
+would buy us nothing. Galaxy is closed; it costs us one non-cash award.
 
-If it is any of the first three, a corrected re-application is worth 20 minutes even now — the
-Galaxy award is not worth cash, but a second store listing costs nothing to have.
-
-### b) Decide on the $25 Google Play account — **this is the real decision**
+### The $25 Google Play account — now the only real decision left
 
 Every cash award except Next Gen requires a published app. Play is the only store still open to us.
 
@@ -60,6 +59,33 @@ safety declarations are written up in `docs/store/PLAY-LISTING.md`. It is a key 
 
 > Still the one thing I will not do for you: it is your ID and your card, submitted as a legal
 > declaration that you are the developer. Not a permissions problem — it has to be you.
+
+---
+
+## 1a. Junie CLI — accepted, 30 credits, two small strings attached
+
+Accepted into the JetBrains Junie program for Shipaton (email 2026-08-10). **30 trial AI credits on
+the JetBrains Account tied to your email, usable until Sep 30.** No promo code — it should just
+work once you sign in.
+
+```bash
+curl -fsSL https://junie.jetbrains.com/install.sh | bash
+```
+
+Then run `junie` in the project folder, pick **JetBrains Account**, and sign in with the email the
+invitation went to. Run `/usage` — it should show the Shipaton allocation rather than a small
+standard trial. **If it shows the small balance or nothing, reply to Ekaterina's email with a
+screenshot of `/usage`** and they will fix it. That reply is the only hard deadline attached to
+this, and it is worth doing the day you install rather than on Sep 29.
+
+Two things they ask in return, both cheap:
+- **Build in public, tagged `#Shipaton`**, then drop the link in the `#kmp` Discord channel. This
+  doubles as our #BuildInPublic entry, so it is not extra work — it is work we owed anyway.
+- Feedback on Junie, by email or `/feedback`.
+
+Worth knowing: the invitation leans heavily on Kotlin Multiplatform because JetBrains also sponsors
+the *Ship Kotlin Everywhere* award. **Using Junie does not require KMP** and we are not entering
+that category — Twofold is deliberately native Android. The credits are useful regardless.
 
 ---
 
