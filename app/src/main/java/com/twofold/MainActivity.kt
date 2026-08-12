@@ -11,6 +11,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -320,6 +322,7 @@ private fun TwofoldApp(foldStates: Flow<FoldState>) {
  * its last two options is worse than one that admits it has more.
  */
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 private fun MeetingKindPicker(state: PresentState) {
     val colors = LocalTwofoldColors.current
 
@@ -329,7 +332,7 @@ private fun MeetingKindPicker(state: PresentState) {
             style = MaterialTheme.typography.labelLarge,
             color = colors.inkMuted,
         )
-        Row(Modifier.horizontalScroll(rememberScrollState())) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             MeetingKind.entries.forEach { kind ->
                 val selected = state.meetingKind == kind
                 TextButton(onClick = { state.chooseMeetingKind(kind) }) {
@@ -478,85 +481,117 @@ private fun NoteEditor(state: PresentState) {
         Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        // Generous spacing *between* groups. Within a group — a field and the button that fills it
+        // — the spacing is much tighter, because on screen an evenly-spaced column reads as a list
+        // of unrelated controls and the Speak buttons looked like they belonged to nothing.
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        OutlinedTextField(
-            value = state.clientLabel,
-            onValueChange = { state.clientLabel = it },
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text(stringResource(state.meetingKind.partyPrompt)) },
-            singleLine = true,
-        )
-
-        // A name is the one thing here typed while walking up to a door, and it is also the thing
-        // most often spelled wrong in a hurry. `mergeInline` rather than `merge` — this field is a
-        // name, not a sentence, and must not have a full stop inserted into the middle of it.
-        DictateButton(R.string.dictate_spoken_name) { spoken ->
-            state.clientLabel = Dictation.mergeInline(state.clientLabel, spoken)
+        // A name is the one thing here typed while walking up to a door, and the thing most often
+        // spelled wrong in a hurry. `mergeInline` rather than `merge` — a name is not a sentence
+        // and must not have a full stop inserted into the middle of it.
+        FieldWithDictation(
+            spokenLabel = R.string.dictate_spoken_name,
+            onDictated = { state.clientLabel = Dictation.mergeInline(state.clientLabel, it) },
+        ) {
+            OutlinedTextField(
+                value = state.clientLabel,
+                onValueChange = { state.clientLabel = it },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(state.meetingKind.partyPrompt)) },
+                singleLine = true,
+            )
         }
 
         MeetingKindPicker(state)
 
         LanguagePicker(state)
 
-        OutlinedTextField(
-            value = state.currentNotes.note,
-            onValueChange = { scope.launch { state.setNote(it) } },
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text(stringResource(R.string.private_note_label)) },
-            minLines = 2,
-            maxLines = 4,
-        )
-
-        // Dictation for the note. An agent writes these between appointments — in a car, standing
-        // outside a door with a folder under one arm — and typing does not happen there.
-        DictateButton(R.string.dictate_spoken_note) { spoken ->
-            scope.launch { state.setNote(Dictation.merge(state.currentNotes.note, spoken)) }
+        // An agent writes these between appointments — in a car, standing outside a door with a
+        // folder under one arm — and typing does not happen there.
+        FieldWithDictation(
+            spokenLabel = R.string.dictate_spoken_note,
+            onDictated = { spoken ->
+                scope.launch { state.setNote(Dictation.merge(state.currentNotes.note, spoken)) }
+            },
+        ) {
+            OutlinedTextField(
+                value = state.currentNotes.note,
+                onValueChange = { scope.launch { state.setNote(it) } },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.private_note_label)) },
+                minLines = 2,
+                maxLines = 4,
+            )
         }
 
-        // Talk track: the three things to say on this page, and the objection that always comes up.
-        // Kept as separate lines rather than a paragraph because they are read at a glance,
-        // mid-sentence, by someone who is also talking.
-        state.currentNotes.talkTrack.forEachIndexed { index, line ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = stringResource(R.string.talk_track_line, line),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = colors.ink,
-                    modifier = Modifier.weight(1f),
-                )
-                TextButton(onClick = { scope.launch { state.removeTalkTrackLine(index) } }) {
-                    Text(stringResource(R.string.action_remove))
+        // Talk track: the things to say on this page, and the objection that always comes up.
+        // Separate lines rather than a paragraph because they are read at a glance, mid-sentence,
+        // by someone who is also talking.
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            state.currentNotes.talkTrack.forEachIndexed { index, line ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = stringResource(R.string.talk_track_line, line),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = colors.ink,
+                        modifier = Modifier.weight(1f),
+                    )
+                    TextButton(onClick = { scope.launch { state.removeTalkTrackLine(index) } }) {
+                        Text(stringResource(R.string.action_remove))
+                    }
+                }
+            }
+
+            // The talk track stays emptiest in every test of this app, because it is the field
+            // nobody will type on a phone. Speaking a line is the version that gets used.
+            FieldWithDictation(
+                spokenLabel = R.string.dictate_spoken_line,
+                onDictated = { draftLine = Dictation.merge(draftLine, it) },
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    OutlinedTextField(
+                        value = draftLine,
+                        onValueChange = { draftLine = it },
+                        modifier = Modifier.weight(1f),
+                        label = { Text(stringResource(R.string.talk_track_add_label)) },
+                        singleLine = true,
+                    )
+                    TextButton(
+                        enabled = draftLine.isNotBlank(),
+                        onClick = {
+                            scope.launch {
+                                state.addTalkTrackLine(draftLine)
+                                draftLine = ""
+                            }
+                        },
+                    ) { Text(stringResource(R.string.action_add)) }
                 }
             }
         }
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            RemoveDocument(state)
+        // Last, alone, and well away from everything else. This used to sit in the same row as the
+        // talk-track field, which squeezed that field to about a third of the width and put a
+        // destructive action a thumb's width from one an agent uses constantly.
+        RemoveDocument(state)
+    }
+}
 
-            OutlinedTextField(
-                value = draftLine,
-                onValueChange = { draftLine = it },
-                modifier = Modifier.weight(1f),
-                label = { Text(stringResource(R.string.talk_track_add_label)) },
-                singleLine = true,
-            )
-            TextButton(
-                enabled = draftLine.isNotBlank(),
-                onClick = {
-                    scope.launch {
-                        state.addTalkTrackLine(draftLine)
-                        draftLine = ""
-                    }
-                },
-            ) { Text(stringResource(R.string.action_add)) }
-        }
-
-        // The talk track is the field that stays emptiest in every test of this app, because it is
-        // the one nobody will type on a phone. Speaking a line is the version that gets used.
-        DictateButton(R.string.dictate_spoken_line) { spoken ->
-                draftLine = Dictation.merge(draftLine, spoken)
-            }
+/**
+ * A text field and the button that dictates into it, kept visually as one thing.
+ *
+ * The grouping is the whole point. With uniform column spacing the Speak buttons sat equidistant
+ * from the field above and the heading below, so on screen they read as three orphaned controls
+ * rather than as part of the field they fill.
+ */
+@Composable
+private fun FieldWithDictation(
+    @StringRes spokenLabel: Int,
+    onDictated: (String) -> Unit,
+    field: @Composable () -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        field()
+        DictateButton(spokenLabel, onDictated)
     }
 }
 
@@ -565,6 +600,7 @@ private fun NoteEditor(state: PresentState) {
  * of megabytes, and no client should sit watching a progress bar while it arrives.
  */
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 private fun LanguagePicker(state: PresentState) {
     val scope = rememberCoroutineScope()
     val colors = LocalTwofoldColors.current
@@ -575,7 +611,7 @@ private fun LanguagePicker(state: PresentState) {
             style = MaterialTheme.typography.labelLarge,
             color = colors.inkMuted,
         )
-        Row(Modifier.horizontalScroll(rememberScrollState())) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             listOf(
                 ClientLanguage.ORIGINAL to R.string.lang_original,
                 ClientLanguage.HINDI to R.string.lang_hindi,
