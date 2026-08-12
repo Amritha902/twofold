@@ -78,15 +78,34 @@ doesn't feel right on real hardware, we need to know in week one — not week fi
 
 One app, several categories. Primary target first, then whatever is nearly free.
 
-| Category | Effort | Notes |
-|---|---|---|
-| **Best App for Galaxy** | Primary | The whole thesis. Thin field — most of ~14k entrants ship iOS/Play. |
-| Grand Prize ($100K) | Free | Automatic consideration |
-| HAMM Award | Free | Judged on articulating the revenue model — that's the pitch we already have |
-| #BuildInPublic | Low | Post the build weekly; costs minutes |
-| Design Award | Low | Follows from doing DESIGN.md properly |
-| OneSignal ($45K) | Low | Genuinely useful here: nudge the agent when a presented document went unsigned |
-| Stripe web-to-app ($30K) | Medium | A web funnel selling Pro. Only if weeks 1–4 land on time. |
+**Rewritten 2026-08-12, after Samsung rejected the commercial seller application.**
+
+The rejection cost us **zero cash**. Checked twice against the Devpost prize text: *Best App for
+Galaxy* lists no cash figure at all. Its prize is a Times Square billboard, a Shippy trophy, and
+*"3 weeks of featured placement on the Galaxy Store"*. Every award with money attached survives.
+
+That inverts the plan we ran for four days. A thin field was a real edge, so Galaxy was never
+strategically worthless — but it was never worth cash either, and we had it as *primary* while the
+$25K and $15K categories sat in the "free / low effort" column.
+
+| Category | 1st prize | Fit | State |
+|---|---|---|---|
+| **Next Gen** (students) | **$15,000** | Strong | **Primary.** The only award needing no store account: *"submitting a video and open-source code"*, explicitly *"removing the requirement for a paid Apple or Google developer account."* The repo is already public. |
+| **Keep Them Coming Back** (OneSignal) | **$25,000** | Strong | Largest sponsored prize. Already integrated, and the use case is real rather than bolted on — nudging an agent about a document presented and never signed. Needs a store listing. |
+| Peace Prize | $15,000 | Strong | *"greatest social good."* The app exists because people sign financial documents they cannot read. Needs a store listing. |
+| HAMM | $15,000 | Good | The monetization write-up already exists. Needs a store listing. |
+| Design Award | $15,000 | Good | Needs a store listing. |
+| Grand Prize | $100,000 | Long shot | Judged on traction, which we will not have. Automatic consideration. |
+| #BuildInPublic | $30,000 | Low | Minutes per week, but we started late. |
+| Growth Loop (Layers) | $15,000 | Low | Possible, unexplored. |
+| Ship Kotlin Everywhere | $15,000 | **No** | Requires Kotlin Multiplatform across iOS *and* Android. We are deliberately native-only. |
+| Funnel Vision (Stripe) | $15,000 | No | Needs a web funnel. Out of time. |
+| Best App for Galaxy | **no cash** | **Dead** | Samsung rejected commercial seller registration, 2026-08-12. |
+| Best Game / Catvertising / 5 influencer awards | $15,000 each | No | Wrong app type. |
+
+**The $25 Play decision is now the whole hinge.** Every cash award except Next Gen requires a
+published app, and Play is the only store still open to us: $25 one-off, review usually inside 48
+hours. Without it we compete for exactly one prize. With it, nine.
 
 Galaxy Store **exclusivity earns bonus consideration but is explicitly not required**, so shipping
 Galaxy-only is a choice rather than an obligation — and that matters as a hedge. A Google Play

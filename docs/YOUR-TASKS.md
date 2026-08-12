@@ -20,46 +20,61 @@ unlock work that is otherwise stalled, and I have no way to see them.
 
 ---
 
-## 1. Galaxy Store — ✅ **submitted 2026-08-09, now waiting**
+## 1. Galaxy Store — ❌ **rejected 2026-08-12**
 
-Seller portal shows *Type of Sales: Commercial Distribution Request in Progress*. The request is with
-a Samsung reviewer and the up-to-10-business-day clock is running. Nothing more to do until the
-approval email arrives. Ship-by is Sep 20 to leave a store-review buffer.
+Samsung refused the commercial seller application. **Best App for Galaxy is out**, and the cost of
+that is smaller than it feels: checked twice against the Devpost prize text, that award lists **no
+cash figure at all** — its prize is a Times Square billboard, a trophy, and three weeks of featured
+placement on the Galaxy Store. Every award with money attached is still open.
 
-**When the approval email lands, three things unlock at once:**
-1. Create the Galaxy app configuration in RevenueCat and swap the `test_` key for the `galx_` one.
-2. Set a **free trial** on the Galaxy products — the submission requires a trial or promo code so
-   judges can test premium features, and it cannot be configured on Test Store products.
-3. Make the real purchase on the borrowed foldable.
+**Two things to do, in this order:**
 
-**Use the License Tester setting for that purchase.** The seller portal's own note: a registered
-License Tester buying paid content in an app under beta test is not charged. Add the Samsung account
-on the borrowed device there, and the required real purchase costs nothing.
+### a) Paste me the rejection reason
 
-**Have ready before you start:**
-- PAN card
-- Government photo ID (Aadhaar or passport)
-- Bank account number + IFSC, in your own name
-- A business/contact address and phone number
-- Your email
+I cannot read it — the Gmail connector needs reconnecting (task 0). Samsung rejections at this stage
+are usually one of a small set, and most are re-submittable:
 
-**Cost: nothing.** Verified against Samsung's own FAQ on 2026-08-09, which says outright: *"No,
-there is no sign-up nor annual fee to publish in Galaxy Store."* For comparison, Apple charges
-$99/year and Google Play $25 one-off.
+- name on the bank account not exactly matching the PAN or the government ID
+- an address on the application differing from the address on the ID
+- a business-registration document expected for "Commercial" that an individual seller cannot supply
+- an unreadable or expired ID scan
 
-The **Financial Information** step is not a payment page and reads like one. "Settle the revenue
-generated in the Galaxy Store" means *pay you*. Minimum Remittance is the smallest amount Samsung
-will bother wiring; Payment Account is where your earnings land. Nothing is charged.
+If it is any of the first three, a corrected re-application is worth 20 minutes even now — the
+Galaxy award is not worth cash, but a second store listing costs nothing to have.
 
-**Samsung's cut, when you do earn:** 15% on subscriptions — you keep **85%**. Paid apps and one-off
-in-app items are 20/80. Apple and Google both take 30% in year one, so this is a genuine advantage
-and belongs in the HAMM award pitch rather than sitting in a footnote.
+### b) Decide on the $25 Google Play account — **this is the real decision**
 
-**Time:** ~20 minutes of form-filling, then you wait.
+Every cash award except Next Gen requires a published app. Play is the only store still open to us.
 
-> This is the one item I will not do even with full access to your machine. It is your ID and your
-> bank details being submitted as a legal declaration that you are the seller. Not a permissions
-> problem — it genuinely has to be you.
+| | Without Play | With Play |
+|---|---|---|
+| Awards we can enter | **1** (Next Gen) | **9** |
+| Largest prize reachable | $15,000 | $100,000 |
+| Cost | ₹0 | **$25 one-off** |
+| Time to live | — | usually under 48 hours |
+
+Everything on our side is ready for it. `BillingKey` already accepts a `goog_` key and routes it
+through the plain configuration rather than `GalaxyConfiguration`, both RevenueCat artifacts are
+already in the build, and the path is unit-tested. The full listing copy, graphics list and data
+safety declarations are written up in `docs/store/PLAY-LISTING.md`. It is a key swap and a form.
+
+> Still the one thing I will not do for you: it is your ID and your card, submitted as a legal
+> declaration that you are the developer. Not a permissions problem — it has to be you.
+
+---
+
+## 1b. Next Gen Award — now our primary entry, and it needs no store at all
+
+Student-only, **$15,000 first prize**, and the rules remove the blocker that just hit us:
+*"submitting a video and open-source code"*, explicitly *"removing the requirement for a paid Apple
+or Google developer account."*
+
+- The repo is already public, so the open-source half is done.
+- You will likely need proof of active student enrolment — have a VIT ID or enrolment letter ready.
+- The video requirement is the same one we already owe Devpost, so this costs almost nothing extra.
+
+This is the entry that survives every remaining blocker. Treat the Play decision as upside on top
+of it, not as a prerequisite.
 
 ---
 

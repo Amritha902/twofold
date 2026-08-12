@@ -1,6 +1,10 @@
-# Google Play listing — the hedge
+# Google Play listing — now the plan
 
-**Not the plan. The fallback.** Galaxy Store publication is required for the *Best App for Galaxy*
+**Promoted from fallback to primary on 2026-08-12, when Samsung rejected the commercial seller
+application.** Every cash award except Next Gen requires a published app, and Play is the only
+store still open to us. The reasoning below was written as a hedge; it resolved the other way.
+
+**Originally written as the fallback:** Galaxy Store publication is required for the *Best App for Galaxy*
 category and nothing substitutes for it. But the rules say plainly:
 
 > "Galaxy Store exclusivity may receive bonus consideration but is not required."
